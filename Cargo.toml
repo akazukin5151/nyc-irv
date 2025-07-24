@@ -1,0 +1,9 @@
+[package]
+name = "nyc-irv"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+calamine = "0.29.0"
+indicatif = { version = "0.18.0", features = ["rayon"] }
+rayon = "1.10.0"
