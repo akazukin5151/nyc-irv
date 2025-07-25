@@ -59,20 +59,19 @@ fn main() -> Result<(), Box<dyn Error>> {
                 let o_cand1_pos = ballot.iter().flatten().position(|cand| cand == cand1);
                 let o_cand2_pos = ballot.iter().flatten().position(|cand| cand == cand2);
 
-                // if cand1 is preferred, add `1`. otherwise, add `0`.
-                // if candidate has not been ranked, the other candidate is preferred.
+                // if cand1 is preferred, add `1`. otherwise, no need to add and skip.
+                // if a candidate has not been ranked, the other candidate is preferred.
                 // if both candidate is not ranked, skip this voter.
                 let v = match (o_cand1_pos, o_cand2_pos) {
-                    (None, None) => continue,
-                    (None, Some(_)) => 0,
                     (Some(_), None) => 1,
                     (Some(cand1_pos), Some(cand2_pos)) => {
                         if cand1_pos < cand2_pos {
                             1
                         } else {
-                            0
+                            continue;
                         }
-                    }
+                    },
+                    _ => continue,
                 };
 
                 matrix
