@@ -129,8 +129,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         println!("{cand} | {n_wins}");
     }
 
-    println!("\nCandidate A | Result | Candidate B | Votes for A | Votes for B");
-    println!("--- | --- | --- | --- | --- ");
+    println!(
+        "\nCandidate A | Result | Candidate B | Votes for A | Votes for B | % for A | % for B"
+    );
+    println!("--- | --- | --- | --- | --- | --- | ---");
     for (this_cand, _) in cands_to_n_wins.into_iter().rev() {
         let this_cand = *this_cand;
         for other_cand in sorted_cands.iter().filter(|c| *c != this_cand) {
@@ -140,10 +142,15 @@ fn main() -> Result<(), Box<dyn Error>> {
             // get the number of voters that prefers one candidate over the other
             let n_prefer_this_cand = matrix.get(&pair1).ok_or("matrix has no {pair1}")?;
             let n_prefer_other_cand = matrix.get(&pair2).ok_or("matrix has no {pair2}")?;
+
+            let sum = (n_prefer_this_cand + n_prefer_other_cand) as f32;
+            let this_perc = *n_prefer_this_cand as f32 / sum * 100.;
+            let other_perc = *n_prefer_other_cand as f32 / sum * 100.;
+
             if n_prefer_other_cand > n_prefer_this_cand {
-                println!("{this_cand} | loses to ❌ | {other_cand} | {n_prefer_this_cand} | {n_prefer_other_cand}");
+                println!("{this_cand} | loses to ❌ | {other_cand} | {n_prefer_this_cand} | {n_prefer_other_cand} | {this_perc:.2}% | {other_perc:.2}%");
             } else {
-                println!("{this_cand} | beats ✅ | {other_cand} | {n_prefer_this_cand} | {n_prefer_other_cand}");
+                println!("{this_cand} | beats ✅ | {other_cand} | {n_prefer_this_cand} | {n_prefer_other_cand} | {this_perc:.2}% | {other_perc:.2}%");
             }
         }
     }
