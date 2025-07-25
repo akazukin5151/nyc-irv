@@ -57,7 +57,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     let all_ballots: Vec<_> = subset
         .par_iter()
         .flat_map(|path| {
-            bar.set_message(format!("reading {path:?}"));
+            // this message is misleading because it looks like we're processing files
+            // sequentially, rather than in parallel
+            // bar.set_message(format!("reading {path:?}"));
 
             let mut workbook: Xlsx<_> = open_workbook(path).unwrap();
             let range = workbook.worksheet_range("Sheet1").unwrap();

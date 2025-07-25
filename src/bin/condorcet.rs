@@ -21,8 +21,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         })
         .collect();
 
-    println!("Unpadded binary: {:?}", t1.elapsed());
-    dbg!(ballots.len());
+    println!("Reading unpadded binary took {:?}", t1.elapsed());
+    println!("Read {} ballots", ballots.len());
 
     let mut cands_file = File::open("./out/cands.csv")?;
     let mut buf = vec![];
@@ -43,7 +43,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         })
         .collect();
 
-    // compute pairwise matrix
+    println!("Compute pairwise matrix");
+
     // TODO(perf): parallelize this part
     // key = (cand1, cand2)
     // value = number of voters preferring cand1 over cand2
