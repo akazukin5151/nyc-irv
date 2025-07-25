@@ -182,6 +182,16 @@ Selma K. Bartholomew | loses to ❌ | Whitney R. Tilson | 58270 | 93834 | 38.31%
 Selma K. Bartholomew | loses to ❌ | Michael Blake | 55465 | 264026 | 17.36% | 82.64%
 Selma K. Bartholomew | loses to ❌ | Jessica Ramos | 49128 | 143194 | 25.54% | 74.46%
 Selma K. Bartholomew | beats ✅ | Paperboy Love Prince | 59946 | 56993 | 51.26% | 48.74%
+Paperboy Love Prince | loses to ❌ | Zohran Kwame Mamdani | 15927 | 638291 | 2.43% | 97.57%
+Paperboy Love Prince | loses to ❌ | Andrew M. Cuomo | 45553 | 488448 | 8.53% | 91.47%
+Paperboy Love Prince | loses to ❌ | Brad Lander | 24365 | 628846 | 3.73% | 96.27%
+Paperboy Love Prince | loses to ❌ | Adrienne E. Adams | 36537 | 573839 | 5.99% | 94.01%
+Paperboy Love Prince | loses to ❌ | Scott M. Stringer | 47366 | 328159 | 12.61% | 87.39%
+Paperboy Love Prince | loses to ❌ | Zellnor Myrie | 43714 | 425323 | 9.32% | 90.68%
+Paperboy Love Prince | loses to ❌ | Whitney R. Tilson | 56089 | 97673 | 36.48% | 63.52%
+Paperboy Love Prince | loses to ❌ | Michael Blake | 51045 | 266401 | 16.08% | 83.92%
+Paperboy Love Prince | loses to ❌ | Jessica Ramos | 51720 | 149848 | 25.66% | 74.34%
+Paperboy Love Prince | loses to ❌ | Selma K. Bartholomew | 56993 | 59946 | 48.74% | 51.26%
 
 ### Pairwise matrix
 
