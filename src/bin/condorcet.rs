@@ -206,5 +206,48 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
+    println!();
+
+    for (cand, _) in cands_to_n_wins.iter() {
+        println!("For people who ranked {cand} first, their later choices were...");
+        let later_choices: Vec<Vec<&str>> = all_ballots
+            .iter()
+            .filter(|ballot| ballot.iter().flatten().next() == Some(*cand))
+            .map(|ballot| {
+                ballot
+                    .iter()
+                    .flatten()
+                    .filter(|c| c != cand)
+                    .copied()
+                    .collect()
+            })
+            .collect();
+
+        for choice_idx in 0..4 {
+            let mut freqs = HashMap::new();
+            for choices in &later_choices {
+                let Some(nth_choice) = choices.get(choice_idx) else {
+                    continue;
+                };
+                freqs.entry(nth_choice).and_modify(|c| *c += 1).or_insert(1);
+            }
+
+            let mut sorted: Vec<_> = freqs.into_iter().collect();
+            sorted.sort_by_key(|kv| kv.1);
+            sorted.reverse();
+
+            let sum: i32 = sorted.iter().map(|kv| kv.1).sum();
+            let sum = sum as f64;
+
+            println!("Choice {}", choice_idx + 2);
+            for (choice, freq) in sorted {
+                println!("{choice} - {freq} ({:.2}%)", freq as f64 / sum * 100.);
+            }
+            println!();
+        }
+
+        println!();
+    }
+
     Ok(())
 }
