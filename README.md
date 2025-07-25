@@ -8,7 +8,13 @@ Full CVR data from https://www.vote.nyc/page/election-results-summary
 
 Download it and unzip all files into `./data`
 
-`cargo r --release`
+Run:
+
+```
+cargo b --release
+cargo r --release --bin parse
+cargo r --release --bin condorcet
+```
 
 ## Results
 

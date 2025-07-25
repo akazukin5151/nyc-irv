@@ -1,9 +1,10 @@
 use std::{
     collections::{HashMap, HashSet},
     error::Error,
-    fs::{self, File},
+    fs::File,
     io::Write,
     path::Path,
+    time::Instant,
 };
 
 use calamine::{open_workbook, Data, RangeDeserializerBuilder, Reader, Xlsx};
@@ -56,7 +57,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     let all_ballots: Vec<_> = subset
         .par_iter()
         .flat_map(|path| {
-            bar.inc(1);
             bar.set_message(format!("reading {path:?}"));
 
             let mut workbook: Xlsx<_> = open_workbook(path).unwrap();
@@ -99,6 +99,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                 }
                 ballots.push(this_voters_ballot);
             }
+            bar.inc(1);
             ballots
         })
         .collect();
@@ -113,7 +114,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         // flatten removes the Nones, then we get the first candidate
         if let Some(first_pref) = ballot.iter().flatten().next() {
             mayoral_candidates.insert(*first_pref);
-            first_prefs.entry(first_pref).and_modify(|c| *c += 1).or_insert(1);
+            first_prefs
+                .entry(first_pref)
+                .and_modify(|c| *c += 1)
+                .or_insert(1);
         }
     }
 
@@ -124,112 +128,50 @@ fn main() -> Result<(), Box<dyn Error>> {
         mayoral_candidates.len()
     );
 
-    // compute pairwise matrix
-    // TODO(perf): parallelize this part
-    // key = (cand1, cand2)
-    // value = number of voters preferring cand1 over cand2
-    let mut matrix: HashMap<_, u32> = HashMap::new();
-    for cand1 in mayoral_candidates.iter() {
-        for cand2 in mayoral_candidates.iter() {
-            let pair = (*cand1, *cand2);
-
-            // in all ballots, count how many voters ranked cand1 over cand2
-            // (ignoring any Nones)
-            for ballot in all_ballots.iter() {
-                let o_cand1_pos = ballot.iter().flatten().position(|cand| cand == cand1);
-                let o_cand2_pos = ballot.iter().flatten().position(|cand| cand == cand2);
-
-                // if cand1 is preferred, add `1`. otherwise, add `0`.
-                // if candidate has not been ranked, the other candidate is preferred.
-                // if both candidate is not ranked, skip this voter.
-                let v = match (o_cand1_pos, o_cand2_pos) {
-                    (None, None) => continue,
-                    (None, Some(_)) => 0,
-                    (Some(_), None) => 1,
-                    (Some(cand1_pos), Some(cand2_pos)) => {
-                        if cand1_pos < cand2_pos {
-                            1
-                        } else {
-                            0
-                        }
-                    }
-                };
-
-                matrix
-                    .entry(pair)
-                    .and_modify(|count| *count += v)
-                    .or_insert(v);
-            }
-        }
-    }
-
-    eprintln!("Looking for Condorcet winner");
-    let mut sorted_cands: Vec<_> = mayoral_candidates.into_iter().collect();
+    let mut sorted_cands: Vec<_> = mayoral_candidates.iter().collect();
     sorted_cands
         .sort_unstable_by(|a, b| first_prefs.get(b).unwrap().cmp(first_prefs.get(a).unwrap()));
 
-    let mut winner_found = false;
-    for this_cand in sorted_cands.iter() {
-        let mut is_cand_possible_cw = true;
-        for other_cand in sorted_cands.iter().filter(|c| *c != this_cand) {
-            let pair1 = (*this_cand, *other_cand);
-            let pair2 = (*other_cand, *this_cand);
-
-            // get the number of voters that prefers one candidate over the other
-            let n_prefer_this_cand = matrix.get(&pair1).ok_or("matrix has no {pair1}")?;
-            let n_prefer_other_cand = matrix.get(&pair2).ok_or("matrix has no {pair2}")?;
-            if n_prefer_other_cand > n_prefer_this_cand {
-                is_cand_possible_cw = false;
-            }
-        }
-
-        if is_cand_possible_cw {
-            println!("{this_cand} is the Condorcet winner");
-            winner_found = true;
-
-            for other_cand in sorted_cands.iter().filter(|c| *c != this_cand) {
-                let pair1 = (*this_cand, *other_cand);
-                let pair2 = (*other_cand, *this_cand);
-
-                let n_prefer_this_cand = matrix.get(&pair1).ok_or("matrix has no {pair1}")?;
-                let n_prefer_other_cand = matrix.get(&pair2).ok_or("matrix has no {pair2}")?;
-                println!("{this_cand} beats {other_cand} by {n_prefer_this_cand} > {n_prefer_other_cand}");
-            }
-
-            break;
-        }
-    }
-
-    if !winner_found {
-        println!("No Condorcet winner found, there is a Condorcet cycle");
-    }
-
-    eprintln!("Saving pairwise matrix");
-
-    let mut buf = String::new();
-    buf.push_str(&format!(",{}\n", sorted_cands.join(",")));
-    for this_cand in sorted_cands.iter() {
-        buf.push_str(&format!("{this_cand},"));
-        for other_cand in sorted_cands.iter() {
-            if *other_cand == *this_cand {
-                buf.push(',');
-                continue;
-            }
-            let n_prefer_this_cand = matrix.get(&(this_cand, other_cand)).unwrap();
-            buf.push_str(&format!("{n_prefer_this_cand},"));
-        }
-        buf.push('\n');
-    }
-
-    let _ = fs::create_dir_all("./out");
-
-    let mut f = File::options()
+    let mut cands_file = File::options()
         .write(true)
         .create(true)
         .truncate(true)
-        .open("./out/matrix.csv")?;
+        .open("./out/cands.csv")?;
 
-    f.write_all(buf.as_bytes())?;
+    let mut buf = String::new();
+    for cand in &sorted_cands {
+        buf.push_str(cand);
+        buf.push(',');
+    }
+    cands_file.write_all(buf.as_bytes())?;
+
+    // convert strings to indices of the candidates (sorted by first preferences)
+    // 0 means invalid/ignored candidate (undervote/overvote/write-in)
+    // all other numbers means `index+1`
+    let compact_ballots: Vec<[u8; 5]> = all_ballots
+        .iter()
+        .map(|ballot| {
+            // very small array so perf problems with array.map is not applicable
+            ballot.map(|choice| {
+                choice.map_or_else(
+                    || 0,
+                    |cand| (sorted_cands.iter().position(|c| **c == cand).unwrap() as u8) + 1,
+                )
+            })
+        })
+        .collect();
+
+    let t1 = Instant::now();
+    let mut ballot_file = File::options()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open("./out/ballots.bin")?;
+
+    let buf: Vec<u8> = compact_ballots.iter().flatten().copied().collect();
+
+    ballot_file.write_all(&buf)?;
+    println!("Unpadded binary: {:?}", t1.elapsed());
 
     Ok(())
 }

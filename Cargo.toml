@@ -7,3 +7,7 @@ edition = "2021"
 calamine = "0.29.0"
 indicatif = { version = "0.18.0", features = ["rayon"] }
 rayon = "1.10.0"
+
+[profile.release]
+codegen-units = 1
+lto = "fat"
