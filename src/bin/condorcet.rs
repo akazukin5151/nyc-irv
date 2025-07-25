@@ -88,8 +88,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    eprintln!("Looking for Condorcet winner");
+    eprintln!("Looking for Condorcet winner\n");
 
+    let mut n_wins = HashMap::new();
     let mut winner_found = false;
     for this_cand in sorted_cands.iter() {
         let mut is_cand_possible_cw = true;
@@ -102,23 +103,14 @@ fn main() -> Result<(), Box<dyn Error>> {
             let n_prefer_other_cand = matrix.get(&pair2).ok_or("matrix has no {pair2}")?;
             if n_prefer_other_cand > n_prefer_this_cand {
                 is_cand_possible_cw = false;
+            } else {
+                n_wins.entry(this_cand).and_modify(|n| *n += 1).or_insert(1);
             }
         }
 
         if is_cand_possible_cw {
             println!("{this_cand} is the Condorcet winner");
             winner_found = true;
-
-            for other_cand in sorted_cands.iter().filter(|c| *c != this_cand) {
-                let pair1 = (*this_cand, *other_cand);
-                let pair2 = (*other_cand, *this_cand);
-
-                let n_prefer_this_cand = matrix.get(&pair1).ok_or("matrix has no {pair1}")?;
-                let n_prefer_other_cand = matrix.get(&pair2).ok_or("matrix has no {pair2}")?;
-                println!("{this_cand} beats {other_cand} by {n_prefer_this_cand} > {n_prefer_other_cand}");
-            }
-
-            break;
         }
     }
 
@@ -126,7 +118,34 @@ fn main() -> Result<(), Box<dyn Error>> {
         println!("No Condorcet winner found, there is a Condorcet cycle");
     }
 
-    eprintln!("Saving pairwise matrix");
+    println!();
+
+    let mut cands_to_n_wins: Vec<(_, _)> = n_wins.iter().collect();
+    cands_to_n_wins.sort_by_key(|x| x.1);
+
+    for (cand, n_wins) in cands_to_n_wins.iter().rev() {
+        println!("{cand} won {n_wins} times");
+    }
+
+    println!();
+    for (this_cand, _) in cands_to_n_wins.into_iter().rev() {
+        let this_cand = *this_cand;
+        for other_cand in sorted_cands.iter().filter(|c| *c != this_cand) {
+            let pair1 = (*this_cand, *other_cand);
+            let pair2 = (*other_cand, *this_cand);
+
+            // get the number of voters that prefers one candidate over the other
+            let n_prefer_this_cand = matrix.get(&pair1).ok_or("matrix has no {pair1}")?;
+            let n_prefer_other_cand = matrix.get(&pair2).ok_or("matrix has no {pair2}")?;
+            if n_prefer_other_cand > n_prefer_this_cand {
+                println!("{this_cand} loses to {other_cand} by {n_prefer_this_cand} < {n_prefer_other_cand}");
+            } else {
+                println!("{this_cand} beats {other_cand} by {n_prefer_this_cand} > {n_prefer_other_cand}");
+            }
+        }
+    }
+
+    eprintln!("\nSaving pairwise matrix");
 
     let mut buf = String::new();
     buf.push(',');
