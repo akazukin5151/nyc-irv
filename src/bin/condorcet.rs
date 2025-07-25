@@ -6,6 +6,8 @@ use std::{
     time::Instant,
 };
 
+use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
+
 fn main() -> Result<(), Box<dyn Error>> {
     let mut ballot_file = File::open("./out/ballots.bin")?;
     let mut buf = vec![];
@@ -45,7 +47,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     println!("Compute pairwise matrix");
 
-    // TODO(perf): parallelize this part
     // key = (cand1, cand2)
     // value = number of voters preferring cand1 over cand2
     let mut matrix: HashMap<_, u32> = HashMap::new();
@@ -54,7 +55,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             let pair = (*cand1, *cand2);
 
             let v = all_ballots
-                .iter()
+                .par_iter()
                 .map(|ballot| {
                     let o_cand1_pos = ballot.iter().flatten().position(|cand| cand == cand1);
                     let o_cand2_pos = ballot.iter().flatten().position(|cand| cand == cand2);
