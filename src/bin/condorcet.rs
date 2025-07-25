@@ -1,10 +1,4 @@
-use std::{
-    collections::HashMap,
-    error::Error,
-    fs::{self, File},
-    io::{Read, Write},
-    time::Instant,
-};
+use std::{collections::HashMap, error::Error, fs::File, io::Read, time::Instant};
 
 use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 
@@ -159,38 +153,32 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    eprintln!("\nSaving pairwise matrix");
-
     let mut buf = String::new();
-    buf.push(',');
+    buf.push_str("| | ");
     for cand in &sorted_cands {
         buf.push_str(cand);
-        buf.push(',');
+        buf.push_str(" | ");
     }
-    buf.push('\n');
+    buf.push_str("\n| --- | ");
+    for _ in &sorted_cands {
+        buf.push_str("--- | ");
+    }
+
+    println!("\n{buf}");
+    drop(buf);
 
     for this_cand in sorted_cands.iter() {
-        buf.push_str(&format!("{this_cand},"));
+        print!("{this_cand} | ");
         for other_cand in sorted_cands.iter() {
             if *other_cand == *this_cand {
-                buf.push(',');
+                print!("| ");
                 continue;
             }
             let n_prefer_this_cand = matrix.get(&(this_cand, other_cand)).unwrap();
-            buf.push_str(&format!("{n_prefer_this_cand},"));
+            print!("{n_prefer_this_cand} | ");
         }
-        buf.push('\n');
+        println!();
     }
-
-    let _ = fs::create_dir_all("./out");
-
-    let mut f = File::options()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open("./out/matrix.csv")?;
-
-    f.write_all(buf.as_bytes())?;
 
     Ok(())
 }
