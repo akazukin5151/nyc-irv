@@ -62,7 +62,7 @@ Zohran Kwame Mamdani is the Condorcet winner
 Saving pairwise matrix
 ```
 
-## Number of pairwise wins
+### Number of pairwise wins
 
 Candidate | Number of pairwise wins
 --- | ---
@@ -77,7 +77,7 @@ Jessica Ramos | 3
 Whitney R. Tilson | 2
 Selma K. Bartholomew | 1
 
-## Pairwise matchups
+### Pairwise matchups
 
 Candidate A | Result | Candidate B | Votes for A | Votes for B | % for A | % for B
 --- | --- | --- | --- | --- | --- | ---
@@ -182,7 +182,7 @@ Selma K. Bartholomew | loses to ❌ | Michael Blake | 55465 | 264026 | 17.36% | 
 Selma K. Bartholomew | loses to ❌ | Jessica Ramos | 49128 | 143194 | 25.54% | 74.46%
 Selma K. Bartholomew | beats ✅ | Paperboy Love Prince | 59946 | 56993 | 51.26% | 48.74%
 
-## Pairwise matrix
+### Pairwise matrix
 
 The `value` here is the number of voters that preferred candidate **A** over **B**
 
