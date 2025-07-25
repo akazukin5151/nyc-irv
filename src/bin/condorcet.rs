@@ -123,11 +123,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut cands_to_n_wins: Vec<(_, _)> = n_wins.iter().collect();
     cands_to_n_wins.sort_by_key(|x| x.1);
 
+    println!("Candidate | Number of pairwise wins");
+    println!("--- | ---");
     for (cand, n_wins) in cands_to_n_wins.iter().rev() {
-        println!("{cand} won {n_wins} times");
+        println!("{cand} | {n_wins}");
     }
 
-    println!();
+    println!("\nCandidate A | Result | Candidate B | Votes for A | Votes for B");
+    println!("--- | --- | --- | --- | --- ");
     for (this_cand, _) in cands_to_n_wins.into_iter().rev() {
         let this_cand = *this_cand;
         for other_cand in sorted_cands.iter().filter(|c| *c != this_cand) {
@@ -138,9 +141,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             let n_prefer_this_cand = matrix.get(&pair1).ok_or("matrix has no {pair1}")?;
             let n_prefer_other_cand = matrix.get(&pair2).ok_or("matrix has no {pair2}")?;
             if n_prefer_other_cand > n_prefer_this_cand {
-                println!("{this_cand} loses to {other_cand} by {n_prefer_this_cand} < {n_prefer_other_cand}");
+                println!("{this_cand} | loses to ❌ | {other_cand} | {n_prefer_this_cand} | {n_prefer_other_cand}");
             } else {
-                println!("{this_cand} beats {other_cand} by {n_prefer_this_cand} > {n_prefer_other_cand}");
+                println!("{this_cand} | beats ✅ | {other_cand} | {n_prefer_this_cand} | {n_prefer_other_cand}");
             }
         }
     }
