@@ -2,6 +2,13 @@
 
 Condorcet analysis of the 2025 New York City Democratic mayoral primary. It was done under IRV (RCV), which does not always elect the Condorcet winner.
 
+## Caveats
+
+* It doesn't handle write-ins - it would skip to the next named candidate (won't affect the result anyway, but it's good to write accurate code)
+* It doesn't handle ties (no ties happened anyway, but it's good to write accurate code)
+* It ignores overvotes. Don't know what to do with them, or what the regulations are. Undervotes are also ignored.
+* You should probably use https://github.com/voting-tools/pref_voting. I'm reinventing the wheel here because it's fun and I like Rust, but that doesn't mean you should use this code.
+
 ## Run
 
 Full CVR data from https://www.vote.nyc/page/election-results-summary
