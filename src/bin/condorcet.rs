@@ -53,32 +53,30 @@ fn main() -> Result<(), Box<dyn Error>> {
         for cand2 in sorted_cands.iter() {
             let pair = (*cand1, *cand2);
 
-            // in all ballots, count how many voters ranked cand1 over cand2
-            // (ignoring any Nones)
-            for ballot in all_ballots.iter() {
-                let o_cand1_pos = ballot.iter().flatten().position(|cand| cand == cand1);
-                let o_cand2_pos = ballot.iter().flatten().position(|cand| cand == cand2);
+            let v = all_ballots
+                .iter()
+                .map(|ballot| {
+                    let o_cand1_pos = ballot.iter().flatten().position(|cand| cand == cand1);
+                    let o_cand2_pos = ballot.iter().flatten().position(|cand| cand == cand2);
 
-                // if cand1 is preferred, add `1`. otherwise, no need to add and skip.
-                // if a candidate has not been ranked, the other candidate is preferred.
-                // if both candidate is not ranked, skip this voter.
-                let v = match (o_cand1_pos, o_cand2_pos) {
-                    (Some(_), None) => 1,
-                    (Some(cand1_pos), Some(cand2_pos)) => {
-                        if cand1_pos < cand2_pos {
-                            1
-                        } else {
-                            continue;
+                    // if cand1 is preferred, add `1`. otherwise, no need to add and skip.
+                    // if a candidate has not been ranked, the other candidate is preferred.
+                    // if both candidate is not ranked, skip this voter.
+                    match (o_cand1_pos, o_cand2_pos) {
+                        (Some(_), None) => 1,
+                        (Some(cand1_pos), Some(cand2_pos)) => {
+                            if cand1_pos < cand2_pos {
+                                1
+                            } else {
+                                0
+                            }
                         }
-                    },
-                    _ => continue,
-                };
+                        _ => 0,
+                    }
+                })
+                .sum();
 
-                matrix
-                    .entry(pair)
-                    .and_modify(|count| *count += v)
-                    .or_insert(v);
-            }
+            matrix.entry(pair).and_modify(|c| *c += v).or_insert(v);
         }
     }
 
