@@ -30,7 +30,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut buf = vec![];
     cands_file.read_to_end(&mut buf)?;
     let csv = String::from_utf8(buf)?;
-    let sorted_cands: Vec<&str> = csv.split(',').collect();
+    let mut sorted_cands: Vec<&str> = csv.split(',').collect();
+    // ignore trailing comma
+    if sorted_cands.last().unwrap().is_empty() {
+        sorted_cands.pop();
+    }
+    let sorted_cands = sorted_cands;
+
+    println!("Read {} candidates", sorted_cands.len());
 
     let all_ballots: Vec<[Option<&str>; 5]> = ballots
         .iter()
