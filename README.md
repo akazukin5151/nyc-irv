@@ -19,23 +19,35 @@ cargo r --release --bin condorcet
 ## Results
 
 ```
+$ cargo r --release --bin parse
+    Finished `release` profile [optimized] target(s) in 0.03s
+     Running `target/release/parse`
 Total 951 candidates in all elections
-███████████████████████████████████████████████████████████████████████████████ 31/31 reading "./data/2025P1V1_EAR1.xlsx"
+██████████████████████████████████████████████████████████████████████████████████████████████████████████████████ 31/31
 Found 1114433 ballots total
-[src/main.rs:120:5] &first_prefs = {
+[src/bin/parse.rs:126:5] &first_prefs = {
     "Brad Lander": 121148,
-    "Paperboy Love Prince": 1679,
-    "Zohran Kwame Mamdani": 469960,
     "Andrew M. Cuomo": 387664,
-    "Whitney R. Tilson": 8602,
     "Zellnor Myrie": 10816,
     "Jessica Ramos": 4444,
     "Michael Blake": 4493,
-    "Selma K. Bartholomew": 1615,
+    "Zohran Kwame Mamdani": 469960,
     "Scott M. Stringer": 18205,
+    "Whitney R. Tilson": 8602,
+    "Paperboy Love Prince": 1679,
+    "Selma K. Bartholomew": 1615,
     "Adrienne E. Adams": 44705,
 }
 Found 11 named candidates for mayor
+Unpadded binary: 6.964151ms
+
+$ cargo r --release --bin condorcet
+    Finished `release` profile [optimized] target(s) in 0.03s
+     Running `target/release/condorcet`
+Reading unpadded binary took 3.512777ms
+Read 1114433 ballots
+Read 11 candidates
+Compute pairwise matrix
 Looking for Condorcet winner
 Zohran Kwame Mamdani is the Condorcet winner
 Zohran Kwame Mamdani beats Andrew M. Cuomo by 573635 > 443762
