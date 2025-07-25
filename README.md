@@ -4,7 +4,7 @@ Condorcet analysis of the 2025 New York City Democratic mayoral primary. It was 
 
 ## Caveats
 
-* It doesn't handle write-ins - it would skip to the next named candidate (won't affect the result anyway, but it's good to write accurate code)
+* It ignores write-ins and skips to the next named candidate (won't affect the result anyway, but it's good to write accurate code)
 * It doesn't handle ties (no ties happened anyway, but it's good to write accurate code)
 * It ignores overvotes. Don't know what to do with them, or what the regulations are. Undervotes are also ignored.
 * You should probably use https://github.com/voting-tools/pref_voting. I'm reinventing the wheel here because it's fun and I like Rust, but that doesn't mean you should use this code.
