@@ -229,3 +229,95 @@ The rows are sorted with the first preferences vote on top.
 
 Looking at the first row with Zohran Kwame Mamdani, for every other candidate, more voters preferred him over the other. Therefore he is the Condorcet winner.
 
+### Distribution of ranks
+
+```
+Distribution of ranks for Zohran Kwame Mamdani
+Rank 1: 469018 (42.09%)
+Rank 2: 87851 (7.88%)
+Rank 3: 36878 (3.31%)
+Rank 4: 21803 (1.96%)
+Rank 5: 24790 (2.22%)
+Unranked: 474093 (42.54%)
+
+Distribution of ranks for Brad Lander
+Rank 1: 120544 (10.82%)
+Rank 2: 365852 (32.83%)
+Rank 3: 83792 (7.52%)
+Rank 4: 38955 (3.50%)
+Rank 5: 23768 (2.13%)
+Unranked: 481522 (43.21%)
+
+Distribution of ranks for Adrienne E. Adams
+Rank 1: 43941 (3.94%)
+Rank 2: 118748 (10.66%)
+Rank 3: 256896 (23.05%)
+Rank 4: 96574 (8.67%)
+Rank 5: 63428 (5.69%)
+Unranked: 534846 (47.99%)
+
+Distribution of ranks for Andrew M. Cuomo
+Rank 1: 385398 (34.58%)
+Rank 2: 45865 (4.12%)
+Rank 3: 23565 (2.11%)
+Rank 4: 13992 (1.26%)
+Rank 5: 21580 (1.94%)
+Unranked: 624033 (56.00%)
+
+Distribution of ranks for Zellnor Myrie
+Rank 1: 10554 (0.95%)
+Rank 2: 43461 (3.90%)
+Rank 3: 97617 (8.76%)
+Rank 4: 202670 (18.19%)
+Rank 5: 76309 (6.85%)
+Unranked: 683822 (61.36%)
+
+Distribution of ranks for Scott M. Stringer
+Rank 1: 17668 (1.59%)
+Rank 2: 75944 (6.81%)
+Rank 3: 90747 (8.14%)
+Rank 4: 87282 (7.83%)
+Rank 5: 61178 (5.49%)
+Unranked: 781614 (70.14%)
+
+Distribution of ranks for Michael Blake
+Rank 1: 4313 (0.39%)
+Rank 2: 20846 (1.87%)
+Rank 3: 56475 (5.07%)
+Rank 4: 57691 (5.18%)
+Rank 5: 131048 (11.76%)
+Unranked: 844060 (75.74%)
+
+Distribution of ranks for Jessica Ramos
+Rank 1: 4165 (0.37%)
+Rank 2: 24356 (2.19%)
+Rank 3: 36278 (3.26%)
+Rank 4: 41041 (3.68%)
+Rank 5: 48968 (4.39%)
+Unranked: 959625 (86.11%)
+
+Distribution of ranks for Whitney R. Tilson
+Rank 1: 8416 (0.76%)
+Rank 2: 31397 (2.82%)
+Rank 3: 19056 (1.71%)
+Rank 4: 20575 (1.85%)
+Rank 5: 20978 (1.88%)
+Unranked: 1014011 (90.99%)
+
+Distribution of ranks for Selma K. Bartholomew
+Rank 1: 1447 (0.13%)
+Rank 2: 9221 (0.83%)
+Rank 3: 16250 (1.46%)
+Rank 4: 17622 (1.58%)
+Rank 5: 18845 (1.69%)
+Unranked: 1051048 (94.31%)
+
+Distribution of ranks for Paperboy Love Prince
+Rank 1: 1543 (0.14%)
+Rank 2: 7378 (0.66%)
+Rank 3: 10203 (0.92%)
+Rank 4: 11337 (1.02%)
+Rank 5: 30704 (2.76%)
+Unranked: 1053268 (94.51%)
+```
+

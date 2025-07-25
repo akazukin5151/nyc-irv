@@ -86,7 +86,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut cands_to_n_wins = HashMap::new();
     for cand in sorted_cands.iter() {
-        cands_to_n_wins.insert(cand, 0);
+        cands_to_n_wins.insert(*cand, 0);
     }
 
     let mut winner_found = false;
@@ -102,7 +102,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             if n_prefer_other_cand > n_prefer_this_cand {
                 is_cand_possible_cw = false;
             } else {
-                *cands_to_n_wins.get_mut(this_cand).unwrap() += 1;
+                *cands_to_n_wins.get_mut(*this_cand).unwrap() += 1;
             }
         }
 
@@ -120,10 +120,11 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut cands_to_n_wins: Vec<(_, _)> = cands_to_n_wins.iter().collect();
     cands_to_n_wins.sort_by_key(|x| x.1);
+    let cands_to_n_wins: Vec<_> = cands_to_n_wins.into_iter().rev().collect();
 
     println!("Candidate | Number of pairwise wins");
     println!("--- | ---");
-    for (cand, n_wins) in cands_to_n_wins.iter().rev() {
+    for (cand, n_wins) in &cands_to_n_wins {
         println!("{cand} | {n_wins}");
     }
 
@@ -131,7 +132,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         "\nCandidate A | Result | Candidate B | Votes for A | Votes for B | % for A | % for B"
     );
     println!("--- | --- | --- | --- | --- | --- | ---");
-    for (this_cand, _) in cands_to_n_wins.into_iter().rev() {
+    for (this_cand, _) in &cands_to_n_wins {
         let this_cand = *this_cand;
         for other_cand in sorted_cands.iter().filter(|c| *c != this_cand) {
             let pair1 = (*this_cand, *other_cand);
@@ -178,6 +179,31 @@ fn main() -> Result<(), Box<dyn Error>> {
             print!("{n_prefer_this_cand} | ");
         }
         println!();
+    }
+
+    for (cand, _) in cands_to_n_wins.iter() {
+        println!("\nDistribution of ranks for {cand}");
+        let mut position_freqs = [0; 6];
+        for ballot in &all_ballots {
+            let pos = ballot
+                .iter()
+                .position(|choice| choice.map_or(false, |c| c == **cand));
+            match pos {
+                Some(p) => position_freqs[p] += 1,
+                None => position_freqs[5] += 1,
+            }
+        }
+
+        let sum: i32 = position_freqs.iter().sum();
+        let sum = sum as f64;
+        for (idx, freq) in position_freqs.iter().enumerate() {
+            let perc = *freq as f64 / sum * 100.;
+            if idx == 5 {
+                println!("Unranked: {freq} ({:.02}%)", perc);
+            } else {
+                println!("Rank {}: {freq} ({:.02}%)", idx + 1, perc);
+            }
+        }
     }
 
     Ok(())
