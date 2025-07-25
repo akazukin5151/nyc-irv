@@ -55,20 +55,132 @@ Reading unpadded binary took 3.512777ms
 Read 1114433 ballots
 Read 11 candidates
 Compute pairwise matrix
-Looking for Condorcet winner
 Zohran Kwame Mamdani is the Condorcet winner
-Zohran Kwame Mamdani beats Andrew M. Cuomo by 573635 > 443762
-Zohran Kwame Mamdani beats Brad Lander by 535859 > 234621
-Zohran Kwame Mamdani beats Adrienne E. Adams by 582746 > 196728
-Zohran Kwame Mamdani beats Scott M. Stringer by 605940 > 166337
-Zohran Kwame Mamdani beats Zellnor Myrie by 615224 > 99434
-Zohran Kwame Mamdani beats Whitney R. Tilson by 634868 > 73668
-Zohran Kwame Mamdani beats Michael Blake by 629677 > 49744
-Zohran Kwame Mamdani beats Jessica Ramos by 630861 > 58642
-Zohran Kwame Mamdani beats Paperboy Love Prince by 638291 > 15927
-Zohran Kwame Mamdani beats Selma K. Bartholomew by 636822 > 20586
+
+# <snipped markdown output; rendered below>
+
 Saving pairwise matrix
 ```
+
+## Number of pairwise wins
+
+Candidate | Number of pairwise wins
+--- | ---
+Zohran Kwame Mamdani | 10
+Brad Lander | 9
+Adrienne E. Adams | 8
+Andrew M. Cuomo | 7
+Zellnor Myrie | 6
+Scott M. Stringer | 5
+Michael Blake | 4
+Jessica Ramos | 3
+Whitney R. Tilson | 2
+Selma K. Bartholomew | 1
+
+## Pairwise matchups
+
+Candidate A | Result | Candidate B | Votes for A | Votes for B | % for A | % for B
+--- | --- | --- | --- | --- | --- | ---
+Zohran Kwame Mamdani | beats ✅ | Andrew M. Cuomo | 573635 | 443762 | 56.38% | 43.62%
+Zohran Kwame Mamdani | beats ✅ | Brad Lander | 535859 | 234621 | 69.55% | 30.45%
+Zohran Kwame Mamdani | beats ✅ | Adrienne E. Adams | 582746 | 196728 | 74.76% | 25.24%
+Zohran Kwame Mamdani | beats ✅ | Scott M. Stringer | 605940 | 166337 | 78.46% | 21.54%
+Zohran Kwame Mamdani | beats ✅ | Zellnor Myrie | 615224 | 99434 | 86.09% | 13.91%
+Zohran Kwame Mamdani | beats ✅ | Whitney R. Tilson | 634868 | 73668 | 89.60% | 10.40%
+Zohran Kwame Mamdani | beats ✅ | Michael Blake | 629677 | 49744 | 92.68% | 7.32%
+Zohran Kwame Mamdani | beats ✅ | Jessica Ramos | 630861 | 58642 | 91.50% | 8.50%
+Zohran Kwame Mamdani | beats ✅ | Paperboy Love Prince | 638291 | 15927 | 97.57% | 2.43%
+Zohran Kwame Mamdani | beats ✅ | Selma K. Bartholomew | 636822 | 20586 | 96.87% | 3.13%
+Brad Lander | loses to ❌ | Zohran Kwame Mamdani | 234621 | 535859 | 30.45% | 69.55%
+Brad Lander | beats ✅ | Andrew M. Cuomo | 527418 | 441760 | 54.42% | 45.58%
+Brad Lander | beats ✅ | Adrienne E. Adams | 545138 | 205384 | 72.63% | 27.37%
+Brad Lander | beats ✅ | Scott M. Stringer | 578968 | 141462 | 80.36% | 19.64%
+Brad Lander | beats ✅ | Zellnor Myrie | 601410 | 98415 | 85.94% | 14.06%
+Brad Lander | beats ✅ | Whitney R. Tilson | 618724 | 64697 | 90.53% | 9.47%
+Brad Lander | beats ✅ | Michael Blake | 609053 | 65153 | 90.34% | 9.66%
+Brad Lander | beats ✅ | Jessica Ramos | 615701 | 76932 | 88.89% | 11.11%
+Brad Lander | beats ✅ | Paperboy Love Prince | 628846 | 24365 | 96.27% | 3.73%
+Brad Lander | beats ✅ | Selma K. Bartholomew | 628094 | 39792 | 94.04% | 5.96%
+Adrienne E. Adams | loses to ❌ | Zohran Kwame Mamdani | 196728 | 582746 | 25.24% | 74.76%
+Adrienne E. Adams | beats ✅ | Andrew M. Cuomo | 457755 | 451439 | 50.35% | 49.65%
+Adrienne E. Adams | loses to ❌ | Brad Lander | 205384 | 545138 | 27.37% | 72.63%
+Adrienne E. Adams | beats ✅ | Scott M. Stringer | 506322 | 198164 | 71.87% | 28.13%
+Adrienne E. Adams | beats ✅ | Zellnor Myrie | 470926 | 184369 | 71.86% | 28.14%
+Adrienne E. Adams | beats ✅ | Whitney R. Tilson | 564461 | 74280 | 88.37% | 11.63%
+Adrienne E. Adams | beats ✅ | Michael Blake | 523248 | 110878 | 82.51% | 17.49%
+Adrienne E. Adams | beats ✅ | Jessica Ramos | 558147 | 92653 | 85.76% | 14.24%
+Adrienne E. Adams | beats ✅ | Paperboy Love Prince | 573839 | 36537 | 94.01% | 5.99%
+Adrienne E. Adams | beats ✅ | Selma K. Bartholomew | 569245 | 41491 | 93.21% | 6.79%
+Andrew M. Cuomo | loses to ❌ | Zohran Kwame Mamdani | 443762 | 573635 | 43.62% | 56.38%
+Andrew M. Cuomo | loses to ❌ | Brad Lander | 441760 | 527418 | 45.58% | 54.42%
+Andrew M. Cuomo | loses to ❌ | Adrienne E. Adams | 451439 | 457755 | 49.65% | 50.35%
+Andrew M. Cuomo | beats ✅ | Scott M. Stringer | 461461 | 205837 | 69.15% | 30.85%
+Andrew M. Cuomo | beats ✅ | Zellnor Myrie | 474945 | 369199 | 56.26% | 43.74%
+Andrew M. Cuomo | beats ✅ | Whitney R. Tilson | 478916 | 45581 | 91.31% | 8.69%
+Andrew M. Cuomo | beats ✅ | Michael Blake | 483764 | 231199 | 67.66% | 32.34%
+Andrew M. Cuomo | beats ✅ | Jessica Ramos | 482636 | 99085 | 82.97% | 17.03%
+Andrew M. Cuomo | beats ✅ | Paperboy Love Prince | 488448 | 45553 | 91.47% | 8.53%
+Andrew M. Cuomo | beats ✅ | Selma K. Bartholomew | 486365 | 42196 | 92.02% | 7.98%
+Zellnor Myrie | loses to ❌ | Zohran Kwame Mamdani | 99434 | 615224 | 13.91% | 86.09%
+Zellnor Myrie | loses to ❌ | Andrew M. Cuomo | 369199 | 474945 | 43.74% | 56.26%
+Zellnor Myrie | loses to ❌ | Brad Lander | 98415 | 601410 | 14.06% | 85.94%
+Zellnor Myrie | loses to ❌ | Adrienne E. Adams | 184369 | 470926 | 28.14% | 71.86%
+Zellnor Myrie | beats ✅ | Scott M. Stringer | 356482 | 271899 | 56.73% | 43.27%
+Zellnor Myrie | beats ✅ | Whitney R. Tilson | 414876 | 85119 | 82.98% | 17.02%
+Zellnor Myrie | beats ✅ | Michael Blake | 378000 | 133980 | 73.83% | 26.17%
+Zellnor Myrie | beats ✅ | Jessica Ramos | 411376 | 119180 | 77.54% | 22.46%
+Zellnor Myrie | beats ✅ | Paperboy Love Prince | 425323 | 43714 | 90.68% | 9.32%
+Zellnor Myrie | beats ✅ | Selma K. Bartholomew | 420203 | 53501 | 88.71% | 11.29%
+Scott M. Stringer | loses to ❌ | Zohran Kwame Mamdani | 166337 | 605940 | 21.54% | 78.46%
+Scott M. Stringer | loses to ❌ | Andrew M. Cuomo | 205837 | 461461 | 30.85% | 69.15%
+Scott M. Stringer | loses to ❌ | Brad Lander | 141462 | 578968 | 19.64% | 80.36%
+Scott M. Stringer | loses to ❌ | Adrienne E. Adams | 198164 | 506322 | 28.13% | 71.87%
+Scott M. Stringer | loses to ❌ | Zellnor Myrie | 271899 | 356482 | 43.27% | 56.73%
+Scott M. Stringer | beats ✅ | Whitney R. Tilson | 308832 | 75909 | 80.27% | 19.73%
+Scott M. Stringer | beats ✅ | Michael Blake | 310799 | 239145 | 56.51% | 43.49%
+Scott M. Stringer | beats ✅ | Jessica Ramos | 312088 | 112377 | 73.53% | 26.47%
+Scott M. Stringer | beats ✅ | Paperboy Love Prince | 328159 | 47366 | 87.39% | 12.61%
+Scott M. Stringer | beats ✅ | Selma K. Bartholomew | 325313 | 45194 | 87.80% | 12.20%
+Michael Blake | loses to ❌ | Zohran Kwame Mamdani | 49744 | 629677 | 7.32% | 92.68%
+Michael Blake | loses to ❌ | Andrew M. Cuomo | 231199 | 483764 | 32.34% | 67.66%
+Michael Blake | loses to ❌ | Brad Lander | 65153 | 609053 | 9.66% | 90.34%
+Michael Blake | loses to ❌ | Adrienne E. Adams | 110878 | 523248 | 17.49% | 82.51%
+Michael Blake | loses to ❌ | Scott M. Stringer | 239145 | 310799 | 43.49% | 56.51%
+Michael Blake | loses to ❌ | Zellnor Myrie | 133980 | 378000 | 26.17% | 73.83%
+Michael Blake | beats ✅ | Whitney R. Tilson | 262823 | 94676 | 73.52% | 26.48%
+Michael Blake | beats ✅ | Jessica Ramos | 252421 | 140286 | 64.28% | 35.72%
+Michael Blake | beats ✅ | Paperboy Love Prince | 266401 | 51045 | 83.92% | 16.08%
+Michael Blake | beats ✅ | Selma K. Bartholomew | 264026 | 55465 | 82.64% | 17.36%
+Jessica Ramos | loses to ❌ | Zohran Kwame Mamdani | 58642 | 630861 | 8.50% | 91.50%
+Jessica Ramos | loses to ❌ | Andrew M. Cuomo | 99085 | 482636 | 17.03% | 82.97%
+Jessica Ramos | loses to ❌ | Brad Lander | 76932 | 615701 | 11.11% | 88.89%
+Jessica Ramos | loses to ❌ | Adrienne E. Adams | 92653 | 558147 | 14.24% | 85.76%
+Jessica Ramos | loses to ❌ | Scott M. Stringer | 112377 | 312088 | 26.47% | 73.53%
+Jessica Ramos | loses to ❌ | Zellnor Myrie | 119180 | 411376 | 22.46% | 77.54%
+Jessica Ramos | beats ✅ | Whitney R. Tilson | 143295 | 85301 | 62.68% | 37.32%
+Jessica Ramos | loses to ❌ | Michael Blake | 140286 | 252421 | 35.72% | 64.28%
+Jessica Ramos | beats ✅ | Paperboy Love Prince | 149848 | 51720 | 74.34% | 25.66%
+Jessica Ramos | beats ✅ | Selma K. Bartholomew | 143194 | 49128 | 74.46% | 25.54%
+Whitney R. Tilson | loses to ❌ | Zohran Kwame Mamdani | 73668 | 634868 | 10.40% | 89.60%
+Whitney R. Tilson | loses to ❌ | Andrew M. Cuomo | 45581 | 478916 | 8.69% | 91.31%
+Whitney R. Tilson | loses to ❌ | Brad Lander | 64697 | 618724 | 9.47% | 90.53%
+Whitney R. Tilson | loses to ❌ | Adrienne E. Adams | 74280 | 564461 | 11.63% | 88.37%
+Whitney R. Tilson | loses to ❌ | Scott M. Stringer | 75909 | 308832 | 19.73% | 80.27%
+Whitney R. Tilson | loses to ❌ | Zellnor Myrie | 85119 | 414876 | 17.02% | 82.98%
+Whitney R. Tilson | loses to ❌ | Michael Blake | 94676 | 262823 | 26.48% | 73.52%
+Whitney R. Tilson | loses to ❌ | Jessica Ramos | 85301 | 143295 | 37.32% | 62.68%
+Whitney R. Tilson | beats ✅ | Paperboy Love Prince | 97673 | 56089 | 63.52% | 36.48%
+Whitney R. Tilson | beats ✅ | Selma K. Bartholomew | 93834 | 58270 | 61.69% | 38.31%
+Selma K. Bartholomew | loses to ❌ | Zohran Kwame Mamdani | 20586 | 636822 | 3.13% | 96.87%
+Selma K. Bartholomew | loses to ❌ | Andrew M. Cuomo | 42196 | 486365 | 7.98% | 92.02%
+Selma K. Bartholomew | loses to ❌ | Brad Lander | 39792 | 628094 | 5.96% | 94.04%
+Selma K. Bartholomew | loses to ❌ | Adrienne E. Adams | 41491 | 569245 | 6.79% | 93.21%
+Selma K. Bartholomew | loses to ❌ | Scott M. Stringer | 45194 | 325313 | 12.20% | 87.80%
+Selma K. Bartholomew | loses to ❌ | Zellnor Myrie | 53501 | 420203 | 11.29% | 88.71%
+Selma K. Bartholomew | loses to ❌ | Whitney R. Tilson | 58270 | 93834 | 38.31% | 61.69%
+Selma K. Bartholomew | loses to ❌ | Michael Blake | 55465 | 264026 | 17.36% | 82.64%
+Selma K. Bartholomew | loses to ❌ | Jessica Ramos | 49128 | 143194 | 25.54% | 74.46%
+Selma K. Bartholomew | beats ✅ | Paperboy Love Prince | 59946 | 56993 | 51.26% | 48.74%
 
 ## Pairwise matrix
 
