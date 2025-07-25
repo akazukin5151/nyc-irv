@@ -90,7 +90,11 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     eprintln!("Looking for Condorcet winner\n");
 
-    let mut n_wins = HashMap::new();
+    let mut cands_to_n_wins = HashMap::new();
+    for cand in sorted_cands.iter() {
+        cands_to_n_wins.insert(cand, 0);
+    }
+
     let mut winner_found = false;
     for this_cand in sorted_cands.iter() {
         let mut is_cand_possible_cw = true;
@@ -104,7 +108,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             if n_prefer_other_cand > n_prefer_this_cand {
                 is_cand_possible_cw = false;
             } else {
-                n_wins.entry(this_cand).and_modify(|n| *n += 1).or_insert(1);
+                *cands_to_n_wins.get_mut(this_cand).unwrap() += 1;
             }
         }
 
@@ -120,7 +124,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     println!();
 
-    let mut cands_to_n_wins: Vec<(_, _)> = n_wins.iter().collect();
+    let mut cands_to_n_wins: Vec<(_, _)> = cands_to_n_wins.iter().collect();
     cands_to_n_wins.sort_by_key(|x| x.1);
 
     println!("Candidate | Number of pairwise wins");

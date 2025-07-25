@@ -76,6 +76,7 @@ Michael Blake | 4
 Jessica Ramos | 3
 Whitney R. Tilson | 2
 Selma K. Bartholomew | 1
+Paperboy Love Prince | 0
 
 ### Pairwise matchups
 
