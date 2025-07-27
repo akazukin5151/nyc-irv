@@ -11,7 +11,11 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { SankeyController, Flow } from "chartjs-chart-sankey";
-import { SEQUENTIAL_COLORS_SOLID, SEQUENTIAL_COLORS_TRANS, type Setter } from "./core";
+import {
+  SEQUENTIAL_COLORS_SOLID,
+  SEQUENTIAL_COLORS_TRANS,
+  type Setter,
+} from "./core";
 
 ChartJS.register(
   Tooltip,
@@ -228,59 +232,67 @@ export function FirstChoiceAnalysis({
         <p>first, their later choices were:</p>
       </div>
 
-      <div style={{ height: "80%" }} className="mb-6">
-        {isComputing ? (
-          <div className="h-full w-full rounded-xl bg-neutral-100"></div>
-        ) : (chartData.labels?.length ?? 0) > 0 ? (
-          <Chart
-            type="bar"
-            data={chartData}
-            options={{
-              responsive: true,
-              maintainAspectRatio: false,
-              indexAxis: "y",
-              scales: {
-                x: {
-                  stacked: true,
-                },
-                y: {
-                  stacked: true,
-                },
-              },
-            }}
-          />
-        ) : (
-          <p>Please select a candidate first</p>
-        )}
-      </div>
+      {!(isComputing || (chartData.labels?.length ?? 0) > 0) ? (
+        <div className="h-full">
+        <p>Please select a candidate first</p>
+        </div>
+      ) : (
+        <div style={{ height: "80%" }} className="mb-6">
+          {isComputing ? (
+            <div className="h-full w-full rounded-xl bg-neutral-100"></div>
+          ) : (
+            (chartData.labels?.length ?? 0) > 0 && (
+              <Chart
+                type="bar"
+                data={chartData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  indexAxis: "y",
+                  scales: {
+                    x: {
+                      stacked: true,
+                    },
+                    y: {
+                      stacked: true,
+                    },
+                  },
+                }}
+              />
+            )
+          )}
+        </div>
+      )}
 
-      <h2>Sankey</h2>
-      <div className="h-full pb-3">
-        {isComputing ? (
-          <div className="h-full w-full rounded-xl bg-neutral-100"></div>
-        ) : (
-          (sankeyChartData.datasets[0].data.length ?? 0) > 0 && (
-            <Chart
-              type="sankey"
-              data={sankeyChartData}
-              options={{
-                animation: false,
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: "y",
-                scales: {
-                  x: {
-                    stacked: true,
+      {(isComputing || (sankeyChartData.datasets[0].data.length ?? 0) > 0) && (
+        <div className="h-full pb-3">
+          <h2>Sankey</h2>
+          {isComputing ? (
+            <div className="h-full w-full rounded-xl bg-neutral-100"></div>
+          ) : (
+            (sankeyChartData.datasets[0].data.length ?? 0) > 0 && (
+              <Chart
+                type="sankey"
+                data={sankeyChartData}
+                options={{
+                  animation: false,
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  indexAxis: "y",
+                  scales: {
+                    x: {
+                      stacked: true,
+                    },
+                    y: {
+                      stacked: true,
+                    },
                   },
-                  y: {
-                    stacked: true,
-                  },
-                },
-              }}
-            />
-          )
-        )}
-      </div>
+                }}
+              />
+            )
+          )}
+        </div>
+      )}
     </>
   );
 }

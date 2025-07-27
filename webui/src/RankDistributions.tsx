@@ -37,25 +37,27 @@ export function RankDistributions({
     <>
       <h2>Rank distributions</h2>
 
-      {chartData.datasets.length > 0 && (
-        <Chart
-          type="bar"
-          data={chartData}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            indexAxis: "y",
-            scales: {
-              x: {
-                stacked: true,
+      <div style={{ height: "80%" }}>
+        {chartData.datasets.length > 0 && (
+          <Chart
+            type="bar"
+            data={chartData}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              indexAxis: "y",
+              scales: {
+                x: {
+                  stacked: true,
+                },
+                y: {
+                  stacked: true,
+                },
               },
-              y: {
-                stacked: true,
-              },
-            },
-          }}
-        />
-      )}
+            }}
+          />
+        )}
+      </div>
     </>
   );
 }
