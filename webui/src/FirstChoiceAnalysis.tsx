@@ -234,7 +234,7 @@ export function FirstChoiceAnalysis({
 
       {!(isComputing || (chartData.labels?.length ?? 0) > 0) ? (
         <div className="h-full">
-        <p>Please select a candidate first</p>
+          <p>Please select a candidate first</p>
         </div>
       ) : (
         <div style={{ height: "80%" }} className="mb-6">
