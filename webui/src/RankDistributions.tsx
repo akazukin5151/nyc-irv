@@ -1,6 +1,6 @@
 import { type ChartData } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { CHART_COLORS, NAMED_COLORS } from "./core";
+import { GRAY, SEQUENTIAL_COLORS_TRANS } from "./core";
 
 type RankDistributionsProps = {
   cands: Array<string>;
@@ -22,7 +22,7 @@ export function RankDistributions({
 
     for (let rank = 0; rank < rankDistData.length; rank++) {
       const label = rank === 5 ? "Unranked" : `Rank ${rank + 1}`;
-      const color = rank === 5 ? NAMED_COLORS.grey : CHART_COLORS[rank];
+      const color = rank === 5 ? GRAY : SEQUENTIAL_COLORS_TRANS[rank];
       datasets.push({
         label,
         data: rankDistData[rank],

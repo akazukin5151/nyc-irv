@@ -11,7 +11,7 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { SankeyController, Flow } from "chartjs-chart-sankey";
-import { CHART_COLORS, type Setter } from "./core";
+import { SEQUENTIAL_COLORS_SOLID, SEQUENTIAL_COLORS_TRANS, type Setter } from "./core";
 
 ChartJS.register(
   Tooltip,
@@ -62,11 +62,11 @@ export function FirstChoiceAnalysis({
         data: [],
         colorFrom: (c) => {
           const sd = c.dataset.data[c.dataIndex] as SankeyData;
-          return CHART_COLORS[sd.fromIdx - 1];
+          return SEQUENTIAL_COLORS_SOLID[sd.fromIdx - 1];
         },
         colorTo: (c) => {
           const sd = c.dataset.data[c.dataIndex] as SankeyData;
-          return CHART_COLORS[sd.toIdx - 1];
+          return SEQUENTIAL_COLORS_SOLID[sd.toIdx - 1];
         },
         // TODO: not working
         // column: {
@@ -120,8 +120,8 @@ export function FirstChoiceAnalysis({
       const dataset = {
         label: `${choice_num}${str} choice`,
         data,
-        backgroundColor: CHART_COLORS[choice_idx + 1],
-        borderColor: CHART_COLORS[choice_idx + 1],
+        backgroundColor: SEQUENTIAL_COLORS_TRANS[choice_idx + 1],
+        borderColor: SEQUENTIAL_COLORS_TRANS[choice_idx + 1],
       };
       datasets.push(dataset);
     }
