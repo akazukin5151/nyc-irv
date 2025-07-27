@@ -268,7 +268,7 @@ export function FirstChoiceAnalysis({
       )}
 
       {(isComputing || (sankeyChartData.datasets[0].data.length ?? 0) > 0) && (
-        <div className="h-full pb-3">
+        <div className="h-full">
           <h2>Sankey</h2>
           {isComputing ? (
             <div className="h-full w-full rounded-xl bg-neutral-100"></div>
@@ -296,6 +296,8 @@ export function FirstChoiceAnalysis({
           )}
         </div>
       )}
+
+      <div style={{ height: "10%" }}></div>
     </>
   );
 }

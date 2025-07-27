@@ -49,7 +49,7 @@ function App() {
   }, []);
 
   return (
-    <div className="h-screen p-2">
+    <div className="h-screen p-6">
       <h1 className="mb-3">
         2025 New York City Democratic mayoral primary analysis
       </h1>
