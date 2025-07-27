@@ -220,15 +220,11 @@ fn main() -> Result<(), Box<dyn Error>> {
         let sum = sum as f64;
         for (idx, freq) in position_freqs.iter().enumerate() {
             let perc = *freq as f64 / sum * 100.;
-            if idx == 5 {
-                println!("Unranked: {freq} ({:.02}%)", perc);
-            } else {
-                println!("Rank {}: {freq} ({:.02}%)", idx + 1, perc);
-            }
+            f.write_all(format!("{}\t{freq}\n", idx + 1).as_bytes())?;
         }
     }
 
-    println!();
+    println!("\nWriting later choices data");
 
     let mut all_n_voters = vec![];
     for (idx, (cand, _)) in cands_to_n_wins.iter().enumerate() {
@@ -245,36 +241,6 @@ fn main() -> Result<(), Box<dyn Error>> {
             })
             .collect();
 
-        let n_voters = later_choices.len();
-        println!(
-            "For the {} voters who ranked {cand} first, their later choices were...",
-            n_voters
-        );
-
-        for choice_idx in 0..4 {
-            let mut freqs = HashMap::new();
-            for choices in &later_choices {
-                let cand = choices.get(choice_idx).unwrap_or(&"(Exhausted)");
-                freqs.entry(cand).and_modify(|c| *c += 1).or_insert(1);
-            }
-
-            let mut sorted: Vec<_> = freqs.into_iter().collect();
-            sorted.sort_by_key(|kv| kv.1);
-            sorted.reverse();
-
-            let sum: usize = sorted.iter().map(|kv| kv.1).sum();
-            assert_eq!(sum, n_voters);
-            let sum = n_voters as f64;
-
-            println!("Choice {}", choice_idx + 2);
-            for (choice, freq) in sorted {
-                println!("{choice} - {freq} ({:.2}%)", freq as f64 / sum * 100.);
-            }
-            println!();
-        }
-
-        println!();
-
         let later_choices_compact: Vec<Vec<usize>> = later_choices
             .iter()
             .map(|choices| {
@@ -289,6 +255,8 @@ fn main() -> Result<(), Box<dyn Error>> {
                     .collect()
             })
             .collect();
+
+        let n_voters = later_choices_compact.len();
 
         let mut path = PathBuf::from("./out/later_choices");
         let _ = fs::create_dir_all(&path);
