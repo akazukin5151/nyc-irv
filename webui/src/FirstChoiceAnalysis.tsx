@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   Tooltip,
@@ -53,10 +53,15 @@ export function FirstChoiceAnalysis({
   setLaterChoices,
 }: FirstChoiceAnalysisProps) {
   const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
-  const [isComputing, setIsComputing] = useState(false);
+
+  useEffect(() => {
+    if (cands.length > 0 && firstChoiceCand == null) {
+      handleCandidateSelect(cands[0]);
+    }
+  }, [cands, firstChoiceCand]);
 
   const idx = cands.findIndex((c) => c === firstChoiceCand);
-  const nVotes = firstChoiceCand == null ? "xxx" : allNVotes[idx].toString();
+  const nVotes = allNVotes.length === 0 ? "xxx" : allNVotes[idx].toString();
 
   const chartData: ChartData<"bar", Array<number>, string> = {
     labels: [],
@@ -178,6 +183,7 @@ export function FirstChoiceAnalysis({
   }
 
   const handleCandidateSelect = async (cand: string) => {
+    setFirstChoiceCand(cand);
     const idx = cands.findIndex((c) => c === cand);
     const res = await fetch(`later_choices/${idx}.bin`);
     const bytes = await res.bytes();
@@ -203,7 +209,6 @@ export function FirstChoiceAnalysis({
     }
 
     setLaterChoices(later_choices);
-    setIsComputing(false);
   };
 
   return (
@@ -215,17 +220,10 @@ export function FirstChoiceAnalysis({
         <p> voters who ranked</p>
         <select
           className="mx-2 rounded-md border-1 px-2"
-          defaultValue="null"
           onChange={(evt) => {
-            setIsComputing(true);
-            const cand = evt.target.value;
-            setFirstChoiceCand(cand);
-            handleCandidateSelect(cand);
+            handleCandidateSelect(evt.target.value);
           }}
         >
-          <option disabled value="null">
-            ---Please select a candidate---
-          </option>
           {cands.map((cand) => (
             <option value={cand} key={cand}>
               {cand}
@@ -235,65 +233,49 @@ export function FirstChoiceAnalysis({
         <p>first, their later choices were:</p>
       </div>
 
-      {!(isComputing || (chartData.labels?.length ?? 0) > 0) ? (
-        <div className="h-full">
-          <p>Please select a candidate first</p>
-        </div>
-      ) : (
-        <div style={{ height: "80%" }} className="mb-6">
-          {isComputing ? (
-            <div className="h-full w-full rounded-xl bg-neutral-100"></div>
-          ) : (
-            (chartData.labels?.length ?? 0) > 0 && (
-              <Chart
-                type="bar"
-                data={chartData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  indexAxis: "y",
-                  scales: {
-                    x: {
-                      stacked: true,
-                    },
-                    y: {
-                      stacked: true,
-                    },
-                  },
-                }}
-              />
-            )
-          )}
-        </div>
-      )}
+      <div style={{ height: "80%" }} className="mb-6">
+        {(chartData.labels?.length ?? 0) > 0 && (
+          <Chart
+            type="bar"
+            data={chartData}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              indexAxis: "y",
+              scales: {
+                x: {
+                  stacked: true,
+                },
+                y: {
+                  stacked: true,
+                },
+              },
+            }}
+          />
+        )}
+      </div>
 
-      {(isComputing || (sankeyChartData.datasets[0].data.length ?? 0) > 0) && (
+      {(sankeyChartData.datasets[0].data.length ?? 0) > 0 && (
         <div className="h-full">
           <h2>Sankey</h2>
-          {isComputing ? (
-            <div className="h-full w-full rounded-xl bg-neutral-100"></div>
-          ) : (
-            (sankeyChartData.datasets[0].data.length ?? 0) > 0 && (
-              <Chart
-                type="sankey"
-                data={sankeyChartData}
-                options={{
-                  animation: false,
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  indexAxis: "y",
-                  scales: {
-                    x: {
-                      stacked: true,
-                    },
-                    y: {
-                      stacked: true,
-                    },
-                  },
-                }}
-              />
-            )
-          )}
+          <Chart
+            type="sankey"
+            data={sankeyChartData}
+            options={{
+              animation: false,
+              responsive: true,
+              maintainAspectRatio: false,
+              indexAxis: "y",
+              scales: {
+                x: {
+                  stacked: true,
+                },
+                y: {
+                  stacked: true,
+                },
+              },
+            }}
+          />
         </div>
       )}
 
