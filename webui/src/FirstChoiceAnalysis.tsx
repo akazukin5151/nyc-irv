@@ -11,7 +11,7 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { SankeyController, Flow } from "chartjs-chart-sankey";
-import type { Setter } from "./core";
+import { CHART_COLORS, type Setter } from "./core";
 
 ChartJS.register(
   Tooltip,
@@ -23,16 +23,6 @@ ChartJS.register(
   SankeyController,
   Flow,
 );
-
-const CHART_COLORS = Object.values({
-  red: "rgb(255, 99, 132)",
-  orange: "rgb(255, 159, 64)",
-  yellow: "rgb(255, 205, 86)",
-  green: "rgb(75, 192, 192)",
-  blue: "rgb(54, 162, 235)",
-  purple: "rgb(153, 102, 255)",
-  grey: "rgb(201, 203, 207)",
-});
 
 type SankeyData = {
   from: string;
@@ -211,6 +201,7 @@ export function FirstChoiceAnalysis({
 
   return (
     <>
+      <h2>Later choices</h2>
       <div className="mb-2 inline-flex">
         <p>For the</p>
         <p className="mx-2 font-mono">{nVotes}</p>
@@ -263,6 +254,7 @@ export function FirstChoiceAnalysis({
         )}
       </div>
 
+      <h2>Sankey</h2>
       <div className="h-full pb-3">
         {isComputing ? (
           <div className="h-full w-full rounded-xl bg-neutral-100"></div>

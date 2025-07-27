@@ -203,8 +203,13 @@ fn main() -> Result<(), Box<dyn Error>> {
         println!();
     }
 
-    for (cand, _) in cands_to_n_wins.iter() {
-        println!("\nDistribution of ranks for {cand}");
+    println!("\nWriting distribution of ranks");
+
+    let path = PathBuf::from("./out/rank-distributions.tsv");
+    let mut f = writeable_file(path)?;
+    f.write_all(b"cand\trank\tfreq\n")?;
+
+    for (cand_idx, (cand, _)) in cands_to_n_wins.iter().enumerate() {
         let mut position_freqs = [0; 6];
         for ballot in &all_ballots {
             let pos = ballot
@@ -216,11 +221,8 @@ fn main() -> Result<(), Box<dyn Error>> {
             }
         }
 
-        let sum: i32 = position_freqs.iter().sum();
-        let sum = sum as f64;
         for (idx, freq) in position_freqs.iter().enumerate() {
-            let perc = *freq as f64 / sum * 100.;
-            f.write_all(format!("{}\t{freq}\n", idx + 1).as_bytes())?;
+            f.write_all(format!("{cand_idx}\t{}\t{freq}\n", idx + 1).as_bytes())?;
         }
     }
 

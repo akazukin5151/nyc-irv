@@ -5,3 +5,10 @@
   --font-serif: serif;
   --font-mono: monospace;
 }
+
+@layer base {
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: bold;
+  }
+}
