@@ -1,6 +1,24 @@
-import { type ChartData } from "chart.js";
+import {
+  Chart as ChartJS,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Colors,
+  type ChartData,
+} from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { GRAY, SEQUENTIAL_COLORS_TRANS } from "./core";
+
+ChartJS.register(
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Colors,
+);
 
 type RankDistributionsProps = {
   cands: Array<string>;
