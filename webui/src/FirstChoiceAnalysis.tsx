@@ -214,7 +214,7 @@ export function FirstChoiceAnalysis({
   return (
     <>
       <h2>Later choices</h2>
-      <div className="mb-2 inline-flex">
+      <div className="mb-2 inline-flex flex-wrap">
         <p>For the</p>
         <p className="mx-2 font-mono">{nVotes}</p>
         <p> voters who ranked</p>
