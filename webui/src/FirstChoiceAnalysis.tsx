@@ -176,7 +176,7 @@ export function FirstChoiceAnalysis({
 
   const handleCandidateSelect = async (cand: string) => {
     const idx = cands.findIndex((c) => c === cand);
-    const res = await fetch(`/later_choices/${idx}.bin`);
+    const res = await fetch(`later_choices/${idx}.bin`);
     const bytes = await res.bytes();
 
     const later_choices: Array<Array<string>> = [];

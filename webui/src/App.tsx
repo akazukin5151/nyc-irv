@@ -11,9 +11,9 @@ function App() {
   useEffect(() => {
     const fn = async () => {
       const promises = [
-        fetch("/sorted_cands.tsv"),
-        fetch("/n_voters.tsv"),
-        fetch("/rank-distributions.tsv"),
+        fetch("sorted_cands.tsv"),
+        fetch("n_voters.tsv"),
+        fetch("rank-distributions.tsv"),
       ];
       const res = await Promise.all(promises);
       const texts = await Promise.all(res.map((r) => r.text()));
