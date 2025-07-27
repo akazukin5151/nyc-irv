@@ -3,11 +3,19 @@ use std::{
     error::Error,
     fs::{self, File},
     io::{Read, Write},
-    path::PathBuf,
+    path::{Path, PathBuf},
     time::Instant,
 };
 
 use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
+
+fn writeable_file<P: AsRef<Path>>(path: P) -> Result<File, std::io::Error> {
+    File::options()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open(path)
+}
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut ballot_file = File::open("./out/ballots.bin")?;
@@ -129,11 +137,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     cands_to_n_wins.sort_by_key(|x| x.1);
     let cands_to_n_wins: Vec<_> = cands_to_n_wins.into_iter().rev().collect();
 
-    let mut f = File::options()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open("./out/sorted_cands.tsv")?;
+    let mut f = writeable_file("./out/sorted_cands.tsv")?;
 
     for (cand, _) in &cands_to_n_wins {
         f.write_all(cand.as_bytes())?;
@@ -290,11 +294,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         let _ = fs::create_dir_all(&path);
         path.push(format!("{idx}.bin"));
 
-        let mut f = File::options()
-            .write(true)
-            .create(true)
-            .truncate(true)
-            .open(path)?;
+        let mut f = writeable_file(path)?;
 
         for choices in later_choices_compact {
             f.write_all(&[choices.len() as u8])?;
@@ -306,11 +306,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         all_n_voters.push(n_voters);
     }
 
-    let mut f = File::options()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open("./out/n_voters.tsv")?;
+    let mut f = writeable_file("./out/n_voters.tsv")?;
 
     for n_voters in all_n_voters {
         f.write_all(n_voters.to_string().as_bytes())?;
