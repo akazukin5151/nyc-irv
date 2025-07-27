@@ -6,6 +6,7 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
+  BarController,
   Colors,
   type ChartData,
 } from "chart.js";
@@ -23,6 +24,8 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
+  BarController,
+
   Colors,
   SankeyController,
   Flow,
