@@ -50,6 +50,20 @@ function App() {
 
   return (
     <div className="h-screen p-2">
+      <h1 className="mb-3">
+        2025 New York City Democratic mayoral primary analysis
+      </h1>
+      <p className="mb-3">
+        This is the page containing interactive charts. See{" "}
+        <a
+          className="text-blue-500 underline"
+          href="https://github.com/akazukin5151/nyc-irv/blob/main/README.md"
+        >
+          https://github.com/akazukin5151/nyc-irv/blob/main/README.md
+        </a>{" "}
+        for static results
+      </p>
+
       <RankDistributions cands={cands} rankDistData={rankDistData} />
 
       <FirstChoiceAnalysis

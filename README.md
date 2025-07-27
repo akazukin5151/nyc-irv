@@ -1,4 +1,4 @@
-# 2025 New York City Democratic mayoral primary
+# 2025 New York City Democratic mayoral primary analysis
 
 Condorcet analysis of the 2025 New York City Democratic mayoral primary. It was done under IRV (RCV), which does not always elect the Condorcet winner.
 
@@ -228,4 +228,8 @@ Selma K. Bartholomew | 20586 | 42196 | 39792 | 41491 | 45194 | 53501 | 58270 | 5
 The rows are sorted with the first preferences vote on top.
 
 Looking at the first row with Zohran Kwame Mamdani, for every other candidate, more voters preferred him over the other. Therefore he is the Condorcet winner.
+
+### Interactive charts
+
+See https://akazukin5151.github.io/nyc-irv/
 
