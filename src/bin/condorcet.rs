@@ -1,4 +1,11 @@
-use std::{collections::HashMap, error::Error, fs::File, io::Read, time::Instant};
+use std::{
+    collections::HashMap,
+    error::Error,
+    fs::{self, File},
+    io::{Read, Write},
+    path::PathBuf,
+    time::Instant,
+};
 
 use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 
@@ -122,6 +129,17 @@ fn main() -> Result<(), Box<dyn Error>> {
     cands_to_n_wins.sort_by_key(|x| x.1);
     let cands_to_n_wins: Vec<_> = cands_to_n_wins.into_iter().rev().collect();
 
+    let mut f = File::options()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open("./out/sorted_cands.tsv")?;
+
+    for (cand, _) in &cands_to_n_wins {
+        f.write_all(cand.as_bytes())?;
+        f.write_all(b"\t")?;
+    }
+
     println!("Candidate | Number of pairwise wins");
     println!("--- | ---");
     for (cand, n_wins) in &cands_to_n_wins {
@@ -208,11 +226,11 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     println!();
 
-    for (cand, _) in cands_to_n_wins.iter() {
-        println!("For people who ranked {cand} first, their later choices were...");
+    let mut all_n_voters = vec![];
+    for (idx, (cand, _)) in cands_to_n_wins.iter().enumerate() {
         let later_choices: Vec<Vec<&str>> = all_ballots
             .iter()
-            .filter(|ballot| ballot.iter().flatten().next() == Some(*cand))
+            .filter(|ballot| ballot.iter().flatten().next() == Some(cand))
             .map(|ballot| {
                 ballot
                     .iter()
@@ -223,21 +241,26 @@ fn main() -> Result<(), Box<dyn Error>> {
             })
             .collect();
 
+        let n_voters = later_choices.len();
+        println!(
+            "For the {} voters who ranked {cand} first, their later choices were...",
+            n_voters
+        );
+
         for choice_idx in 0..4 {
             let mut freqs = HashMap::new();
             for choices in &later_choices {
-                let Some(nth_choice) = choices.get(choice_idx) else {
-                    continue;
-                };
-                freqs.entry(nth_choice).and_modify(|c| *c += 1).or_insert(1);
+                let cand = choices.get(choice_idx).unwrap_or(&"(Exhausted)");
+                freqs.entry(cand).and_modify(|c| *c += 1).or_insert(1);
             }
 
             let mut sorted: Vec<_> = freqs.into_iter().collect();
             sorted.sort_by_key(|kv| kv.1);
             sorted.reverse();
 
-            let sum: i32 = sorted.iter().map(|kv| kv.1).sum();
-            let sum = sum as f64;
+            let sum: usize = sorted.iter().map(|kv| kv.1).sum();
+            assert_eq!(sum, n_voters);
+            let sum = n_voters as f64;
 
             println!("Choice {}", choice_idx + 2);
             for (choice, freq) in sorted {
@@ -247,6 +270,51 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
 
         println!();
+
+        let later_choices_compact: Vec<Vec<usize>> = later_choices
+            .iter()
+            .map(|choices| {
+                choices
+                    .iter()
+                    .map(|cand| {
+                        cands_to_n_wins
+                            .iter()
+                            .position(|(c, _)| *c == cand)
+                            .unwrap()
+                    })
+                    .collect()
+            })
+            .collect();
+
+        let mut path = PathBuf::from("./out/later_choices");
+        let _ = fs::create_dir_all(&path);
+        path.push(format!("{idx}.bin"));
+
+        let mut f = File::options()
+            .write(true)
+            .create(true)
+            .truncate(true)
+            .open(path)?;
+
+        for choices in later_choices_compact {
+            f.write_all(&[choices.len() as u8])?;
+            for cand in choices {
+                f.write_all(&[cand as u8])?;
+            }
+        }
+
+        all_n_voters.push(n_voters);
+    }
+
+    let mut f = File::options()
+        .write(true)
+        .create(true)
+        .truncate(true)
+        .open("./out/n_voters.tsv")?;
+
+    for n_voters in all_n_voters {
+        f.write_all(n_voters.to_string().as_bytes())?;
+        f.write_all(b"\t")?;
     }
 
     Ok(())
