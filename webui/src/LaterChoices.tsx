@@ -66,7 +66,8 @@ export function LaterChoices({
   }, [cands, firstChoiceCand]);
 
   const idx = cands.findIndex((c) => c === firstChoiceCand);
-  const nVotes = allNVotes.length === 0 ? "xxx" : allNVotes[idx].toString();
+  const nVotes =
+    allNVotes.length === 0 ? "xxx" : (allNVotes[idx]?.toString() ?? "xxx");
 
   const chartData: ChartData<"bar", Array<number>, string> = {
     labels: [],
