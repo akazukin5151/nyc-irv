@@ -69,7 +69,11 @@ export function LaterChoices({
 
   const idx = cands.findIndex((c) => c === firstChoiceCand);
   const nVotes =
-    allNVotes.length === 0 ? "xxx" : (allNVotes[idx]?.toString() ?? "xxx");
+    allNVotes.length === 0
+      ? "xxx"
+      : allNVotes[idx] == null
+        ? "xxx"
+        : (new Intl.NumberFormat("en-US").format(allNVotes[idx]) ?? "xxx");
 
   const chartData: ChartData<"bar", Array<number>, string> = {
     labels: [],
