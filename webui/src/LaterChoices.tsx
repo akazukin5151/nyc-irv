@@ -40,7 +40,7 @@ type SankeyData = {
   toIdx: number;
 };
 
-type FirstChoiceAnalysisProps = {
+type LaterChoicesProps = {
   cands: Array<string>;
   allNVotes: Array<number>;
   laterChoices: Array<Array<number>>;
@@ -49,14 +49,14 @@ type FirstChoiceAnalysisProps = {
   setFlowData: Setter<Record<string, Record<string, number>>>;
 };
 
-export function FirstChoiceAnalysis({
+export function LaterChoices({
   cands,
   allNVotes,
   laterChoices,
   setLaterChoices,
   flowData,
   setFlowData,
-}: FirstChoiceAnalysisProps) {
+}: LaterChoicesProps) {
   const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
 
   useEffect(() => {

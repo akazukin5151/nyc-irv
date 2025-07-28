@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FirstChoiceAnalysis } from "./FirstChoiceAnalysis";
+import { LaterChoices } from "./LaterChoices";
 import { RankDistributions } from "./RankDistributions";
 import { handleCandidateSelectCore } from "./core";
 
@@ -74,7 +74,7 @@ function App() {
 
       <RankDistributions cands={cands} rankDistData={rankDistData} />
 
-      <FirstChoiceAnalysis
+      <LaterChoices
         cands={cands}
         allNVotes={allNVotes}
         laterChoices={laterChoices}
