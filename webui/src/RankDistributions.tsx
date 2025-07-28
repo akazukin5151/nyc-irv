@@ -10,7 +10,7 @@ import {
   type ChartData,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { GRAY, SEQUENTIAL_COLORS_TRANS } from "./core";
+import { GRAY, percInFooter, SEQUENTIAL_COLORS_TRANS } from "./core";
 
 ChartJS.register(
   Tooltip,
@@ -95,21 +95,7 @@ export function RankDistributions({
                               : "th";
                       return `${n} voters ranked ${c.label} as their ${choice_num}${str} choice`;
                     },
-                    footer: (context) => {
-                      const c = context[0];
-                      const n = c.dataset.data[c.dataIndex] as number;
-                      const sum_of_this_rank = (c.dataset.data.reduce(
-                        (a, b) => (a as number) + (b as number),
-                        0,
-                      ) ?? 0) as number;
-                      if (sum_of_this_rank === 0) {
-                        return ``;
-                      }
-                      const perc = new Intl.NumberFormat("en-US", {
-                        maximumFractionDigits: 2,
-                      }).format((n / sum_of_this_rank) * 100);
-                      return `${perc}% of all ${c.dataset.label} votes`;
-                    },
+                    footer: percInFooter,
                   },
                 },
               },

@@ -14,6 +14,7 @@ import { Chart } from "react-chartjs-2";
 import { SankeyController, Flow } from "chartjs-chart-sankey";
 import {
   handleCandidateSelectCore,
+  percInFooter,
   SEQUENTIAL_COLORS_SOLID,
   SEQUENTIAL_COLORS_TRANS,
   type Setter,
@@ -140,6 +141,11 @@ export function LaterChoices({
     handleCandidateSelectCore(idx, setLaterChoices, setFlowData);
   };
 
+  let cur_cand_last_name = "";
+  if (firstChoiceCand != null) {
+    cur_cand_last_name = firstChoiceCand.split(" ").pop() ?? "";
+  }
+
   return (
     <>
       <h2>Later choices</h2>
@@ -181,6 +187,31 @@ export function LaterChoices({
                 },
                 y: {
                   stacked: true,
+                },
+              },
+              plugins: {
+                tooltip: {
+                  footerFont: { weight: "normal" },
+                  callbacks: {
+                    title: (c) => c[0].formattedValue,
+                    label: (c) => {
+                      const n = c.formattedValue;
+                      const choice_num = c.datasetIndex + 2;
+                      const str =
+                        choice_num === 1
+                          ? "st"
+                          : choice_num === 2
+                            ? "nd"
+                            : choice_num === 3
+                              ? "rd"
+                              : "th";
+                      if (c.label === "Exhausted") {
+                        return `${n} ${cur_cand_last_name} voters exhausted their ballot by the ${choice_num}${str} choice`;
+                      }
+                      return `${n} ${cur_cand_last_name} voters ranked ${c.label} as their ${choice_num}${str} choice`;
+                    },
+                    footer: percInFooter,
+                  },
                 },
               },
             }}
