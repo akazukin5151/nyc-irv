@@ -229,50 +229,54 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("\nWriting later choices data");
 
     let mut all_n_voters = vec![];
-    for (idx, (cand, _)) in cands_to_n_wins.iter().enumerate() {
+    for (idx, (first_choice_cand, _)) in cands_to_n_wins.iter().enumerate() {
         let later_choices: Vec<Vec<&str>> = all_ballots
             .iter()
-            .filter(|ballot| ballot.iter().flatten().next() == Some(cand))
+            .filter(|ballot| ballot.iter().flatten().next() == Some(first_choice_cand))
             .map(|ballot| {
                 ballot
                     .iter()
                     .flatten()
-                    .filter(|c| c != cand)
+                    .filter(|c| c != first_choice_cand)
                     .copied()
                     .collect()
             })
             .collect();
 
-        let later_choices_compact: Vec<Vec<usize>> = later_choices
-            .iter()
-            .map(|choices| {
-                choices
-                    .iter()
-                    .map(|cand| {
-                        cands_to_n_wins
-                            .iter()
-                            .position(|(c, _)| *c == cand)
-                            .unwrap()
-                    })
-                    .collect()
-            })
-            .collect();
+        let mut cand_rank_freqs: Vec<[i64; 4]> = vec![];
+        for (other_cand, _) in cands_to_n_wins.iter().filter(|c| c.0 != *first_choice_cand) {
+            // for voters that ranked first_choice_cand first, find the position they ranked other_cand
+            let ranks = later_choices
+                .iter()
+                .map(|ballot| ballot.iter().position(|c| c == *other_cand));
 
-        let n_voters = later_choices_compact.len();
+            let mut freqs = [0; 4];
+            for rank in ranks.flatten() {
+                freqs[rank] += 1;
+            }
+            cand_rank_freqs.push(freqs);
+        }
+
+        // treat exhausted as if it's a separate candidate and count
+        // the frequencies of ranks where ballots become exhausted
+        let mut exhausted_freqs = [0; 4];
+        for ballot in &later_choices {
+            for (idx, c) in exhausted_freqs.iter_mut().enumerate() {
+                if ballot.len() <= idx {
+                    *c += 1;
+                }
+            }
+        }
+        cand_rank_freqs.push(exhausted_freqs);
 
         let mut path = PathBuf::from("./out/later_choices");
         let _ = fs::create_dir_all(&path);
-        path.push(format!("{idx}.bin"));
+        path.push(format!("{idx}.json"));
 
         let mut f = writeable_file(path)?;
+        serde_json::to_writer(&mut f, &cand_rank_freqs)?;
 
-        for choices in later_choices_compact {
-            f.write_all(&[choices.len() as u8])?;
-            for cand in choices {
-                f.write_all(&[cand as u8])?;
-            }
-        }
-
+        let n_voters = later_choices.len();
         all_n_voters.push(n_voters);
     }
 

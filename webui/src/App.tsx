@@ -6,7 +6,7 @@ import { handleCandidateSelectCore } from "./core";
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
   const [allNVotes, setAllNVotes] = useState<Array<number>>([]);
-  const [laterChoices, setLaterChoices] = useState<Array<Array<string>>>([]);
+  const [laterChoices, setLaterChoices] = useState<Array<Array<number>>>([]);
   const [rankDistData, setRankDistData] = useState<Array<Array<number>>>([]);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ function App() {
           const cands = cands_csv.split("\t").filter((cand) => cand !== "");
           setCands(cands);
 
-          handleCandidateSelectCore(0, cands, setLaterChoices);
+          handleCandidateSelectCore(0, setLaterChoices);
         });
 
       fetch("n_voters.tsv")

@@ -29,31 +29,9 @@ export const GRAY = "rgba(201, 203, 207, 0.3)";
 
 export async function handleCandidateSelectCore(
   idx: number,
-  cands: Array<string>,
-  setLaterChoices: Setter<Array<Array<string>>>,
+  setLaterChoices: Setter<Array<Array<number>>>,
 ) {
-  const res = await fetch(`later_choices/${idx}.bin`);
-  const bytes = await res.bytes();
-
-  const later_choices: Array<Array<string>> = [];
-  let i = 0;
-  while (i < bytes.length) {
-    const this_voters_choices = [];
-    const arr_length = bytes[i];
-    i += 1;
-    for (let _j = 0; _j < arr_length; _j++) {
-      const cand_idx = bytes[i];
-      const cand = cands[cand_idx];
-      this_voters_choices.push(cand);
-      // this will increment on the last item of the ballot as well,
-      // pointing to the next ballot's `arr_length`. this is fine.
-      // the for loop will end and the next iteration of the while loop
-      // will read the new item into `arr_length`.
-      i += 1;
-    }
-
-    later_choices.push(this_voters_choices);
-  }
-
-  setLaterChoices(later_choices);
+  const res = await fetch(`later_choices/${idx}.json`);
+  const json: Array<Array<number>> = await res.json();
+  setLaterChoices(json);
 }
