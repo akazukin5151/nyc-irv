@@ -144,7 +144,9 @@ export function LaterChoices({
     <>
       <h2>Later choices</h2>
       <div className="sticky-blurred-div sticky top-0 z-1 mb-2 inline-flex w-full flex-wrap justify-center px-1 py-2">
-        <p>For the <span className="font-mono">{nVotes}</span> voters who ranked</p>
+        <p>
+          For the <span className="font-mono">{nVotes}</span> voters who ranked
+        </p>
         <select
           className="mx-2 rounded-md border-1 px-2"
           onChange={(evt) => {

@@ -4,7 +4,7 @@
    * would "slip" through the blur at the bottom. so we make a gradient
    * to make the top part completely opaque, and the bottom part slightly transparent
    * taken from https://www.joshwcomeau.com/css/backdrop-filter/ */
-  background: linear-gradient(to bottom, #fff, rgba(255, 255, 255, .5));
+  background: linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0.5));
 }
 
 /* covers the shadow under the sticky-blurred-div when it's not sticky yet.
