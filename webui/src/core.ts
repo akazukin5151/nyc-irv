@@ -30,8 +30,15 @@ export const GRAY = "rgba(201, 203, 207, 0.3)";
 export async function handleCandidateSelectCore(
   idx: number,
   setLaterChoices: Setter<Array<Array<number>>>,
+  setFlowData: Setter<Record<string, Record<string, number>>>,
 ) {
-  const res = await fetch(`later_choices/${idx}.json`);
-  const json: Array<Array<number>> = await res.json();
-  setLaterChoices(json);
+  fetch(`later_choices/${idx}.json`).then(async (res) => {
+    const json: Array<Array<number>> = await res.json();
+    setLaterChoices(json);
+  });
+
+  fetch(`flows/${idx}.json`).then(async (res) => {
+    const json = await res.json();
+    setFlowData(json);
+  });
 }

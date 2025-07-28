@@ -278,6 +278,57 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         let n_voters = later_choices.len();
         all_n_voters.push(n_voters);
+
+        let mut flows: HashMap<String, HashMap<String, i64>> = HashMap::new();
+
+        for ballot in later_choices {
+            let mut i = 0;
+            // iterate up to ballot.len() + 1 to count exhausted ballots
+            while i < ballot.len() + 1 {
+                // we don't need to count "6. Exhausted"
+                // because by count 5, all preferences have been indicated.
+                // so the next count will be "none".
+                // i + 2 is the number for the `to` field
+                if i + 2 == 6 {
+                    break;
+                }
+
+                let prev_choice = if i == 0 {
+                    first_choice_cand
+                } else {
+                    ballot[i - 1]
+                };
+
+                let next_choice = if i == ballot.len() {
+                    "Exhausted"
+                } else {
+                    ballot[i]
+                };
+
+                let from = format!("{}: {prev_choice}", i + 1);
+                let to = format!("{}: {next_choice}", i + 2);
+
+                flows
+                    .entry(from)
+                    .and_modify(|hmap| {
+                        hmap.entry(to.clone()).and_modify(|c| *c += 1).or_insert(1);
+                    })
+                    .or_insert_with(|| {
+                        let mut hmap = HashMap::new();
+                        hmap.insert(to, 1_i64);
+                        hmap
+                    });
+
+                i += 1;
+            }
+        }
+
+        let mut path = PathBuf::from("./out/flows");
+        let _ = fs::create_dir_all(&path);
+        path.push(format!("{idx}.json"));
+
+        let mut f = writeable_file(path)?;
+        serde_json::to_writer(&mut f, &flows)?;
     }
 
     let mut f = writeable_file("./out/n_voters.tsv")?;
