@@ -57,8 +57,8 @@ function App() {
   }, []);
 
   return (
-    <div className="h-screen p-6">
-      <h1 className="mb-3">
+    <div className="h-screen overflow-y-auto p-6 pt-0">
+      <h1 className="mb-3 pt-6">
         2025 New York City Democratic mayoral primary analysis
       </h1>
       <p className="mb-3">

@@ -18,6 +18,7 @@ import {
   SEQUENTIAL_COLORS_TRANS,
   type Setter,
 } from "./core";
+import "./LaterChoices.css";
 
 ChartJS.register(
   Tooltip,
@@ -142,7 +143,7 @@ export function LaterChoices({
   return (
     <>
       <h2>Later choices</h2>
-      <div className="mb-2 inline-flex flex-wrap">
+      <div className="sticky-blurred-div sticky top-0 z-1 mb-2 inline-flex w-full flex-wrap justify-center px-1 py-2">
         <p>For the</p>
         <p className="mx-2 font-mono">{nVotes}</p>
         <p> voters who ranked</p>
@@ -159,6 +160,10 @@ export function LaterChoices({
           ))}
         </select>
         <p>first, their later choices were:</p>
+      </div>
+      <div className="shadow-under-blur" />
+      <div className="relative">
+        <div className="shadow-coverer" />
       </div>
 
       <div style={{ height: "80%" }} className="mb-6">

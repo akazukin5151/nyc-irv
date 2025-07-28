@@ -1,0 +1,31 @@
+.sticky-blurred-div {
+  backdrop-filter: saturate(180%) blur(20px);
+  /* if it's a single slightly transparent color, some elements
+   * would "slip" through the blur at the bottom. so we make a gradient
+   * to make the top part completely opaque, and the bottom part slightly transparent
+   * taken from https://www.joshwcomeau.com/css/backdrop-filter/ */
+  background: linear-gradient(to bottom, #fff, rgba(255, 255, 255, .5));
+}
+
+/* covers the shadow under the sticky-blurred-div when it's not sticky yet.
+ * there's no need to have a shadow when it's not yet sticky. */
+.shadow-coverer {
+  position: absolute;
+  background: white;
+  width: 100%;
+  height: 15px;
+  top: -5px;
+}
+
+.shadow-under-blur {
+  position: sticky;
+  width: 98%;
+  /* decreasing the width only affects the right side.
+   * shift it to the left so both left and right sides of the shadow can be covered. */
+  left: 2px;
+  /* height of the sticky blurred div */
+  top: 40px;
+  box-shadow:
+    0 4px 6px 1px rgb(0 0 0 / 0.1),
+    0 2px 4px 2px rgb(0 0 0 / 0.1);
+}
