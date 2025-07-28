@@ -106,7 +106,7 @@ export function LaterChoices({
 
     for (let choice_idx = 0; choice_idx < 4; choice_idx++) {
       const choice_num = choice_idx + 2;
-      const str = choice_num === 2 ? "nd" : choice_idx === 3 ? "rd" : "th";
+      const str = choice_num === 2 ? "nd" : choice_num === 3 ? "rd" : "th";
 
       const data = laterChoices.map((freqs) => freqs[choice_idx]);
 
