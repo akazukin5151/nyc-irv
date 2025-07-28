@@ -74,6 +74,45 @@ export function RankDistributions({
                   stacked: true,
                 },
               },
+              plugins: {
+                tooltip: {
+                  footerFont: { weight: "normal" },
+                  callbacks: {
+                    title: (context) => context[0].formattedValue,
+                    label: (c) => {
+                      const n = c.formattedValue;
+                      const choice_num = c.datasetIndex + 1;
+                      if (choice_num === 6) {
+                        return `${n} voters did not rank ${c.label}`;
+                      }
+                      const str =
+                        choice_num === 1
+                          ? "st"
+                          : choice_num === 2
+                            ? "nd"
+                            : choice_num === 3
+                              ? "rd"
+                              : "th";
+                      return `${n} voters ranked ${c.label} as their ${choice_num}${str} choice`;
+                    },
+                    footer: (context) => {
+                      const c = context[0];
+                      const n = c.dataset.data[c.dataIndex] as number;
+                      const sum_of_this_rank = (c.dataset.data.reduce(
+                        (a, b) => (a as number) + (b as number),
+                        0,
+                      ) ?? 0) as number;
+                      if (sum_of_this_rank === 0) {
+                        return ``;
+                      }
+                      const perc = new Intl.NumberFormat("en-US", {
+                        maximumFractionDigits: 2,
+                      }).format((n / sum_of_this_rank) * 100);
+                      return `${perc}% of all ${c.dataset.label} votes`;
+                    },
+                  },
+                },
+              },
             }}
           />
         )}
