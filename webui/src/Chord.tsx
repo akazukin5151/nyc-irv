@@ -23,8 +23,6 @@ export function Chord({ matrix, colors, names }: ChordProps) {
     .sortSubgroups(descending);
 
   const chords = calcChords(matrix);
-  // TODO: for each angle, find the angle between start and end.
-  // this is the angle to place the text label
 
   const calcRibbon = ribbon().radius(innerRadius);
   const ribbonPaths = chords.map((chord) => {
@@ -62,7 +60,6 @@ export function Chord({ matrix, colors, names }: ChordProps) {
   const calcArc = arc().innerRadius(innerRadius).outerRadius(outerRadius);
 
   const arcData = chords.map((chord) => {
-    // TODO: tooltips. d3 example have only one arc for each group.
     const arc = calcArc({
       innerRadius,
       outerRadius,
