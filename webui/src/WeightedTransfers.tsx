@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Chord } from "./Chord";
-import { Sticky } from "./Sticky";
 
 type WeightedTransfersProps = {
   cands: Array<string>;

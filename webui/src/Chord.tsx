@@ -1,6 +1,8 @@
 import { chord, ribbon } from "d3-chord";
 import { arc } from "d3-shape";
-import { chord_to_gradient_rotation } from "./angles";
+import { compute_chord_info } from "./angles";
+import { StyledText } from "./StyledText";
+import { useState } from "react";
 
 type ChordProps = {
   matrix: Array<Array<number>>;
@@ -9,6 +11,8 @@ type ChordProps = {
 };
 
 export function Chord({ matrix, colors, names }: ChordProps) {
+  const [tooltipData, setTooltipData] = useState<number | null>(null);
+
   const width = 900;
   const height = 500;
   const outerRadius = Math.min(width, height) * 0.4;
@@ -36,12 +40,22 @@ export function Chord({ matrix, colors, names }: ChordProps) {
     const target_value = chord.target.value;
     const title = `${source_value} ${source_name} → ${target_name}\n${target_value} ${target_name} → ${source_name}`;
 
+    const { degrees, coord1, coord2 } = compute_chord_info(
+      chord.source,
+      chord.target,
+      innerRadius - 30,
+    );
+
     return {
       ribbonPath,
       title,
-      rotation: chord_to_gradient_rotation(chord.source, chord.target),
+      rotation: degrees,
       sourceColor: colors[chord.source.index],
       targetColor: colors[chord.target.index],
+      source_value,
+      target_value,
+      coord1,
+      coord2,
     };
   });
 
@@ -72,9 +86,16 @@ export function Chord({ matrix, colors, names }: ChordProps) {
     }),
   );
 
+  const offset = 90;
+  const zoomedWidth = width - offset;
+  const zoomedHeight = height - offset;
+  const offsetX = -zoomedWidth / 2;
+  const offsetY = -zoomedHeight / 2;
+  const viewBox = `${offsetX},${offsetY},${zoomedWidth},${zoomedHeight}`;
+
   return (
     <>
-      <svg width={width} height={height} viewBox="-350,-200,700,400">
+      <svg width={width} height={height} viewBox={viewBox}>
         <defs>
           {ribbonPaths.map(({ rotation, sourceColor, targetColor }, idx) => (
             <linearGradient
@@ -89,16 +110,65 @@ export function Chord({ matrix, colors, names }: ChordProps) {
         </defs>
         <g>
           {arcData.map(({ arc, color }, idx) => (
-            <path fill={color} d={arc ?? ""} key={idx}></path>
+            <path
+              fill={color}
+              d={arc ?? ""}
+              key={idx}
+              onMouseOver={() => {
+                setTooltipData(idx);
+              }}
+              onMouseLeave={() => {
+                setTooltipData(null);
+              }}
+            ></path>
           ))}
         </g>
 
         <g fillOpacity="0.7" stroke="#55555566" strokeWidth="0.5">
-          {ribbonPaths.map(({ ribbonPath, title }, idx) => (
-            <path fill={`url(#grad-${idx})`} d={ribbonPath ?? ""} key={idx}>
-              <title>{title}</title>
-            </path>
-          ))}
+          {ribbonPaths.map(
+            (
+              { ribbonPath, title, source_value, target_value, coord1, coord2 },
+              idx,
+            ) => (
+              <g className="group">
+                <path
+                  fill={`url(#grad-${idx})`}
+                  d={ribbonPath ?? ""}
+                  key={idx}
+                  opacity={
+                    tooltipData == null ? 1 : tooltipData !== idx ? 0.1 : 1
+                  }
+                  className="transition-opacity"
+                  onMouseOver={() => {
+                    setTooltipData(idx);
+                  }}
+                  onMouseLeave={() => {
+                    setTooltipData(null);
+                  }}
+                >
+                  <title>{title}</title>
+                </path>
+                <StyledText
+                  idx={idx}
+                  x={coord1[0]}
+                  y={-coord1[1]}
+                  tooltipData={tooltipData}
+                  setTooltipData={setTooltipData}
+                >
+                  {source_value}
+                </StyledText>
+                <StyledText
+                  idx={idx}
+                  x={coord2[0]}
+                  y={-coord2[1]}
+                  tooltipData={tooltipData}
+                  setTooltipData={setTooltipData}
+                >
+                  {target_value}
+                </StyledText>
+              </g>
+            ),
+          )}
         </g>
       </svg>
     </>

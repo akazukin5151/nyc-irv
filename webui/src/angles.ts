@@ -1,5 +1,11 @@
 import type { ChordSubgroup } from "d3-chord";
 
+export type ChordInfo = {
+  degrees: number;
+  coord1: readonly [number, number];
+  coord2: readonly [number, number];
+};
+
 /**
  * a chord consists of a source and target place, both denoted by its angle.
  * in both the source and target itself have an arc width.
@@ -23,26 +29,37 @@ import type { ChordSubgroup } from "d3-chord";
  * 2. these angles are actually bearings. convert to mathematical angles.
  * 3. use dot product, determinant, and atan2 to find the *clockwise* angle
  * from source to target
+ *
+ * also returns the calculated coordinates based on the radius. note that
+ * the y coordinate have positive values on the top, which is the inverse
+ * of svg y coordinates
  */
-export function chord_to_gradient_rotation(
+export function compute_chord_info(
   source: ChordSubgroup,
   target: ChordSubgroup,
-): number {
+  radius: number,
+): ChordInfo {
   const mid_bearing1 = (source.startAngle + source.endAngle) / 2;
   const mid_bearing2 = (target.startAngle + target.endAngle) / 2;
-
-  if (mid_bearing1 === mid_bearing2) {
-    return mid_bearing1;
-    // throw new Error("not supported");
-  }
 
   const angle1 = bearing_to_angle(mid_bearing1);
   const angle2 = bearing_to_angle(mid_bearing2);
 
   // to construct the vectors, get the coordinates first.
   // assume on unit circle. actual radius doesn't matter.
-  const coord1 = [Math.cos(angle1), Math.sin(angle1)] as const;
-  const coord2 = [Math.cos(angle2), Math.sin(angle2)] as const;
+  const coord1 = [
+    Math.cos(angle1) * radius,
+    Math.sin(angle1) * radius,
+  ] as const;
+  const coord2 = [
+    Math.cos(angle2) * radius,
+    Math.sin(angle2) * radius,
+  ] as const;
+
+  if (mid_bearing1 === mid_bearing2) {
+    return { degrees: mid_bearing1, coord1, coord2 };
+    // throw new Error("not supported");
+  }
 
   const left_coord = [coord1[0] + 10, coord1[1]] as const;
 
@@ -63,7 +80,7 @@ export function chord_to_gradient_rotation(
   }
 
   const degrees = (theta / (2 * Math.PI)) * 360;
-  return degrees;
+  return { degrees, coord1, coord2 };
 }
 
 /**
