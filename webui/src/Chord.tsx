@@ -130,11 +130,10 @@ export function Chord({ matrix, colors, names }: ChordProps) {
               { ribbonPath, title, source_value, target_value, coord1, coord2 },
               idx,
             ) => (
-              <g className="group">
+              <g className="group" key={idx}>
                 <path
                   fill={`url(#grad-${idx})`}
                   d={ribbonPath ?? ""}
-                  key={idx}
                   opacity={
                     tooltipData == null ? 1 : tooltipData !== idx ? 0.1 : 1
                   }

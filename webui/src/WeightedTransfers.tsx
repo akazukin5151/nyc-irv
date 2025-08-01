@@ -30,6 +30,7 @@ export function WeightedTransfers({
         <div className="flex min-w-[150px] flex-col">
           {metrics.map(({ name: m }) => (
             <label
+              key={m}
               htmlFor={m}
               className="flex items-center rounded-xl px-2 py-2 transition-all hover:bg-sky-100"
             >
@@ -39,7 +40,7 @@ export function WeightedTransfers({
                 id={m}
                 name="weighting-metric"
                 className={`mr-2 box-content h-1 w-1 appearance-none rounded-full border border-[5px] border-white bg-white bg-clip-padding ring-1 ring-gray-300 outline-none checked:border-blue-400 checked:ring-blue-500`}
-                checked={metricName === m}
+                defaultChecked={metricName === m}
                 onClick={() => setMetricName(m)}
               />
               {m}
