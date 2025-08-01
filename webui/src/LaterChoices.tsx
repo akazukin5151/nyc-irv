@@ -19,7 +19,7 @@ import {
   SEQUENTIAL_COLORS_TRANS,
   type Setter,
 } from "./core";
-import "./LaterChoices.css";
+import { Sticky } from "./Sticky";
 
 ChartJS.register(
   Tooltip,
@@ -153,7 +153,10 @@ export function LaterChoices({
   return (
     <>
       <h2>Later choices</h2>
-      <div className="sticky-blurred-div sticky top-0 z-1 mb-2 inline-flex w-full flex-wrap justify-center px-1 py-2">
+      <Sticky
+        height={42}
+        className={`mb-2 inline-flex w-full flex-wrap justify-center`}
+      >
         <p>
           For the <span className="font-mono">{nVotes}</span> voters who ranked
         </p>
@@ -170,13 +173,9 @@ export function LaterChoices({
           ))}
         </select>
         <p>first, their later choices were:</p>
-      </div>
-      <div className="shadow-under-blur" />
-      <div className="relative">
-        <div className="shadow-coverer" />
-      </div>
+      </Sticky>
 
-      <div style={{ height: "80%" }} className="mb-6">
+      <div className="mb-6 h-[calc(100vh*0.8)]">
         {(chartData.labels?.length ?? 0) > 0 && (
           <Chart
             type="bar"
@@ -224,8 +223,8 @@ export function LaterChoices({
       </div>
 
       {(sankeyChartData.datasets[0].data.length ?? 0) > 0 && (
-        <div className="h-full">
-          <h2>Sankey</h2>
+        <div style={{ maxHeight: "calc(100vh - 40px)" }}>
+          <h2 className="mb-1">Sankey</h2>
           <Chart
             type="sankey"
             data={sankeyChartData}
@@ -246,8 +245,6 @@ export function LaterChoices({
           />
         </div>
       )}
-
-      <div style={{ height: "10%" }}></div>
     </>
   );
 }

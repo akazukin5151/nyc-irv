@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { LaterChoices } from "./LaterChoices";
 import { RankDistributions } from "./RankDistributions";
 import { handleCandidateSelectCore } from "./core";
+import { WeightedTransfers } from "./WeightedTransfers";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
@@ -11,6 +12,9 @@ function App() {
     Record<string, Record<string, number>>
   >({});
   const [rankDistData, setRankDistData] = useState<Array<Array<number>>>([]);
+  const [allChordData, setAllChordData] = useState<Array<Array<Array<number>>>>(
+    [],
+  );
 
   useEffect(() => {
     const fn = async () => {
@@ -51,6 +55,10 @@ function App() {
 
           setRankDistData(rank_dist_data);
         });
+
+      fetch("matrices.json")
+        .then((x) => x.json())
+        .then((matrices) => setAllChordData(matrices));
     };
 
     fn();
@@ -74,14 +82,20 @@ function App() {
 
       <RankDistributions cands={cands} rankDistData={rankDistData} />
 
-      <LaterChoices
-        cands={cands}
-        allNVotes={allNVotes}
-        laterChoices={laterChoices}
-        setLaterChoices={setLaterChoices}
-        flowData={flowData}
-        setFlowData={setFlowData}
-      />
+      <div>
+        <LaterChoices
+          cands={cands}
+          allNVotes={allNVotes}
+          laterChoices={laterChoices}
+          setLaterChoices={setLaterChoices}
+          flowData={flowData}
+          setFlowData={setFlowData}
+        />
+      </div>
+
+      <div style={{ height: "8%" }}></div>
+
+      <WeightedTransfers cands={cands} allChordData={allChordData} />
     </div>
   );
 }

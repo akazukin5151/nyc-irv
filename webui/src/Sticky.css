@@ -22,9 +22,9 @@
   width: 98%;
   /* decreasing the width only affects the right side.
    * shift it to the left so both left and right sides of the shadow can be covered. */
-  left: 2px;
-  /* height of the sticky blurred div */
-  top: 40px;
+  left: 10px;
+  /* height of the sticky blurred div - overriden via JS now */
+  /* top: 40px; */
   box-shadow:
     0 4px 6px 1px rgb(0 0 0 / 0.1),
     0 2px 4px 2px rgb(0 0 0 / 0.1);

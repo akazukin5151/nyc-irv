@@ -203,7 +203,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         println!();
     }
 
-    println!("\nWriting distribution of ranks");
+    println!("Writing distribution of ranks");
 
     let path = PathBuf::from("./out/rank-distributions.tsv");
     let mut f = writeable_file(path)?;
@@ -226,7 +226,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    println!("\nWriting later choices data");
+    println!("Writing later choices data");
 
     let mut all_n_voters = vec![];
     for (idx, (first_choice_cand, _)) in cands_to_n_wins.iter().enumerate() {
@@ -338,5 +338,113 @@ fn main() -> Result<(), Box<dyn Error>> {
         f.write_all(b"\t")?;
     }
 
+    println!("Writing pairwise graph data");
+
+    let mut matrices = [vec![], vec![], vec![], vec![], vec![]];
+
+    for (cand1, _) in cands_to_n_wins.iter() {
+        let mut row = vec![];
+        for (cand2, _) in cands_to_n_wins.iter() {
+            if cand1 == cand2 {
+                row.push([0.; 5]);
+                continue;
+            }
+
+            // positions are from 1 to 4 inclusive, or None
+            // pos,..,,unranked
+            // 1,2,3,4,None
+            let positions: Vec<Option<usize>> = all_ballots
+                .iter()
+                // get the ballots that ranked cand1 first
+                .filter(|ballot| ballot.iter().flatten().next() == Some(cand1))
+                // for those ballots, find the position of cand2
+                .map(|ballot| ballot.iter().flatten().position(|c| c == *cand2))
+                .collect();
+
+            row.push(calc_scores(&positions));
+        }
+
+        // `row` is pushed to once per candidate.
+        // to add exhausted, treat it as a candidate. so here we add scores for
+        // the exhausted "candidate"
+        {
+            let positions: Vec<Option<usize>> = all_ballots
+                .iter()
+                // get the ballots that ranked cand1 first
+                .filter(|ballot| ballot.iter().flatten().next() == Some(cand1))
+                // for those ballots, find the position where it's exhausted
+                .map(|ballot| ballot.iter().position(|c| c.is_none()))
+                .collect();
+
+            row.push(calc_scores(&positions));
+        }
+
+        for (idx, matrix) in matrices.iter_mut().enumerate() {
+            let r: Vec<f32> = row.iter().map(|v| v[idx]).collect();
+            matrix.push(r);
+        }
+    }
+
+    for matrix in matrices.iter_mut() {
+        matrix.push(vec![0.0; cands_to_n_wins.len() + 1]);
+    }
+
+    let mut f = writeable_file("./out/matrices.json")?;
+    serde_json::to_writer(&mut f, &matrices)?;
+
     Ok(())
+}
+
+fn calc_scores(positions: &[Option<usize>]) -> [f32; 5] {
+    // "first transfer score" is about counting only the first transfer from first
+    // to second preference. all other transfers have score 0.
+    let first_transfer_score: i32 = positions
+        .iter()
+        // `i` is the position of cand2. if i == 1, cand2 is the second preference.
+        // (the first preference is cand1)
+        .map(|p| p.map_or(0, |i| if i == 1 { 1 } else { 0 }))
+        .sum();
+
+    // treat None as 5, then transform it to 0.
+    // borda = 4,3,2,1,0
+    let borda_counts = positions.iter().map(|p| 5_i32 - p.unwrap_or(5) as i32);
+    let borda_score: i32 = borda_counts.sum();
+
+    // nauru (harmonic) = 1/1, 1/2, 1/3, 1/4, 0
+    let harmonic_counts = positions.iter().map(|pos| {
+        if let Some(p) = pos {
+            1. / *p as f32
+        } else {
+            0.
+        }
+    });
+    let harmonic_score: f32 = harmonic_counts.sum();
+
+    // geometric = 1, 1/2, 1/4, 1/8, 1/16, 0
+    let geometric_counts = positions.iter().map(|pos| {
+        if let Some(p) = pos {
+            1. / (2_i32.pow(*p as u32) as f32)
+        } else {
+            0.
+        }
+    });
+    let geometric_score: f32 = geometric_counts.sum();
+
+    // inverse square = 1/1^2, 1/2^2, 1/3^2, 1/4^2, 0
+    let inv_sq_counts = positions.iter().map(|pos| {
+        if let Some(p) = pos {
+            1. / (p.pow(2) as f32)
+        } else {
+            0.
+        }
+    });
+    let inv_sq_score: f32 = inv_sq_counts.sum();
+
+    [
+        first_transfer_score as f32,
+        borda_score as f32,
+        harmonic_score,
+        geometric_score,
+        inv_sq_score,
+    ]
 }
