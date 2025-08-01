@@ -3,6 +3,8 @@ import type { Dispatch, SetStateAction } from "react";
 
 export type Setter<T> = Dispatch<SetStateAction<T>>;
 
+export type TextAnchor = "start" | "middle" | "end";
+
 /**
  * for continuous variables
  */

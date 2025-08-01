@@ -1,6 +1,10 @@
 import { chord, ribbon } from "d3-chord";
 import { arc } from "d3-shape";
-import { compute_chord_info } from "./angles";
+import {
+  bearing_to_anchor,
+  bearing_to_coord,
+  compute_chord_info,
+} from "./angles";
 import { StyledText } from "./StyledText";
 import { useState } from "react";
 
@@ -82,6 +86,28 @@ export function Chord({ matrix, colors, names }: ChordProps) {
       return { arc, color };
     }),
   );
+
+  const candidateLabels = chords.groups.map((group) => {
+    const name = names[group.index].split(" ").pop();
+    if (name === "Bartholomew" || name === "Prince") {
+      // exclude very minor candidates with no space for label
+      return null;
+    }
+
+    const anchor = bearing_to_anchor(group.startAngle, group.endAngle);
+
+    // for some reason, Exhausted doesn't need a vertical offset
+    const radius =
+      outerRadius + (anchor === "middle" && name !== "Exhausted" ? 20 : 10);
+
+    const coord = bearing_to_coord(group.startAngle, group.endAngle, radius);
+
+    return (
+      <text x={coord[0]} y={-coord[1]} textAnchor={anchor} key={name}>
+        {name}
+      </text>
+    );
+  });
 
   const offset = 90;
   const zoomedWidth = width - offset;
@@ -166,6 +192,8 @@ export function Chord({ matrix, colors, names }: ChordProps) {
             ),
           )}
         </g>
+
+        <g>{candidateLabels}</g>
       </svg>
     </>
   );

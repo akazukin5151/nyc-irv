@@ -1,4 +1,5 @@
 import type { ChordSubgroup } from "d3-chord";
+import type { TextAnchor } from "./core";
 
 export type ChordInfo = {
   degrees: number;
@@ -42,19 +43,9 @@ export function compute_chord_info(
   const mid_bearing1 = (source.startAngle + source.endAngle) / 2;
   const mid_bearing2 = (target.startAngle + target.endAngle) / 2;
 
-  const angle1 = bearing_to_angle(mid_bearing1);
-  const angle2 = bearing_to_angle(mid_bearing2);
-
   // to construct the vectors, get the coordinates first.
-  // assume on unit circle. actual radius doesn't matter.
-  const coord1 = [
-    Math.cos(angle1) * radius,
-    Math.sin(angle1) * radius,
-  ] as const;
-  const coord2 = [
-    Math.cos(angle2) * radius,
-    Math.sin(angle2) * radius,
-  ] as const;
+  const coord1 = bearing_to_coord(source.startAngle, source.endAngle, radius);
+  const coord2 = bearing_to_coord(target.startAngle, target.endAngle, radius);
 
   if (mid_bearing1 === mid_bearing2) {
     return { degrees: mid_bearing1, coord1, coord2 };
@@ -108,4 +99,38 @@ function dot_product(as: Array<number>, bs: Array<number>): number {
 
 function determinant(as: Array<number>, bs: Array<number>): number {
   return bs[0] * as[1] - bs[1] * as[0];
+}
+
+const middle_padding = Math.PI * 0.1; // 10% of the half-circle = 20% of the circle
+
+export function bearing_to_anchor(
+  startAngle: number,
+  endAngle: number,
+): TextAnchor {
+  const mid_bearing = (startAngle + endAngle) / 2;
+
+  let anchor: TextAnchor = "middle";
+  if (mid_bearing > middle_padding && mid_bearing < Math.PI - middle_padding) {
+    anchor = "start";
+  } else if (
+    mid_bearing > Math.PI + middle_padding
+    && mid_bearing < 2 * Math.PI - middle_padding
+  ) {
+    anchor = "end";
+  }
+
+  return anchor;
+}
+
+export function bearing_to_coord(
+  startAngle: number,
+  endAngle: number,
+  radius: number,
+): readonly [number, number] {
+  const mid_bearing = (startAngle + endAngle) / 2;
+  const angle = bearing_to_angle(mid_bearing);
+
+  // to construct the vectors, get the coordinates first.
+  // assume on unit circle. actual radius doesn't matter.
+  return [Math.cos(angle) * radius, Math.sin(angle) * radius] as const;
 }
