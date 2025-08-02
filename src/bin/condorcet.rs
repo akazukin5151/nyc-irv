@@ -314,11 +314,12 @@ fn main() -> Result<(), Box<dyn Error>> {
                 } else {
                     ballot[i - 1]
                 };
+                let prev_choice = prev_choice.split(' ').last().unwrap();
 
                 let next_choice = if i == ballot.len() {
                     "Exhausted"
                 } else {
-                    ballot[i]
+                    ballot[i].split(' ').last().unwrap()
                 };
 
                 let from = format!("{}: {prev_choice}", i + 1);
