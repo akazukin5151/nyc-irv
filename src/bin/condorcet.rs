@@ -254,6 +254,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             for rank in ranks.flatten() {
                 freqs[rank] += 1;
             }
+
             cand_rank_freqs.push(freqs);
         }
 
@@ -350,16 +351,27 @@ fn main() -> Result<(), Box<dyn Error>> {
                 continue;
             }
 
-            // positions are from 1 to 4 inclusive, or None
-            // pos,..,,unranked
-            // 1,2,3,4,None
             let positions: Vec<Option<usize>> = all_ballots
                 .iter()
                 // get the ballots that ranked cand1 first
                 .filter(|ballot| ballot.iter().flatten().next() == Some(cand1))
+                // TODO: this is copied from above later_choices
+                // this is somehow different from doing ballot.iter().flatten().position()
+                .map(|ballot| {
+                    ballot
+                        .iter()
+                        .flatten()
+                        .filter(|c| c != cand1)
+                        .copied()
+                        .collect::<Vec<_>>()
+                })
                 // for those ballots, find the position of cand2
-                .map(|ballot| ballot.iter().flatten().position(|c| c == *cand2))
+                .map(|ballot| ballot.iter().position(|c| c == *cand2))
                 .collect();
+
+            // positions are from 0 to 3 inclusive, or None
+            // pos,..,,unranked
+            // 0,1,2,3,None
 
             row.push(calc_scores(&positions));
         }
@@ -395,32 +407,36 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+// positions are from 0 to 3 inclusive, or None
+// pos,..,,unranked
+// 0,1,2,3,None
 fn calc_scores(positions: &[Option<usize>]) -> [f32; 5] {
     // "first transfer score" is about counting only the first transfer from first
     // to second preference. all other transfers have score 0.
     let first_transfer_score: i32 = positions
         .iter()
-        // `i` is the position of cand2. if i == 1, cand2 is the second preference.
+        // `i` is the position of cand2. if i == 0, cand2 is the second preference.
         // (the first preference is cand1)
-        .map(|p| p.map_or(0, |i| if i == 1 { 1 } else { 0 }))
+        .map(|p| p.map_or(0, |i| if i == 0 { 1 } else { 0 }))
         .sum();
 
-    // treat None as 5, then transform it to 0.
+    // treat None as 4, then transform it to 0.
+    //         0,1,2,3,4
     // borda = 4,3,2,1,0
-    let borda_counts = positions.iter().map(|p| 5_i32 - p.unwrap_or(5) as i32);
+    let borda_counts = positions.iter().map(|p| 4_i32 - p.unwrap_or(4) as i32);
     let borda_score: i32 = borda_counts.sum();
 
     // nauru (harmonic) = 1/1, 1/2, 1/3, 1/4, 0
     let harmonic_counts = positions.iter().map(|pos| {
         if let Some(p) = pos {
-            1. / *p as f32
+            1. / (*p as f32 + 1.)
         } else {
             0.
         }
     });
     let harmonic_score: f32 = harmonic_counts.sum();
 
-    // geometric = 1, 1/2, 1/4, 1/8, 1/16, 0
+    // geometric = 1/1, 1/2, 1/4, 1/8, 1/16, 0
     let geometric_counts = positions.iter().map(|pos| {
         if let Some(p) = pos {
             1. / (2_i32.pow(*p as u32) as f32)
@@ -433,7 +449,7 @@ fn calc_scores(positions: &[Option<usize>]) -> [f32; 5] {
     // inverse square = 1/1^2, 1/2^2, 1/3^2, 1/4^2, 0
     let inv_sq_counts = positions.iter().map(|pos| {
         if let Some(p) = pos {
-            1. / (p.pow(2) as f32)
+            1. / ((p + 1).pow(2) as f32)
         } else {
             0.
         }
