@@ -152,7 +152,7 @@ export function LaterChoices({
 
   return (
     <div className="h-[calc(100vh*2)] rounded-md bg-white shadow-md">
-      <h2 className="ml-2 pt-2">Later choices</h2>
+      <h2 className="ml-4 pt-2">Later choices</h2>
       <Sticky
         height={42}
         className={`mb-2 inline-flex w-full flex-wrap justify-center`}
@@ -224,7 +224,7 @@ export function LaterChoices({
 
       {(sankeyChartData.datasets[0].data.length ?? 0) > 0 && (
         <div style={{ maxHeight: "calc(100vh - 40px)" }}>
-          <h2 className="mb-1 ml-2">Sankey</h2>
+          <h2 className="mb-1 ml-4">Sankey</h2>
           <Chart
             type="sankey"
             data={sankeyChartData}

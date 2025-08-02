@@ -55,7 +55,7 @@ export function RankDistributions({
 
   return (
     <div className="h-[80%] rounded-md bg-white shadow-md">
-      <h2 className="ml-2 pt-2">Rank distributions</h2>
+      <h2 className="ml-4 pt-2">Rank distributions</h2>
 
       <div className="h-[90%] px-1">
         {chartData.datasets.length > 0 && (

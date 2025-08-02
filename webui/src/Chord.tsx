@@ -17,7 +17,7 @@ type ChordProps = {
 export function Chord({ matrix, colors, names }: ChordProps) {
   const [tooltipData, setTooltipData] = useState<number | null>(null);
 
-  const width = 900;
+  const width = 700;
   const height = 500;
   const outerRadius = Math.min(width, height) * 0.4;
   const innerRadius = outerRadius - 20;
@@ -109,7 +109,7 @@ export function Chord({ matrix, colors, names }: ChordProps) {
     );
   });
 
-  const offset = 90;
+  const offset = 70;
   const zoomedWidth = width - offset;
   const zoomedHeight = height - offset;
   const offsetX = -zoomedWidth / 2;

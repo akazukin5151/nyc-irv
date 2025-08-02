@@ -3,6 +3,7 @@ import { LaterChoices } from "./LaterChoices";
 import { RankDistributions } from "./RankDistributions";
 import { handleCandidateSelectCore } from "./core";
 import { WeightedTransfers } from "./WeightedTransfers";
+import { ExternalLink } from "./ExternalLink";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
@@ -71,12 +72,9 @@ function App() {
       </h1>
       <p className="mb-3">
         This is the page containing interactive charts. See{" "}
-        <a
-          className="text-blue-500 underline"
-          href="https://github.com/akazukin5151/nyc-irv/blob/main/README.md"
-        >
+        <ExternalLink href="https://github.com/akazukin5151/nyc-irv/blob/main/README.md">
           https://github.com/akazukin5151/nyc-irv/blob/main/README.md
-        </a>{" "}
+        </ExternalLink>{" "}
         for static results
       </p>
 

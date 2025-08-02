@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Chord } from "./Chord";
+import { ExternalLink } from "./ExternalLink";
+import { Explainer } from "./Explainer";
 
 type WeightedTransfersProps = {
   cands: Array<string>;
@@ -7,11 +9,70 @@ type WeightedTransfersProps = {
 };
 
 const metrics = [
-  { name: "Borda", dataIdx: 1 },
-  { name: "Harmonic", dataIdx: 2 },
-  { name: "Geometric", dataIdx: 3 },
-  { name: "Inverse square", dataIdx: 4 },
-  { name: "First transfer", dataIdx: 0 },
+  {
+    name: "Borda",
+    dataIdx: 1,
+    description: (
+      <>
+        Weights use the{" "}
+        <ExternalLink href="https://en.wikipedia.org/wiki/Arithmetic_progression">
+          arithmetic sequence
+        </ExternalLink>
+      </>
+    ),
+    weights: ["4", "3", "2", "1"],
+  },
+  {
+    name: "Harmonic",
+    dataIdx: 2,
+    description: (
+      <>
+        <ExternalLink href="https://en.wikipedia.org/wiki/Positional_voting#Dowdall">
+          Dowdall's method in Nauru
+        </ExternalLink>
+      </>
+    ),
+    weights: ["⅟", "½", "⅓", "¼"],
+  },
+  {
+    name: "Geometric",
+    dataIdx: 3,
+    description: <>Weights are halved every transfer</>,
+    weights: ["⅟", "½", "¼", "⅛"],
+  },
+  {
+    name: "Inverse square",
+    dataIdx: 4,
+    description: (
+      <>
+        Weights are reduced by inverse square (analogous to{" "}
+        <ExternalLink href="https://en.wikipedia.org/wiki/Inverse-square_law">
+          distance decay in 3D
+        </ExternalLink>
+        )
+      </>
+    ),
+    weights: [
+      <>
+        1<sup>-2</sup>
+      </>,
+      <>
+        2<sup>-2</sup>
+      </>,
+      <>
+        3<sup>-2</sup>
+      </>,
+      <>
+        4<sup>-2</sup>
+      </>,
+    ],
+  },
+  {
+    name: "First transfer",
+    dataIdx: 0,
+    description: <>Only the first transfer is counted</>,
+    weights: ["1", "0", "0", "0"],
+  },
 ] as const;
 
 type MetricName = (typeof metrics)[number]["name"];
@@ -24,28 +85,94 @@ export function WeightedTransfers({
 
   return (
     <div className="rounded-md bg-white shadow-md">
-      <h2 className="ml-2 pt-2">Transfers</h2>
+      <h2 className="ml-4 pt-2">Preferences</h2>
 
       <div className="flex items-center">
-        <div className="flex min-w-[150px] flex-col">
-          {metrics.map(({ name: m }) => (
-            <label
-              key={m}
-              htmlFor={m}
-              className="flex items-center rounded-xl px-2 py-2 transition-all hover:bg-sky-100"
-            >
-              <input
-                key={m}
-                type="radio"
-                id={m}
-                name="weighting-metric"
-                className={`mr-2 box-content h-1 w-1 appearance-none rounded-full border border-[5px] border-white bg-white bg-clip-padding ring-1 ring-gray-300 outline-none checked:border-blue-400 checked:ring-blue-500`}
-                defaultChecked={metricName === m}
-                onClick={() => setMetricName(m)}
-              />
-              {m}
-            </label>
-          ))}
+        <div className="ml-4 flex flex-col gap-2">
+          <ul>
+            <li>
+              <Explainer>
+                The chord shows all preferences flows (except when{" "}
+                <span className="italic">First transfer</span> is selected).
+              </Explainer>
+            </li>
+            <li>
+              <Explainer>
+                The first transfer from the first choice to the second choice is
+                weighted the highest. Later preferences are weighted less.
+              </Explainer>
+            </li>
+            <li>
+              <Explainer>Choose how to weight the later preferences:</Explainer>
+            </li>
+          </ul>
+
+          <table className="text-left text-sm text-neutral-500">
+            <thead>
+              <tr>
+                <th></th>
+                <th></th>
+                <th>
+                  <abbr title="1st choice to 2nd choice">1 → 2</abbr>
+                </th>
+                <th>
+                  <abbr title="2nd choice to 3rd choice">2 → 3</abbr>
+                </th>
+                <th>
+                  <abbr title="3rd choice to 4th choice">3 → 4</abbr>
+                </th>
+                <th>
+                  <abbr title="4th choice to 5th choice">4 → 5</abbr>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {metrics.map(({ name, weights }) => (
+                <tr
+                  className="transition-all hover:bg-sky-100"
+                  key={name}
+                  onClick={() => setMetricName(name)}
+                >
+                  <td className="pt-1 pl-1">
+                    <input
+                      key={name}
+                      type="radio"
+                      id={name}
+                      name="weighting-metric"
+                      className={`box-content h-1 w-1 appearance-none rounded-full border border-[5px] border-white bg-white bg-clip-padding ring-1 ring-gray-300 outline-none checked:border-blue-400 checked:ring-blue-500`}
+                      checked={metricName === name}
+                      onChange={() => setMetricName(name)}
+                    />
+                  </td>
+                  <td className="px-2 py-1">
+                    <label key={name} htmlFor={name}>
+                      {name}
+                    </label>
+                  </td>
+                  {weights.map((weight, idx) => (
+                    <td key={`${name}-weight-${idx}`}>{weight}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <hr className="text-neutral-300" />
+
+          <table>
+            <tbody>
+              {metrics.map(({ name, description }) => (
+                <tr key={name}>
+                  <th className="pr-3 text-left whitespace-nowrap" scope="row">
+                    <Explainer>{name}</Explainer>
+                  </th>
+                  <td>
+                    <Explainer>{description}</Explainer>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         <div className="flex w-full justify-center">
@@ -72,6 +199,13 @@ export function WeightedTransfers({
           )}
         </div>
       </div>
+
+      <p className="relative right-0 bottom-0 my-2 pr-3 text-right">
+        <Explainer>
+          Each ribbon shows both the incoming and outgoing flow. The width of
+          start arc is the outgoing flow.
+        </Explainer>
+      </p>
     </div>
   );
 }
