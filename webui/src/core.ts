@@ -30,7 +30,7 @@ export const SEQUENTIAL_COLORS_TRANS = [
 
 export const GRAY = "rgba(201, 203, 207, 0.3)";
 
-export async function handleCandidateSelectCore(
+export function handleCandidateSelectCore(
   idx: number,
   setLaterChoices: Setter<Array<Array<number>>>,
   setFlowData: Setter<Record<string, Record<string, number>>>,
@@ -46,7 +46,7 @@ export async function handleCandidateSelectCore(
   });
 }
 
-export function percInFooter(context: TooltipItem<"bar">[]): string {
+export function percInFooter(context: Array<TooltipItem<"bar">>): string {
   const c = context[0];
   const n = c.dataset.data[c.dataIndex] as number;
   const sum_of_this_rank = (c.dataset.data.reduce(

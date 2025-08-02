@@ -139,7 +139,7 @@ export function LaterChoices({
     }
   }
 
-  const handleCandidateSelect = async (cand: string) => {
+  const handleCandidateSelect = (cand: string) => {
     setFirstChoiceCand(cand);
     const idx = cands.findIndex((c) => c === cand);
     handleCandidateSelectCore(idx, setLaterChoices, setFlowData);
