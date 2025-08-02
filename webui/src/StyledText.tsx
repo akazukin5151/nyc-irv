@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { Setter, TextAnchor } from "./core";
+import type { Setter } from "./core";
 
 type StyledTextProps = {
   idx: number;
