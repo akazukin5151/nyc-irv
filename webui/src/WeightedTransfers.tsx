@@ -23,8 +23,8 @@ export function WeightedTransfers({
   const [metricName, setMetricName] = useState<MetricName>("First transfer");
 
   return (
-    <div>
-      <h2>Transfers</h2>
+    <div className="rounded-md bg-white shadow-md">
+      <h2 className="ml-2 pt-2">Transfers</h2>
 
       <div className="flex items-center">
         <div className="flex min-w-[150px] flex-col">

@@ -65,7 +65,7 @@ function App() {
   }, []);
 
   return (
-    <div className="h-screen overflow-y-auto p-6 pt-0">
+    <div className="h-screen overflow-y-auto bg-neutral-100 p-6 pt-0">
       <h1 className="mb-3 pt-6">
         2025 New York City Democratic mayoral primary analysis
       </h1>
@@ -82,16 +82,16 @@ function App() {
 
       <RankDistributions cands={cands} rankDistData={rankDistData} />
 
-      <div>
-        <LaterChoices
-          cands={cands}
-          allNVotes={allNVotes}
-          laterChoices={laterChoices}
-          setLaterChoices={setLaterChoices}
-          flowData={flowData}
-          setFlowData={setFlowData}
-        />
-      </div>
+      <div style={{ height: "8%" }}></div>
+
+      <LaterChoices
+        cands={cands}
+        allNVotes={allNVotes}
+        laterChoices={laterChoices}
+        setLaterChoices={setLaterChoices}
+        flowData={flowData}
+        setFlowData={setFlowData}
+      />
 
       <div style={{ height: "8%" }}></div>
 

@@ -54,10 +54,10 @@ export function RankDistributions({
   }
 
   return (
-    <>
-      <h2>Rank distributions</h2>
+    <div className="h-[80%] rounded-md bg-white shadow-md">
+      <h2 className="ml-2 pt-2">Rank distributions</h2>
 
-      <div style={{ height: "80%" }}>
+      <div className="h-[90%] px-1">
         {chartData.datasets.length > 0 && (
           <Chart
             type="bar"
@@ -103,6 +103,6 @@ export function RankDistributions({
           />
         )}
       </div>
-    </>
+    </div>
   );
 }
