@@ -82,6 +82,10 @@ function App() {
 
       <div style={{ height: "8%" }}></div>
 
+      <WeightedTransfers cands={cands} allChordData={allChordData} />
+
+      <div style={{ height: "8%" }}></div>
+
       <LaterChoices
         cands={cands}
         allNVotes={allNVotes}
@@ -90,10 +94,6 @@ function App() {
         flowData={flowData}
         setFlowData={setFlowData}
       />
-
-      <div style={{ height: "8%" }}></div>
-
-      <WeightedTransfers cands={cands} allChordData={allChordData} />
     </div>
   );
 }
