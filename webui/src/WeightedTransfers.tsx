@@ -8,8 +8,8 @@ type WeightedTransfersProps = {
 
 const metrics = [
   { name: "Borda", dataIdx: 1 },
-  { name: "Geometric", dataIdx: 3 },
   { name: "Harmonic", dataIdx: 2 },
+  { name: "Geometric", dataIdx: 3 },
   { name: "Inverse square", dataIdx: 4 },
   { name: "First transfer", dataIdx: 0 },
 ] as const;
