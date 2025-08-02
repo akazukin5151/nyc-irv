@@ -6,7 +6,7 @@ export type Setter<T> = Dispatch<SetStateAction<T>>;
 export type TextAnchor = "start" | "middle" | "end";
 
 export const radioStyle =
-  "box-content h-1 w-1 appearance-none rounded-full border border-[5px] border-white bg-white bg-clip-padding ring-1 ring-gray-300 outline-none checked:border-blue-400 checked:ring-blue-500 transition-all";
+  "box-content h-1 w-1 appearance-none rounded-full border border-[5px] border-white bg-white bg-clip-padding ring-1 ring-gray-300 outline-none checked:border-blue-500 checked:border-blue-500 transition-all";
 
 export const CANDIDATE_COLORS = {
   Mamdani: "#ffad00",
