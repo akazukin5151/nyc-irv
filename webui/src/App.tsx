@@ -18,51 +18,47 @@ function App() {
   );
 
   useEffect(() => {
-    const fn = async () => {
-      fetch("sorted_cands.tsv")
-        .then((x) => x.text())
-        .then((cands_csv) => {
-          const cands = cands_csv.split("\t").filter((cand) => cand !== "");
-          setCands(cands);
-          handleCandidateSelectCore(0, setLaterChoices, setFlowData);
+    fetch("sorted_cands.tsv")
+      .then((x) => x.text())
+      .then((cands_csv) => {
+        const cands = cands_csv.split("\t").filter((cand) => cand !== "");
+        setCands(cands);
+        handleCandidateSelectCore(0, setLaterChoices, setFlowData);
 
-          fetch("rank-distributions.tsv")
-            .then((x) => x.text())
-            .then((tsv) => {
-              const rank_distributions_csv = tsv.split("\n");
-              const rank_dist_data: Array<Array<number>> = [];
-              for (const row of rank_distributions_csv.slice(1)) {
-                if (row.length === 0) {
-                  continue;
-                }
-
-                const splitted = row.split("\t");
-                const cand_idx = parseInt(splitted[0]);
-                const rank = parseInt(splitted[1]) - 1;
-                const freq = parseInt(splitted[2]);
-
-                const cand_arr = rank_dist_data[rank] ?? cands.map(() => 0);
-                cand_arr[cand_idx] = freq;
-                rank_dist_data[rank] = cand_arr;
+        fetch("rank-distributions.tsv")
+          .then((x) => x.text())
+          .then((tsv) => {
+            const rank_distributions_csv = tsv.split("\n");
+            const rank_dist_data: Array<Array<number>> = [];
+            for (const row of rank_distributions_csv.slice(1)) {
+              if (row.length === 0) {
+                continue;
               }
 
-              setRankDistData(rank_dist_data);
-            });
-        });
+              const splitted = row.split("\t");
+              const cand_idx = parseInt(splitted[0]);
+              const rank = parseInt(splitted[1]) - 1;
+              const freq = parseInt(splitted[2]);
 
-      fetch("n_voters.tsv")
-        .then((x) => x.text())
-        .then((n_votes_tsv) => {
-          const n_votes = n_votes_tsv.split("\t").map((s) => parseInt(s));
-          setAllNVotes(n_votes);
-        });
+              const cand_arr = rank_dist_data[rank] ?? cands.map(() => 0);
+              cand_arr[cand_idx] = freq;
+              rank_dist_data[rank] = cand_arr;
+            }
 
-      fetch("matrices.json")
-        .then((x) => x.json())
-        .then((matrices) => setAllChordData(matrices));
-    };
+            setRankDistData(rank_dist_data);
+          });
+      });
 
-    fn();
+    fetch("n_voters.tsv")
+      .then((x) => x.text())
+      .then((n_votes_tsv) => {
+        const n_votes = n_votes_tsv.split("\t").map((s) => parseInt(s));
+        setAllNVotes(n_votes);
+      });
+
+    fetch("matrices.json")
+      .then((x) => x.json())
+      .then((matrices) => setAllChordData(matrices));
   }, []);
 
   return (
