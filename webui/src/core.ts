@@ -5,6 +5,24 @@ export type Setter<T> = Dispatch<SetStateAction<T>>;
 
 export type TextAnchor = "start" | "middle" | "end";
 
+export const radioStyle =
+  "box-content h-1 w-1 appearance-none rounded-full border border-[5px] border-white bg-white bg-clip-padding ring-1 ring-gray-300 outline-none checked:border-blue-400 checked:ring-blue-500 transition-all";
+
+export const CANDIDATE_COLORS = {
+  Mamdani: "#ffad00",
+  Lander: "#e13c1a",
+  Adams: "#4f3797",
+  Cuomo: "#0d447c",
+  Myrie: "#b2e061",
+  Stringer: "#7eb0d5",
+  Blake: "#b28b34",
+  Ramos: "#f9b615",
+  Tilson: "#0bbaeb",
+  Bartholomew: "#c30eff",
+  Prince: "#06cb13",
+  Exhausted: "#888",
+};
+
 /**
  * for continuous variables
  */

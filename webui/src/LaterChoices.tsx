@@ -13,8 +13,10 @@ import {
 import { Chart } from "react-chartjs-2";
 import { SankeyController, Flow } from "chartjs-chart-sankey";
 import {
+  CANDIDATE_COLORS,
   handleCandidateSelectCore,
   percInFooter,
+  radioStyle,
   SEQUENTIAL_COLORS_SOLID,
   SEQUENTIAL_COLORS_TRANS,
   type Setter,
@@ -40,7 +42,11 @@ type SankeyData = {
   flow: number;
   fromIdx: number;
   toIdx: number;
+  fromCand: keyof typeof CANDIDATE_COLORS;
+  toCand: keyof typeof CANDIDATE_COLORS;
 };
+
+type SankeyColor = "rank" | "cand";
 
 type LaterChoicesProps = {
   cands: Array<string>;
@@ -60,6 +66,7 @@ export function LaterChoices({
   setFlowData,
 }: LaterChoicesProps) {
   const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
+  const [sankeyColor, setSankeyColor] = useState<SankeyColor>("rank");
 
   useEffect(() => {
     if (cands.length > 0 && firstChoiceCand == null) {
@@ -86,11 +93,17 @@ export function LaterChoices({
         data: [],
         colorFrom: (c) => {
           const sd = c.dataset.data[c.dataIndex] as SankeyData;
-          return SEQUENTIAL_COLORS_SOLID[sd.fromIdx - 1];
+          if (sankeyColor === "rank") {
+            return SEQUENTIAL_COLORS_SOLID[sd.fromIdx - 1];
+          }
+          return CANDIDATE_COLORS[sd.fromCand];
         },
         colorTo: (c) => {
           const sd = c.dataset.data[c.dataIndex] as SankeyData;
-          return SEQUENTIAL_COLORS_SOLID[sd.toIdx - 1];
+          if (sankeyColor === "rank") {
+            return SEQUENTIAL_COLORS_SOLID[sd.toIdx - 1];
+          }
+          return CANDIDATE_COLORS[sd.toCand];
         },
         // TODO: not working
         // column: {
@@ -134,7 +147,9 @@ export function LaterChoices({
           flow,
           fromIdx: parseInt(from.slice(0, 1)),
           toIdx: parseInt(to.slice(0, 1)),
-        });
+          fromCand: from.split(" ").pop(),
+          toCand: to.split(" ").pop(),
+        } as SankeyData);
       }
     }
   }
@@ -151,7 +166,7 @@ export function LaterChoices({
   }
 
   return (
-    <div className="h-[calc(100vh*2)] rounded-md bg-white shadow-md">
+    <div className="h-[calc(100vh*2.1)] rounded-md bg-white shadow-md">
       <h2 className="ml-4 pt-2">Later choices</h2>
       <Sticky
         height={42}
@@ -225,6 +240,30 @@ export function LaterChoices({
       {(sankeyChartData.datasets[0].data.length ?? 0) > 0 && (
         <div style={{ maxHeight: "calc(100vh - 40px)" }}>
           <h2 className="mb-1 ml-4">Sankey</h2>
+
+          <div className="ml-4">
+            <label className="mr-4">
+              <input
+                type="radio"
+                name="sankey-colors"
+                className={radioStyle + " mr-1"}
+                checked={sankeyColor === "rank"}
+                onChange={() => setSankeyColor("rank")}
+              />
+              Color by position on ballot
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="sankey-colors"
+                className={radioStyle + " mr-1"}
+                checked={sankeyColor === "cand"}
+                onChange={() => setSankeyColor("cand")}
+              />
+              Color by candidate
+            </label>
+          </div>
+
           <Chart
             type="sankey"
             data={sankeyChartData}

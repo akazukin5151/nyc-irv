@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Chord } from "./Chord";
 import { ExternalLink } from "./ExternalLink";
 import { Explainer } from "./Explainer";
+import { CANDIDATE_COLORS, radioStyle } from "./core";
 
 type WeightedTransfersProps = {
   cands: Array<string>;
@@ -139,7 +140,7 @@ export function WeightedTransfers({
                       type="radio"
                       id={name}
                       name="weighting-metric"
-                      className={`box-content h-1 w-1 appearance-none rounded-full border border-[5px] border-white bg-white bg-clip-padding ring-1 ring-gray-300 outline-none checked:border-blue-400 checked:ring-blue-500`}
+                      className={radioStyle}
                       checked={metricName === name}
                       onChange={() => setMetricName(name)}
                     />
@@ -183,17 +184,7 @@ export function WeightedTransfers({
                   metrics.find((m) => m.name === metricName)?.dataIdx ?? 0
                 ]
               }
-              colors={[
-                "#ffad00",
-                "#f27b32",
-                "#4f3797",
-                "#0d447c",
-                "#b2e061",
-                "#7eb0d5",
-                "#b28b34",
-                "#f9b615",
-                "#1b3c98",
-              ]}
+              colors={Object.values(CANDIDATE_COLORS)}
               names={[...cands, "Exhausted"]}
             />
           )}
