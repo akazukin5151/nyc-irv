@@ -4,6 +4,7 @@ Condorcet analysis of the 2025 New York City Democratic mayoral primary. It was 
 
 ## Caveats
 
+* The data have ballots where a voter ranked the same candidate multiple times (e.g., A > A > A > C). It ignores the duplicated ranks, so the example would turn into A > C.
 * It ignores write-ins and skips to the next named candidate (won't affect the result anyway, but it's good to write accurate code)
 * It doesn't handle ties (no ties happened anyway, but it's good to write accurate code)
 * It ignores overvotes. Don't know what to do with them, or what the regulations are. Undervotes are also ignored.

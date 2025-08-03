@@ -1,5 +1,5 @@
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     error::Error,
     fs::{self, File},
     io::{Read, Write},
@@ -51,13 +51,27 @@ fn main() -> Result<(), Box<dyn Error>> {
     let all_ballots: Vec<[Option<&str>; 5]> = ballots
         .iter()
         .map(|ballot| {
-            ballot.map(|v| {
-                if v == 0 {
-                    None
+            let mut seen = HashSet::new();
+            let mut res: [Option<&str>; 5] = [const { None }; 5];
+            let mut idx = 0;
+            for num in ballot {
+                if *num == 0 {
+                    res[idx] = None;
+                    idx += 1;
                 } else {
-                    Some(sorted_cands[v as usize - 1])
+                    let name = sorted_cands[*num as usize - 1];
+                    if !seen.contains(name) {
+                        seen.insert(name);
+                        res[idx] = Some(name);
+                        idx += 1;
+                    }
+                    // if already inserted, do not increment idx.
+                    // the next non-0 num will be written to the current idx,
+                    // leaving at least 1 None at the end.
+                    // as we want to shift choices so that all Nones are at the end.
                 }
-            })
+            }
+            res
         })
         .collect();
 
