@@ -55,7 +55,13 @@ export function RankDistributions({
 
   return (
     <div className="h-[80%] rounded-md bg-white shadow-md">
-      <h2 className="ml-4 pt-2">Rank distributions</h2>
+      <h2 className="ml-4 pt-2">
+        Distributions of ranks received by candidate
+      </h2>
+
+      <p className="ml-4">
+        Some candidates are mostly voter's second or later choices.
+      </p>
 
       <div className="h-[90%] px-1">
         {chartData.datasets.length > 0 && (

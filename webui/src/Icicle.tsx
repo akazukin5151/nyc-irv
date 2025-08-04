@@ -106,8 +106,8 @@ export function Icicle({ treeData }: IcicleProps) {
 
       <div className="ml-4">
         <p>
-          The first level is the first choice. Lower levels are the voter's later
-          choices. This chart shows every preference from every voter.
+          The first level is the first choice. Lower levels are the voter's
+          later choices. This chart shows every preference from every voter.
         </p>
 
         {tooltip != null && <p>{tooltip}</p>}

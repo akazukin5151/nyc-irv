@@ -242,6 +242,12 @@ export function LaterChoices({
           <h2 className="mb-1 ml-4">Sankey</h2>
 
           <div className="ml-4">
+            <p className="mb-1">
+              This is similar to the Icicle chart in the beginning, but only
+              shows the preferences for voters that ranked {firstChoiceCand}{" "}
+              first.
+            </p>
+
             <label className="mr-4">
               <input
                 type="radio"
