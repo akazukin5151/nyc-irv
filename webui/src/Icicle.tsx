@@ -21,7 +21,7 @@ function rectWidth(d: HierarchyRectangularNode<Tree>) {
 
 const width = 1000;
 const height = 500;
-const offsetY = -100;
+const offsetY = -160;
 const defaultTooltip = "Hover over a bar to see its ranking and frequency";
 
 type IcicleProps = {
@@ -105,6 +105,11 @@ export function Icicle({ treeData }: IcicleProps) {
       <h2 className="ml-4 pt-2">All preferences</h2>
 
       <div className="ml-4">
+        <p>
+          The first level is the first choice. Lower levels are the voter's later
+          choices. This chart shows every preference from every voter.
+        </p>
+
         {tooltip != null && <p>{tooltip}</p>}
 
         <canvas
