@@ -7,7 +7,7 @@ use std::{
     time::Instant,
 };
 
-use calamine::{open_workbook, Data, RangeDeserializerBuilder, Reader, Xlsx};
+use calamine::{Data, RangeDeserializerBuilder, Reader, Xlsx, open_workbook};
 use indicatif::{ProgressBar, ProgressStyle};
 use rayon::prelude::*;
 

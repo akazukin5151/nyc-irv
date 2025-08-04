@@ -200,9 +200,13 @@ fn main() -> Result<(), Box<dyn Error>> {
             let other_perc = *n_prefer_other_cand as f32 / sum * 100.;
 
             if n_prefer_other_cand > n_prefer_this_cand {
-                println!("{this_cand} | loses to ❌ | {other_cand} | {n_prefer_this_cand} | {n_prefer_other_cand} | {this_perc:.2}% | {other_perc:.2}%");
+                println!(
+                    "{this_cand} | loses to ❌ | {other_cand} | {n_prefer_this_cand} | {n_prefer_other_cand} | {this_perc:.2}% | {other_perc:.2}%"
+                );
             } else {
-                println!("{this_cand} | beats ✅ | {other_cand} | {n_prefer_this_cand} | {n_prefer_other_cand} | {this_perc:.2}% | {other_perc:.2}%");
+                println!(
+                    "{this_cand} | beats ✅ | {other_cand} | {n_prefer_this_cand} | {n_prefer_other_cand} | {this_perc:.2}% | {other_perc:.2}%"
+                );
             }
         }
     }
