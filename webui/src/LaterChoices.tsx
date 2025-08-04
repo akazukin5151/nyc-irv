@@ -14,6 +14,7 @@ import { Chart } from "react-chartjs-2";
 import { SankeyController, Flow } from "chartjs-chart-sankey";
 import {
   CANDIDATE_COLORS,
+  getCandColor,
   handleCandidateSelectCore,
   percInFooter,
   radioStyle,
@@ -244,7 +245,15 @@ export function LaterChoices({
           <div className="ml-4">
             <p className="mb-1">
               This is similar to the Icicle chart in the beginning, but only
-              shows the preferences for voters that ranked {firstChoiceCand}{" "}
+              shows the preferences for voters that ranked{" "}
+              <span
+                className="underline decoration-3"
+                style={{
+                  textDecorationColor: getCandColor(firstChoiceCand),
+                }}
+              >
+                {firstChoiceCand}
+              </span>{" "}
               first.
             </p>
 

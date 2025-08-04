@@ -85,3 +85,15 @@ export function percInFooter(context: Array<TooltipItem<"bar">>): string {
   }).format((n / sum_of_this_rank) * 100);
   return `${perc}% of all ${c.dataset.label} votes`;
 }
+
+export function getCandColor(firstChoiceCand: string | null): string {
+  if (firstChoiceCand == null) {
+    return "none";
+  }
+
+  const lastName = firstChoiceCand.split(" ").pop();
+  if (lastName == null || !(lastName in CANDIDATE_COLORS)) {
+    return "none";
+  }
+  return CANDIDATE_COLORS[lastName as keyof typeof CANDIDATE_COLORS];
+}
