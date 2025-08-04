@@ -65,12 +65,13 @@ export function Icicle({ treeData }: IcicleProps) {
         const cand = name.split(" ").pop() as keyof typeof CANDIDATE_COLORS;
         const color = CANDIDATE_COLORS[cand];
 
-        const title = `${d
+        const joined = d
           .ancestors()
           .map((d) => d.data.name)
           .reverse()
           .slice(1)
-          .join(" > ")}\n${d.value}`;
+          .join(" > ");
+        const title = `${d.value} voters ranked ${joined}`;
 
         ctx.beginPath();
         ctx.rect(d.x0, d.y0, rectWidth(d), d.y1 - d.y0 - 1);
