@@ -66,7 +66,7 @@ export function LaterChoices({
   setFlowData,
 }: LaterChoicesProps) {
   const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
-  const [sankeyColor, setSankeyColor] = useState<SankeyColor>("rank");
+  const [sankeyColor, setSankeyColor] = useState<SankeyColor>("cand");
 
   useEffect(() => {
     if (cands.length > 0 && firstChoiceCand == null) {
@@ -253,20 +253,20 @@ export function LaterChoices({
                 type="radio"
                 name="sankey-colors"
                 className={radioStyle + " mr-1"}
-                checked={sankeyColor === "rank"}
-                onChange={() => setSankeyColor("rank")}
+                checked={sankeyColor === "cand"}
+                onChange={() => setSankeyColor("cand")}
               />
-              Color by position on ballot
+              Color by candidate
             </label>
             <label>
               <input
                 type="radio"
                 name="sankey-colors"
                 className={radioStyle + " mr-1"}
-                checked={sankeyColor === "cand"}
-                onChange={() => setSankeyColor("cand")}
+                checked={sankeyColor === "rank"}
+                onChange={() => setSankeyColor("rank")}
               />
-              Color by candidate
+              Color by position on ballot
             </label>
           </div>
 
