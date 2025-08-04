@@ -80,11 +80,11 @@ function App() {
         for static results
       </p>
 
-      <RankDistributions cands={cands} rankDistData={rankDistData} />
+      <Icicle treeData={treeData} />
 
       <div style={{ height: "8%" }}></div>
 
-      <Icicle treeData={treeData} />
+      <RankDistributions cands={cands} rankDistData={rankDistData} />
 
       <div style={{ height: "8%" }}></div>
 
