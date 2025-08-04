@@ -3,8 +3,8 @@ import {
   partition,
   type HierarchyRectangularNode,
 } from "d3-hierarchy";
-import { CANDIDATE_COLORS, type Tree } from "./core";
-import { useEffect, useRef, useState } from "react";
+import { CANDIDATE_COLORS, getCandColor, type Tree } from "./core";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 type Coords = {
   x: number;
@@ -12,7 +12,8 @@ type Coords = {
   width: number;
   height: number;
   color: string;
-  title: string;
+  ancestors: Array<string>;
+  value: number;
 };
 
 function rectWidth(d: HierarchyRectangularNode<Tree>) {
@@ -32,7 +33,7 @@ export function Icicle({ treeData }: IcicleProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [coords, setCoords] = useState<Array<Coords>>();
   // despite the name, our tooltip doesn't float for performance reasons
-  const [tooltip, setTooltip] = useState<string>(defaultTooltip);
+  const [tooltip, setTooltip] = useState<ReactNode>(defaultTooltip);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -65,14 +66,11 @@ export function Icicle({ treeData }: IcicleProps) {
         const cand = name.split(" ").pop() as keyof typeof CANDIDATE_COLORS;
         const color = CANDIDATE_COLORS[cand];
 
-        const joined = d
+        const ancestors = d
           .ancestors()
           .map((d) => d.data.name)
           .reverse()
-          .slice(1)
-          .join(" > ");
-        const title = `${d.value} voters ranked ${joined}`;
-
+          .slice(1);
         ctx.beginPath();
         ctx.rect(d.x0, d.y0, rectWidth(d), d.y1 - d.y0 - 1);
         ctx.fillStyle = color;
@@ -85,7 +83,8 @@ export function Icicle({ treeData }: IcicleProps) {
           width: rectWidth(d),
           height: d.y1 - d.y0 - 1,
           color,
-          title,
+          ancestors,
+          value: d.value ?? 0,
         });
       });
 
@@ -145,7 +144,35 @@ export function Icicle({ treeData }: IcicleProps) {
                 && mousePos.y >= minY
                 && mousePos.y <= maxY
               ) {
-                setTooltip(coord.title);
+                const underlined = coord.ancestors.map((cand) => (
+                  <span
+                    key={cand}
+                    className="underline decoration-3"
+                    style={{ textDecorationColor: getCandColor(cand) }}
+                  >
+                    {cand}
+                  </span>
+                ));
+
+                if (
+                  underlined.length < 5
+                  && coord.ancestors[coord.ancestors.length - 1] !== "Exhausted"
+                ) {
+                  underlined.push(<span>(All)</span>);
+                }
+
+                const joined = underlined.reduce((a, b) => (
+                  <span>
+                    {a} &gt; {b}
+                  </span>
+                ));
+
+                const tooltip = (
+                  <span>
+                    {coord.value} voters ranked {joined}
+                  </span>
+                );
+                setTooltip(tooltip);
                 return;
               }
             }
