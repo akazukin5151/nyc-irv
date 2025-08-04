@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { LaterChoices } from "./LaterChoices";
 import { RankDistributions } from "./RankDistributions";
-import { handleCandidateSelectCore } from "./core";
+import { handleCandidateSelectCore, type Tree } from "./core";
 import { WeightedTransfers } from "./WeightedTransfers";
 import { ExternalLink } from "./ExternalLink";
+import { Icicle } from "./Icicle";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
@@ -16,6 +17,7 @@ function App() {
   const [allChordData, setAllChordData] = useState<Array<Array<Array<number>>>>(
     [],
   );
+  const [treeData, setTreeData] = useState<Tree | null>(null);
 
   useEffect(() => {
     fetch("sorted_cands.tsv")
@@ -59,6 +61,10 @@ function App() {
     fetch("matrices.json")
       .then((x) => x.json())
       .then((matrices) => setAllChordData(matrices));
+
+    fetch("tree.json")
+      .then((x) => x.json())
+      .then((tree) => setTreeData(tree));
   }, []);
 
   return (
@@ -75,6 +81,10 @@ function App() {
       </p>
 
       <RankDistributions cands={cands} rankDistData={rankDistData} />
+
+      <div style={{ height: "8%" }}></div>
+
+      <Icicle treeData={treeData} />
 
       <div style={{ height: "8%" }}></div>
 

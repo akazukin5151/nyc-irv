@@ -86,7 +86,7 @@ export function WeightedTransfers({
 
   return (
     <div className="rounded-md bg-white shadow-md">
-      <h2 className="ml-4 pt-2">Preferences</h2>
+      <h2 className="ml-4 pt-2">Weighted preferences</h2>
 
       <div className="flex items-center">
         <div className="ml-4 flex flex-col gap-2">
