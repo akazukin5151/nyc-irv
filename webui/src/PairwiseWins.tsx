@@ -5,10 +5,13 @@ export function PairwiseWins() {
         <h2 className="ml-4 pt-2">Number of pairwise wins</h2>
 
         <table className="mt-2 ml-4 [&_td]:border-b-2 [&_td]:border-neutral-200/50 [&_td]:px-3 [&_td]:py-1 [&_td]:nth-[2n]:text-right [&_th]:px-3 [&_th]:py-1">
-          <thead className="bg-neutral-200">
+          <thead
+            className="border-b-2 border-slate-200/50 bg-slate-100 text-slate-500"
+            style={{ fontVariant: "small-caps" }}
+          >
             <tr>
-              <th>Candidate</th>
-              <th>Number of pairwise wins</th>
+              <th>candidate</th>
+              <th>number of pairwise wins</th>
             </tr>
           </thead>
           <tbody>
