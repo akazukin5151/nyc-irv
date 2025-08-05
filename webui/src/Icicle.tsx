@@ -73,13 +73,8 @@ export function Icicle() {
           .map((d) => d.data.name)
           .reverse()
           .slice(1);
-        ctx.beginPath();
-        ctx.rect(d.x0, d.y0, rectWidth(d), d.y1 - d.y0 - 1);
-        ctx.fillStyle = color;
-        ctx.fill();
-        ctx.closePath();
 
-        coords.push({
+        const coord = {
           x: d.x0,
           y: d.y0,
           width: rectWidth(d),
@@ -87,7 +82,15 @@ export function Icicle() {
           color,
           ancestors,
           value: d.value ?? 0,
-        });
+        };
+
+        ctx.beginPath();
+        ctx.rect(coord.x, coord.y, coord.width, coord.height);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.closePath();
+
+        coords.push(coord);
       });
 
       setCoords(coords);
