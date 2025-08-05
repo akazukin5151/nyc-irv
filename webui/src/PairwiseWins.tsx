@@ -9,7 +9,11 @@ export function PairwiseWins() {
             <li>There were 11 candidates for Mayor.</li>
             <li>Each candidate can have 10 other 1 v 1 matchups.</li>
             <li>
-              Mamdani won all 10 of his matchups, so he is the Condorcet winner.
+              Mamdani won all 10 of his matchups, so he is the{" "}
+              <span className="underline decoration-green-600 decoration-3">
+                Condorcet winner
+              </span>
+              .
             </li>
             <li>
               Mamdani was also the winner of this IRV (RCV) election, so in this
