@@ -16,6 +16,7 @@ import {
   CANDIDATE_COLORS,
   getCandColor,
   handleCandidateSelectCore,
+  numToOrdinal,
   percInFooter,
   radioStyle,
   SEQUENTIAL_COLORS_SOLID,
@@ -217,14 +218,7 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
                     label: (c) => {
                       const n = c.formattedValue;
                       const choice_num = c.datasetIndex + 2;
-                      const str =
-                        choice_num === 1
-                          ? "st"
-                          : choice_num === 2
-                            ? "nd"
-                            : choice_num === 3
-                              ? "rd"
-                              : "th";
+                      const str = numToOrdinal(choice_num);
                       if (c.label === "Exhausted") {
                         return `${n} ${cur_cand_last_name} voters exhausted their ballot by the ${choice_num}${str} choice`;
                       }

@@ -97,3 +97,13 @@ export function getCandColor(firstChoiceCand: string | null): string {
   }
   return CANDIDATE_COLORS[lastName as keyof typeof CANDIDATE_COLORS];
 }
+
+export function numToOrdinal(choice_num: number) {
+  return choice_num === 1
+    ? "st"
+    : choice_num === 2
+      ? "nd"
+      : choice_num === 3
+        ? "rd"
+        : "th";
+}

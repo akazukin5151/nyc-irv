@@ -10,7 +10,12 @@ import {
   type ChartData,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { GRAY, percInFooter, SEQUENTIAL_COLORS_TRANS } from "./core";
+import {
+  GRAY,
+  numToOrdinal,
+  percInFooter,
+  SEQUENTIAL_COLORS_TRANS,
+} from "./core";
 import { useEffect, useState } from "react";
 
 ChartJS.register(
@@ -115,14 +120,7 @@ export function RankDistributions({ cands }: RankDistributionsProps) {
                       if (choice_num === 6) {
                         return `${n} voters did not rank ${c.label}`;
                       }
-                      const str =
-                        choice_num === 1
-                          ? "st"
-                          : choice_num === 2
-                            ? "nd"
-                            : choice_num === 3
-                              ? "rd"
-                              : "th";
+                      const str = numToOrdinal(choice_num);
                       return `${n} voters ranked ${c.label} as their ${choice_num}${str} choice`;
                     },
                     footer: percInFooter,
