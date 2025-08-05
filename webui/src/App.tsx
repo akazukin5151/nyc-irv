@@ -5,6 +5,7 @@ import { handleCandidateSelectCore, type Tree } from "./core";
 import { WeightedTransfers } from "./WeightedTransfers";
 import { ExternalLink } from "./ExternalLink";
 import { Icicle } from "./Icicle";
+import { PairwiseWins } from "./PairwiseWins";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
@@ -79,6 +80,10 @@ function App() {
         </ExternalLink>{" "}
         for static results
       </p>
+
+      <PairwiseWins />
+
+      <div style={{ height: "8%" }}></div>
 
       <Icicle treeData={treeData} />
 
