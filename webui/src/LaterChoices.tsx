@@ -71,7 +71,9 @@ export function LaterChoices({
 
   useEffect(() => {
     if (cands.length > 0 && firstChoiceCand == null) {
-      handleCandidateSelect(cands[0]);
+      setFirstChoiceCand(cands[0]);
+      const idx = cands.findIndex((c) => c === cands[0]);
+      handleCandidateSelectCore(idx, setLaterChoices, setFlowData);
     }
   }, [cands, firstChoiceCand]);
 
@@ -155,12 +157,6 @@ export function LaterChoices({
     }
   }
 
-  const handleCandidateSelect = (cand: string) => {
-    setFirstChoiceCand(cand);
-    const idx = cands.findIndex((c) => c === cand);
-    handleCandidateSelectCore(idx, setLaterChoices, setFlowData);
-  };
-
   let cur_cand_last_name = "";
   if (firstChoiceCand != null) {
     cur_cand_last_name = firstChoiceCand.split(" ").pop() ?? "";
@@ -176,7 +172,10 @@ export function LaterChoices({
         <select
           className="mx-2 rounded-md border-1 px-2"
           onChange={(evt) => {
-            handleCandidateSelect(evt.target.value);
+            const cand = evt.target.value;
+            setFirstChoiceCand(cand);
+            const idx = cands.findIndex((c) => c === cand);
+            handleCandidateSelectCore(idx, setLaterChoices, setFlowData);
           }}
         >
           {cands.map((cand) => (
