@@ -17,7 +17,7 @@ pub fn compute_rank_distributions(
         for ballot in all_ballots {
             let pos = ballot
                 .iter()
-                .position(|choice| choice.map_or(false, |c| c == **cand));
+                .position(|choice| *choice == Some(**cand));
             match pos {
                 Some(p) => position_freqs[p] += 1,
                 None => position_freqs[5] += 1,

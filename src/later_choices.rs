@@ -95,12 +95,12 @@ pub fn compute_later_choices(
                 } else {
                     ballot[i - 1]
                 };
-                let prev_choice = prev_choice.split(' ').last().unwrap();
+                let prev_choice = prev_choice.split(' ').next_back().unwrap();
 
                 let next_choice = if i == ballot.len() {
                     "Exhausted"
                 } else {
-                    ballot[i].split(' ').last().unwrap()
+                    ballot[i].split(' ').next_back().unwrap()
                 };
 
                 let from = format!("{}: {prev_choice}", i + 1);
