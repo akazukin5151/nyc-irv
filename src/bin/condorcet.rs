@@ -3,12 +3,12 @@ use std::{
     error::Error,
     fs::File,
     io::{Read, Write},
-    path::PathBuf,
     time::Instant,
 };
 
 use nyc_irv::{
     core::writeable_file, hierarchy::compute_hierarchy, later_choices::compute_later_choices,
+    rank_distributions::compute_rank_distributions,
 };
 use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 
@@ -216,31 +216,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         println!();
     }
 
-    println!("Writing distribution of ranks");
-
-    let path = PathBuf::from("./out/rank-distributions.tsv");
-    let mut f = writeable_file(path)?;
-    f.write_all(b"cand\trank\tfreq\n")?;
-
-    for (cand_idx, (cand, _)) in cands_to_n_wins.iter().enumerate() {
-        let mut position_freqs = [0; 6];
-        for ballot in &all_ballots {
-            let pos = ballot
-                .iter()
-                .position(|choice| choice.map_or(false, |c| c == **cand));
-            match pos {
-                Some(p) => position_freqs[p] += 1,
-                None => position_freqs[5] += 1,
-            }
-        }
-
-        for (idx, freq) in position_freqs.iter().enumerate() {
-            f.write_all(format!("{cand_idx}\t{}\t{freq}\n", idx + 1).as_bytes())?;
-        }
-    }
-
+    compute_rank_distributions(&all_ballots, &cands_to_n_wins)?;
     compute_later_choices(&all_ballots, &cands_to_n_wins)?;
-
     compute_hierarchy(&all_ballots)?;
 
     Ok(())
