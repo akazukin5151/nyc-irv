@@ -169,10 +169,7 @@ export function LaterChoices({
   return (
     <div className="h-[calc(100vh*2.1)] rounded-md bg-white shadow-md">
       <h2 className="ml-4 pt-2">Later choices</h2>
-      <Sticky
-        height={42}
-        className={`mb-2 inline-flex w-full flex-wrap justify-center`}
-      >
+      <Sticky className={`mb-2 inline-flex w-full flex-wrap justify-center`}>
         <p>
           For the <span className="font-mono">{nVotes}</span> voters who ranked
         </p>
