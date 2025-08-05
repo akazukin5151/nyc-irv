@@ -9,7 +9,6 @@ import { PairwiseWins } from "./PairwiseWins";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
-  const [allNVotes, setAllNVotes] = useState<Array<number>>([]);
   const [laterChoices, setLaterChoices] = useState<Array<Array<number>>>([]);
   const [flowData, setFlowData] = useState<
     Record<string, Record<string, number>>
@@ -52,13 +51,6 @@ function App() {
           });
       });
 
-    fetch("n_voters.tsv")
-      .then((x) => x.text())
-      .then((n_votes_tsv) => {
-        const n_votes = n_votes_tsv.split("\t").map((s) => parseInt(s));
-        setAllNVotes(n_votes);
-      });
-
     fetch("matrices.json")
       .then((x) => x.json())
       .then((matrices) => setAllChordData(matrices));
@@ -99,7 +91,6 @@ function App() {
 
       <LaterChoices
         cands={cands}
-        allNVotes={allNVotes}
         laterChoices={laterChoices}
         setLaterChoices={setLaterChoices}
         flowData={flowData}

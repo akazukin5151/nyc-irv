@@ -51,7 +51,6 @@ type SankeyColor = "rank" | "cand";
 
 type LaterChoicesProps = {
   cands: Array<string>;
-  allNVotes: Array<number>;
   laterChoices: Array<Array<number>>;
   setLaterChoices: Setter<Array<Array<number>>>;
   flowData: Record<string, Record<string, number>>;
@@ -60,14 +59,23 @@ type LaterChoicesProps = {
 
 export function LaterChoices({
   cands,
-  allNVotes,
   laterChoices,
   setLaterChoices,
   flowData,
   setFlowData,
 }: LaterChoicesProps) {
+  const [allNVotes, setAllNVotes] = useState<Array<number>>([]);
   const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
   const [sankeyColor, setSankeyColor] = useState<SankeyColor>("cand");
+
+  useEffect(() => {
+    fetch("n_voters.tsv")
+      .then((x) => x.text())
+      .then((n_votes_tsv) => {
+        const n_votes = n_votes_tsv.split("\t").map((s) => parseInt(s));
+        setAllNVotes(n_votes);
+      });
+  }, [])
 
   useEffect(() => {
     if (cands.length > 0 && firstChoiceCand == null) {
