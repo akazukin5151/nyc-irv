@@ -51,10 +51,8 @@ export function Icicle({ treeData }: IcicleProps) {
 
       const partitions = computePartition(root);
 
-      const d = partitions.descendants();
-
       const coords: Array<Coords> = [];
-      d.forEach((d, _idx) => {
+      partitions.descendants().forEach((d) => {
         if (d.depth === 6) {
           return;
         }
