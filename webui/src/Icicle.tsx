@@ -109,7 +109,9 @@ export function Icicle({ treeData }: IcicleProps) {
           later choices. This chart shows every preference from every voter.
         </p>
 
-        {tooltip != null && <p>{tooltip}</p>}
+        <div className="overflow-y-auto max-lg:h-[50px]">
+          {tooltip != null && <p>{tooltip}</p>}
+        </div>
 
         <canvas
           ref={canvasRef}
