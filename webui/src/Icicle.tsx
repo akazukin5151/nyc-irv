@@ -25,15 +25,19 @@ const height = 500;
 const offsetY = -160;
 const defaultTooltip = "Hover over a bar to see its ranking and frequency";
 
-type IcicleProps = {
-  treeData: Tree | null;
-};
+export function Icicle() {
+  const [treeData, setTreeData] = useState<Tree | null>(null);
 
-export function Icicle({ treeData }: IcicleProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [coords, setCoords] = useState<Array<Coords>>();
   // despite the name, our tooltip doesn't float for performance reasons
   const [tooltip, setTooltip] = useState<ReactNode>(defaultTooltip);
+
+  useEffect(() => {
+    fetch("tree.json")
+      .then((x) => x.json())
+      .then((tree) => setTreeData(tree));
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;

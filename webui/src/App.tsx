@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { LaterChoices } from "./LaterChoices";
 import { RankDistributions } from "./RankDistributions";
-import { type Tree } from "./core";
 import { WeightedTransfers } from "./WeightedTransfers";
 import { ExternalLink } from "./ExternalLink";
 import { Icicle } from "./Icicle";
@@ -9,7 +8,6 @@ import { PairwiseWins } from "./PairwiseWins";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
-  const [treeData, setTreeData] = useState<Tree | null>(null);
 
   useEffect(() => {
     fetch("sorted_cands.tsv")
@@ -18,10 +16,6 @@ function App() {
         const cands = cands_csv.split("\t").filter((cand) => cand !== "");
         setCands(cands);
       });
-
-    fetch("tree.json")
-      .then((x) => x.json())
-      .then((tree) => setTreeData(tree));
   }, []);
 
   return (
@@ -41,7 +35,7 @@ function App() {
 
       <div style={{ height: "8%" }}></div>
 
-      <Icicle treeData={treeData} />
+      <Icicle />
 
       <div style={{ height: "8%" }}></div>
 
