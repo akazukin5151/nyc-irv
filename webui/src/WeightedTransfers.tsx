@@ -1,13 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Chord } from "./Chord";
 import { ExternalLink } from "./ExternalLink";
 import { Explainer } from "./Explainer";
 import { CANDIDATE_COLORS, radioStyle } from "./core";
-
-type WeightedTransfersProps = {
-  cands: Array<string>;
-  allChordData: Array<Array<Array<number>>>;
-};
 
 const metrics = [
   {
@@ -78,10 +73,21 @@ const metrics = [
 
 type MetricName = (typeof metrics)[number]["name"];
 
-export function WeightedTransfers({
-  cands,
-  allChordData,
-}: WeightedTransfersProps) {
+type WeightedTransfersProps = {
+  cands: Array<string>;
+};
+
+export function WeightedTransfers({ cands }: WeightedTransfersProps) {
+  const [allChordData, setAllChordData] = useState<Array<Array<Array<number>>>>(
+    [],
+  );
+
+  useEffect(() => {
+    fetch("matrices.json")
+      .then((x) => x.json())
+      .then((matrices) => setAllChordData(matrices));
+  }, []);
+
   const [metricName, setMetricName] = useState<MetricName>("First transfer");
 
   return (

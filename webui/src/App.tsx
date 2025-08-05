@@ -9,9 +9,6 @@ import { PairwiseWins } from "./PairwiseWins";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
-  const [allChordData, setAllChordData] = useState<Array<Array<Array<number>>>>(
-    [],
-  );
   const [treeData, setTreeData] = useState<Tree | null>(null);
 
   useEffect(() => {
@@ -21,10 +18,6 @@ function App() {
         const cands = cands_csv.split("\t").filter((cand) => cand !== "");
         setCands(cands);
       });
-
-    fetch("matrices.json")
-      .then((x) => x.json())
-      .then((matrices) => setAllChordData(matrices));
 
     fetch("tree.json")
       .then((x) => x.json())
@@ -56,7 +49,7 @@ function App() {
 
       <div style={{ height: "8%" }}></div>
 
-      <WeightedTransfers cands={cands} allChordData={allChordData} />
+      <WeightedTransfers cands={cands} />
 
       <div style={{ height: "8%" }}></div>
 
