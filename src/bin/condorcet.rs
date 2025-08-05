@@ -153,17 +153,35 @@ fn main() -> Result<(), Box<dyn Error>> {
         f.write_all(b"\t")?;
     }
 
+    print_n_wins(&cands_to_n_wins);
+    print_pairwise_matchups(&sorted_cands, &matrix, &cands_to_n_wins)?;
+    print_pairwise_matrix(&sorted_cands, &matrix);
+
+    compute_rank_distributions(&all_ballots, &cands_to_n_wins)?;
+    compute_later_choices(&all_ballots, &cands_to_n_wins)?;
+    compute_hierarchy(&all_ballots)?;
+
+    Ok(())
+}
+
+fn print_n_wins(cands_to_n_wins: &[(&&str, &i32)]) {
     println!("Candidate | Number of pairwise wins");
     println!("--- | ---");
-    for (cand, n_wins) in &cands_to_n_wins {
+    for (cand, n_wins) in cands_to_n_wins {
         println!("{cand} | {n_wins}");
     }
+}
 
+fn print_pairwise_matchups(
+    sorted_cands: &[&str],
+    matrix: &HashMap<(&str, &str), u32>,
+    cands_to_n_wins: &[(&&str, &i32)],
+) -> Result<(), Box<dyn Error>> {
     println!(
         "\nCandidate A | Result | Candidate B | Votes for A | Votes for B | % for A | % for B"
     );
     println!("--- | --- | --- | --- | --- | --- | ---");
-    for (this_cand, _) in &cands_to_n_wins {
+    for (this_cand, _) in cands_to_n_wins {
         let this_cand = *this_cand;
         for other_cand in sorted_cands.iter().filter(|c| *c != this_cand) {
             let pair1 = (*this_cand, *other_cand);
@@ -189,14 +207,18 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
+    Ok(())
+}
+
+fn print_pairwise_matrix(sorted_cands: &[&str], matrix: &HashMap<(&str, &str), u32>) {
     let mut buf = String::new();
     buf.push_str("| | ");
-    for cand in &sorted_cands {
+    for cand in sorted_cands {
         buf.push_str(cand);
         buf.push_str(" | ");
     }
     buf.push_str("\n| --- | ");
-    for _ in &sorted_cands {
+    for _ in sorted_cands {
         buf.push_str("--- | ");
     }
 
@@ -215,10 +237,4 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
         println!();
     }
-
-    compute_rank_distributions(&all_ballots, &cands_to_n_wins)?;
-    compute_later_choices(&all_ballots, &cands_to_n_wins)?;
-    compute_hierarchy(&all_ballots)?;
-
-    Ok(())
 }
