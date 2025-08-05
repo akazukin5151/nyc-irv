@@ -6,7 +6,7 @@ import {
 import { CANDIDATE_COLORS, getCandColor, type Tree } from "./core";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
-type Coords = {
+type Coordinate = {
   x: number;
   y: number;
   width: number;
@@ -29,7 +29,7 @@ export function Icicle() {
   const [treeData, setTreeData] = useState<Tree | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [coords, setCoords] = useState<Array<Coords>>();
+  const [allCoords, setAllCoords] = useState<Array<Coordinate>>();
   // despite the name, our tooltip doesn't float for performance reasons
   const [tooltip, setTooltip] = useState<ReactNode>(defaultTooltip);
 
@@ -55,7 +55,7 @@ export function Icicle() {
 
       const partitions = computePartition(root);
 
-      const coords: Array<Coords> = [];
+      const coords: Array<Coordinate> = [];
       partitions.descendants().forEach((d) => {
         if (d.depth === 6) {
           return;
@@ -93,7 +93,7 @@ export function Icicle() {
         coords.push(coord);
       });
 
-      setCoords(coords);
+      setAllCoords(coords);
     }
 
     return () => {
@@ -126,7 +126,7 @@ export function Icicle() {
           className="w-full max-w-max"
           onMouseMove={(evt) => {
             const canvas = canvasRef.current;
-            if (coords == null || canvas == null) {
+            if (allCoords == null || canvas == null) {
               return;
             }
 
@@ -141,7 +141,7 @@ export function Icicle() {
             };
 
             // check which rectangle it is intersecting with
-            for (const coord of coords) {
+            for (const coord of allCoords) {
               const minX = coord.x;
               const maxX = minX + coord.width;
               const minY = coord.y;
