@@ -88,7 +88,7 @@ export function WeightedTransfers({
     <div className="rounded-md bg-white shadow-md">
       <h2 className="ml-4 pt-2">Weighted preferences</h2>
 
-      <div className="flex items-center">
+      <div className="flex items-center justify-center max-lg:flex-wrap">
         <div className="ml-4 flex flex-col gap-2">
           <ul>
             <li>
@@ -176,7 +176,7 @@ export function WeightedTransfers({
           </table>
         </div>
 
-        <div className="flex w-full justify-center">
+        <div className="flex justify-center max-lg:mt-5">
           {cands.length > 0 && allChordData.length > 0 && (
             <Chord
               matrix={
