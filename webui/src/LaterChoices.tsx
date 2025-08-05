@@ -20,7 +20,6 @@ import {
   radioStyle,
   SEQUENTIAL_COLORS_SOLID,
   SEQUENTIAL_COLORS_TRANS,
-  type Setter,
 } from "./core";
 import { Sticky } from "./Sticky";
 
@@ -31,7 +30,6 @@ ChartJS.register(
   LinearScale,
   BarElement,
   BarController,
-
   Colors,
   SankeyController,
   Flow,
@@ -51,20 +49,15 @@ type SankeyColor = "rank" | "cand";
 
 type LaterChoicesProps = {
   cands: Array<string>;
-  laterChoices: Array<Array<number>>;
-  setLaterChoices: Setter<Array<Array<number>>>;
-  flowData: Record<string, Record<string, number>>;
-  setFlowData: Setter<Record<string, Record<string, number>>>;
 };
 
-export function LaterChoices({
-  cands,
-  laterChoices,
-  setLaterChoices,
-  flowData,
-  setFlowData,
-}: LaterChoicesProps) {
+export function LaterChoices({ cands }: LaterChoicesProps) {
   const [allNVotes, setAllNVotes] = useState<Array<number>>([]);
+  const [laterChoices, setLaterChoices] = useState<Array<Array<number>>>([]);
+  const [flowData, setFlowData] = useState<
+    Record<string, Record<string, number>>
+  >({});
+
   const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
   const [sankeyColor, setSankeyColor] = useState<SankeyColor>("cand");
 
@@ -75,13 +68,17 @@ export function LaterChoices({
         const n_votes = n_votes_tsv.split("\t").map((s) => parseInt(s));
         setAllNVotes(n_votes);
       });
-  }, [])
+
+    // fetch the first candidate's later choices and flow data now.
+    // we don't need to wait for candidate list to be loaded
+    handleCandidateSelectCore(0, setLaterChoices, setFlowData);
+  }, []);
 
   useEffect(() => {
     if (cands.length > 0 && firstChoiceCand == null) {
+      // we do need to wait for the candidate names to be loaded
+      // before setting the initial firstChoiceCand value
       setFirstChoiceCand(cands[0]);
-      const idx = cands.findIndex((c) => c === cands[0]);
-      handleCandidateSelectCore(idx, setLaterChoices, setFlowData);
     }
   }, [cands, firstChoiceCand]);
 

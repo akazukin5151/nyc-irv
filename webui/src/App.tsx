@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { LaterChoices } from "./LaterChoices";
 import { RankDistributions } from "./RankDistributions";
-import { handleCandidateSelectCore, type Tree } from "./core";
+import { type Tree } from "./core";
 import { WeightedTransfers } from "./WeightedTransfers";
 import { ExternalLink } from "./ExternalLink";
 import { Icicle } from "./Icicle";
@@ -9,10 +9,6 @@ import { PairwiseWins } from "./PairwiseWins";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
-  const [laterChoices, setLaterChoices] = useState<Array<Array<number>>>([]);
-  const [flowData, setFlowData] = useState<
-    Record<string, Record<string, number>>
-  >({});
   const [rankDistData, setRankDistData] = useState<Array<Array<number>>>([]);
   const [allChordData, setAllChordData] = useState<Array<Array<Array<number>>>>(
     [],
@@ -25,7 +21,6 @@ function App() {
       .then((cands_csv) => {
         const cands = cands_csv.split("\t").filter((cand) => cand !== "");
         setCands(cands);
-        handleCandidateSelectCore(0, setLaterChoices, setFlowData);
 
         fetch("rank-distributions.tsv")
           .then((x) => x.text())
@@ -89,13 +84,7 @@ function App() {
 
       <div style={{ height: "8%" }}></div>
 
-      <LaterChoices
-        cands={cands}
-        laterChoices={laterChoices}
-        setLaterChoices={setLaterChoices}
-        flowData={flowData}
-        setFlowData={setFlowData}
-      />
+      <LaterChoices cands={cands} />
     </div>
   );
 }
