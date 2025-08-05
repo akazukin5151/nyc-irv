@@ -9,7 +9,6 @@ import { PairwiseWins } from "./PairwiseWins";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
-  const [rankDistData, setRankDistData] = useState<Array<Array<number>>>([]);
   const [allChordData, setAllChordData] = useState<Array<Array<Array<number>>>>(
     [],
   );
@@ -21,29 +20,6 @@ function App() {
       .then((cands_csv) => {
         const cands = cands_csv.split("\t").filter((cand) => cand !== "");
         setCands(cands);
-
-        fetch("rank-distributions.tsv")
-          .then((x) => x.text())
-          .then((tsv) => {
-            const rank_distributions_csv = tsv.split("\n");
-            const rank_dist_data: Array<Array<number>> = [];
-            for (const row of rank_distributions_csv.slice(1)) {
-              if (row.length === 0) {
-                continue;
-              }
-
-              const splitted = row.split("\t");
-              const cand_idx = parseInt(splitted[0]);
-              const rank = parseInt(splitted[1]) - 1;
-              const freq = parseInt(splitted[2]);
-
-              const cand_arr = rank_dist_data[rank] ?? cands.map(() => 0);
-              cand_arr[cand_idx] = freq;
-              rank_dist_data[rank] = cand_arr;
-            }
-
-            setRankDistData(rank_dist_data);
-          });
       });
 
     fetch("matrices.json")
@@ -76,7 +52,7 @@ function App() {
 
       <div style={{ height: "8%" }}></div>
 
-      <RankDistributions cands={cands} rankDistData={rankDistData} />
+      <RankDistributions cands={cands} />
 
       <div style={{ height: "8%" }}></div>
 

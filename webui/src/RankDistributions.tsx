@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { GRAY, percInFooter, SEQUENTIAL_COLORS_TRANS } from "./core";
+import { useEffect, useState } from "react";
 
 ChartJS.register(
   Tooltip,
@@ -24,13 +25,36 @@ ChartJS.register(
 
 type RankDistributionsProps = {
   cands: Array<string>;
-  rankDistData: Array<Array<number>>;
 };
 
-export function RankDistributions({
-  cands,
-  rankDistData,
-}: RankDistributionsProps) {
+export function RankDistributions({ cands }: RankDistributionsProps) {
+  const [rankDistData, setRankDistData] = useState<Array<Array<number>>>([]);
+
+  useEffect(() => {
+    fetch("rank-distributions.tsv")
+      .then((x) => x.text())
+      .then((tsv) => {
+        const rank_distributions_csv = tsv.split("\n");
+        const rank_dist_data: Array<Array<number>> = [];
+        for (const row of rank_distributions_csv.slice(1)) {
+          if (row.length === 0) {
+            continue;
+          }
+
+          const splitted = row.split("\t");
+          const cand_idx = parseInt(splitted[0]);
+          const rank = parseInt(splitted[1]) - 1;
+          const freq = parseInt(splitted[2]);
+
+          const cand_arr = rank_dist_data[rank] ?? cands.map(() => 0);
+          cand_arr[cand_idx] = freq;
+          rank_dist_data[rank] = cand_arr;
+        }
+
+        setRankDistData(rank_dist_data);
+      });
+  }, []);
+
   const chartData: ChartData<"bar", Array<number>, string> = {
     labels: [],
     datasets: [],
