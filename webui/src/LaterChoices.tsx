@@ -242,7 +242,7 @@ export function LaterChoices({
         <div style={{ maxHeight: "calc(100vh - 40px)" }}>
           <h2 className="mb-1 ml-4">Sankey</h2>
 
-          <div className="ml-4">
+          <div className="mx-4">
             <p className="mb-1">
               This is similar to the Icicle chart in the beginning, but only
               shows the preferences for voters that ranked{" "}
