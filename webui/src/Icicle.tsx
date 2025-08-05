@@ -3,18 +3,13 @@ import {
   partition,
   type HierarchyRectangularNode,
 } from "d3-hierarchy";
-import { CANDIDATE_COLORS, getCandColor, type Tree } from "./core";
+import {
+  CANDIDATE_COLORS,
+  type Coordinate,
+  getCandColor,
+  type Tree,
+} from "./core";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-
-type Coordinate = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  color: string;
-  ancestors: Array<string>;
-  value: number;
-};
 
 function rectWidth(d: HierarchyRectangularNode<Tree>) {
   return d.x1 - d.x0 - Math.min(1, (d.x1 - d.x0) / 2);

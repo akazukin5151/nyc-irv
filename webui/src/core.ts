@@ -11,6 +11,16 @@ export type Tree = {
   children: Array<Tree>;
 };
 
+export type Coordinate = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: string;
+  ancestors: Array<string>;
+  value: number;
+};
+
 export const radioStyle =
   "box-content h-1 w-1 appearance-none rounded-full border border-[5px] border-white bg-white bg-clip-padding ring-1 ring-gray-300 outline-none checked:border-blue-500 checked:border-blue-500 transition-all";
 
