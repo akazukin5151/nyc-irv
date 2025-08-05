@@ -72,39 +72,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let matrix = compute_pairwise_matrix(&sorted_cands, &all_ballots);
 
-    eprintln!("Looking for Condorcet winner\n");
-
-    let mut cands_to_n_wins = HashMap::new();
-    for cand in sorted_cands.iter() {
-        cands_to_n_wins.insert(*cand, 0);
-    }
-
-    let mut winner_found = false;
-    for this_cand in sorted_cands.iter() {
-        let mut is_cand_possible_cw = true;
-        for other_cand in sorted_cands.iter().filter(|c| *c != this_cand) {
-            let pair1 = (*this_cand, *other_cand);
-            let pair2 = (*other_cand, *this_cand);
-
-            // get the number of voters that prefers one candidate over the other
-            let n_prefer_this_cand = matrix.get(&pair1).ok_or("matrix has no {pair1}")?;
-            let n_prefer_other_cand = matrix.get(&pair2).ok_or("matrix has no {pair2}")?;
-            if n_prefer_other_cand > n_prefer_this_cand {
-                is_cand_possible_cw = false;
-            } else {
-                *cands_to_n_wins.get_mut(*this_cand).unwrap() += 1;
-            }
-        }
-
-        if is_cand_possible_cw {
-            println!("{this_cand} is the Condorcet winner");
-            winner_found = true;
-        }
-    }
-
-    if !winner_found {
-        println!("No Condorcet winner found, there is a Condorcet cycle");
-    }
+    let cands_to_n_wins = look_for_condorcet_winner(&sorted_cands, &matrix)?;
 
     println!();
 
@@ -128,6 +96,43 @@ fn main() -> Result<(), Box<dyn Error>> {
     compute_hierarchy(&all_ballots)?;
 
     Ok(())
+}
+
+fn look_for_condorcet_winner<'a>(
+    sorted_cands: &[&'a str],
+    matrix: &HashMap<(&str, &str), u32>,
+) -> Result<HashMap<&'a str, i32>, Box<dyn Error>> {
+    eprintln!("Looking for Condorcet winner\n");
+    let mut cands_to_n_wins = HashMap::new();
+    for cand in sorted_cands.iter() {
+        cands_to_n_wins.insert(*cand, 0);
+    }
+    let mut winner_found = false;
+    for this_cand in sorted_cands.iter() {
+        let mut is_cand_possible_cw = true;
+        for other_cand in sorted_cands.iter().filter(|c| *c != this_cand) {
+            let pair1 = (*this_cand, *other_cand);
+            let pair2 = (*other_cand, *this_cand);
+
+            // get the number of voters that prefers one candidate over the other
+            let n_prefer_this_cand = matrix.get(&pair1).ok_or("matrix has no {pair1}")?;
+            let n_prefer_other_cand = matrix.get(&pair2).ok_or("matrix has no {pair2}")?;
+            if n_prefer_other_cand > n_prefer_this_cand {
+                is_cand_possible_cw = false;
+            } else {
+                *cands_to_n_wins.get_mut(*this_cand).unwrap() += 1;
+            }
+        }
+
+        if is_cand_possible_cw {
+            println!("{this_cand} is the Condorcet winner");
+            winner_found = true;
+        }
+    }
+    if !winner_found {
+        println!("No Condorcet winner found, there is a Condorcet cycle");
+    }
+    Ok(cands_to_n_wins)
 }
 
 fn compute_pairwise_matrix<'a>(
