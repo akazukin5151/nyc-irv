@@ -3,36 +3,12 @@ use std::{
     error::Error,
     fs::{self, File},
     io::{Read, Write},
-    path::{Path, PathBuf},
+    path::PathBuf,
     time::Instant,
 };
 
+use nyc_irv::{core::writeable_file, hierarchy::compute_hierarchy};
 use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
-use serde::Serialize;
-
-#[derive(Serialize, Clone)]
-struct Node {
-    name: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    value: Option<i64>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    children: Option<Vec<Node>>,
-}
-
-enum NodeInternal {
-    /// Leaf node
-    Value(i64),
-    /// Edge
-    Children(HashMap<String, NodeInternal>),
-}
-
-fn writeable_file<P: AsRef<Path>>(path: P) -> Result<File, std::io::Error> {
-    File::options()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open(path)
-}
 
 fn main() -> Result<(), Box<dyn Error>> {
     let mut ballot_file = File::open("./out/ballots.bin")?;
@@ -399,73 +375,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut f = writeable_file("./out/matrices.json")?;
     serde_json::to_writer(&mut f, &matrices)?;
 
-    println!("Writing hierarchy data");
-
-    let mut children: HashMap<String, NodeInternal> = HashMap::new();
-    for ballot in &all_ballots {
-        // flatten to ignore Nones
-        let flattened: Vec<_> = ballot.iter().flatten().collect();
-        if flattened.is_empty() {
-            continue;
-        }
-
-        let mut hmap = &mut children;
-
-        for choice in flattened {
-            let key = choice.to_string();
-            if !hmap.contains_key(&key) {
-                let hm = HashMap::new();
-                hmap.insert(key.clone(), NodeInternal::Children(hm));
-            }
-            let Some(NodeInternal::Children(h)) = hmap.get_mut(&key) else {
-                unreachable!();
-            };
-            hmap = h;
-        }
-
-        // add exhausted node to hmap with NodeInternal::Value
-        let key = "Exhausted".to_string();
-        hmap.entry(key)
-            .and_modify(|node| {
-                let NodeInternal::Value(v) = node else {
-                    // exhausted can never have children
-                    unreachable!()
-                };
-                *v += 1;
-            })
-            .or_insert(NodeInternal::Value(1));
-    }
-
-    fn hmap_to_vec(k: String, n: &NodeInternal) -> Node {
-        match n {
-            NodeInternal::Value(v) => Node {
-                name: k,
-                value: Some(*v),
-                children: None,
-            },
-            NodeInternal::Children(c) => {
-                let x: Vec<Node> = c.iter().map(|(k, n)| hmap_to_vec(k.clone(), n)).collect();
-                Node {
-                    name: k,
-                    value: None,
-                    children: Some(x),
-                }
-            }
-        }
-    }
-
-    let children_vec: Vec<Node> = children
-        .into_iter()
-        .map(|(k, n)| hmap_to_vec(k, &n))
-        .collect();
-
-    let tree = Node {
-        name: "Root".to_owned(),
-        value: children_vec.iter().map(|node| node.value).sum(),
-        children: Some(children_vec),
-    };
-    let mut f = writeable_file("./out/tree.json")?;
-    serde_json::to_writer(&mut f, &tree)?;
+    compute_hierarchy(&all_ballots)?;
 
     Ok(())
 }
