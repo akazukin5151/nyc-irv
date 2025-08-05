@@ -115,7 +115,8 @@ export function Icicle({ treeData }: IcicleProps) {
           ref={canvasRef}
           width={width * 2}
           height={height * 2}
-          style={{ width: `${width}px`, height: `${height}px` }}
+          style={{ height: `${height}px` }}
+          className="w-full max-w-max"
           onMouseMove={(evt) => {
             const canvas = canvasRef.current;
             if (coords == null || canvas == null) {
