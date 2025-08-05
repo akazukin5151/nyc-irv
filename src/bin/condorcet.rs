@@ -70,41 +70,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         })
         .collect();
 
-    println!("Compute pairwise matrix");
-
-    // key = (cand1, cand2)
-    // value = number of voters preferring cand1 over cand2
-    let mut matrix: HashMap<_, u32> = HashMap::new();
-    for cand1 in sorted_cands.iter() {
-        for cand2 in sorted_cands.iter() {
-            let pair = (*cand1, *cand2);
-
-            let v = all_ballots
-                .par_iter()
-                .map(|ballot| {
-                    let o_cand1_pos = ballot.iter().flatten().position(|cand| cand == cand1);
-                    let o_cand2_pos = ballot.iter().flatten().position(|cand| cand == cand2);
-
-                    // if cand1 is preferred, add `1`. otherwise, no need to add and skip.
-                    // if a candidate has not been ranked, the other candidate is preferred.
-                    // if both candidate is not ranked, skip this voter.
-                    match (o_cand1_pos, o_cand2_pos) {
-                        (Some(_), None) => 1,
-                        (Some(cand1_pos), Some(cand2_pos)) => {
-                            if cand1_pos < cand2_pos {
-                                1
-                            } else {
-                                0
-                            }
-                        }
-                        _ => 0,
-                    }
-                })
-                .sum();
-
-            matrix.entry(pair).and_modify(|c| *c += v).or_insert(v);
-        }
-    }
+    let matrix = compute_pairwise_matrix(&sorted_cands, &all_ballots);
 
     eprintln!("Looking for Condorcet winner\n");
 
@@ -162,6 +128,49 @@ fn main() -> Result<(), Box<dyn Error>> {
     compute_hierarchy(&all_ballots)?;
 
     Ok(())
+}
+
+fn compute_pairwise_matrix<'a>(
+    sorted_cands: &[&'a str],
+    all_ballots: &[[Option<&str>; 5]],
+) -> HashMap<(&'a str, &'a str), u32> {
+    println!("Compute pairwise matrix");
+
+    // key = (cand1, cand2)
+    // value = number of voters preferring cand1 over cand2
+    let mut matrix: HashMap<_, u32> = HashMap::new();
+    for cand1 in sorted_cands.iter() {
+        for cand2 in sorted_cands.iter() {
+            let pair = (*cand1, *cand2);
+
+            let v = all_ballots
+                .par_iter()
+                .map(|ballot| {
+                    let o_cand1_pos = ballot.iter().flatten().position(|cand| cand == cand1);
+                    let o_cand2_pos = ballot.iter().flatten().position(|cand| cand == cand2);
+
+                    // if cand1 is preferred, add `1`. otherwise, no need to add and skip.
+                    // if a candidate has not been ranked, the other candidate is preferred.
+                    // if both candidate is not ranked, skip this voter.
+                    match (o_cand1_pos, o_cand2_pos) {
+                        (Some(_), None) => 1,
+                        (Some(cand1_pos), Some(cand2_pos)) => {
+                            if cand1_pos < cand2_pos {
+                                1
+                            } else {
+                                0
+                            }
+                        }
+                        _ => 0,
+                    }
+                })
+                .sum();
+
+            matrix.entry(pair).and_modify(|c| *c += v).or_insert(v);
+        }
+    }
+
+    matrix
 }
 
 fn print_n_wins(cands_to_n_wins: &[(&&str, &i32)]) {
