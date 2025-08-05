@@ -3,13 +3,9 @@ import {
   partition,
   type HierarchyRectangularNode,
 } from "d3-hierarchy";
-import {
-  CANDIDATE_COLORS,
-  type Coordinate,
-  getCandColor,
-  type Tree,
-} from "./core";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { CANDIDATE_COLORS, type Coordinate, type Tree } from "./core";
+import { useEffect, useRef, useState } from "react";
+import { IcicleHoverInfo } from "./IcicleHoverInfo";
 
 function rectWidth(d: HierarchyRectangularNode<Tree>) {
   return d.x1 - d.x0 - Math.min(1, (d.x1 - d.x0) / 2);
@@ -18,15 +14,13 @@ function rectWidth(d: HierarchyRectangularNode<Tree>) {
 const width = 1000;
 const height = 500;
 const offsetY = -160;
-const defaultTooltip = "Hover over a bar to see its ranking and frequency";
 
 export function Icicle() {
   const [treeData, setTreeData] = useState<Tree | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [allCoords, setAllCoords] = useState<Array<Coordinate>>();
-  // despite the name, our tooltip doesn't float for performance reasons
-  const [tooltip, setTooltip] = useState<ReactNode>(defaultTooltip);
+  const [hoverInfo, setHoverInfo] = useState<Coordinate | null>(null);
 
   useEffect(() => {
     fetch("tree.json")
@@ -110,7 +104,7 @@ export function Icicle() {
         </p>
 
         <div className="overflow-y-auto max-lg:h-[50px]">
-          {tooltip != null && <p>{tooltip}</p>}
+          <IcicleHoverInfo coord={hoverInfo} />
         </div>
 
         <canvas
@@ -147,39 +141,11 @@ export function Icicle() {
                 && mousePos.y >= minY
                 && mousePos.y <= maxY
               ) {
-                const underlined = coord.ancestors.map((cand) => (
-                  <span
-                    key={cand}
-                    className="underline decoration-3"
-                    style={{ textDecorationColor: getCandColor(cand) }}
-                  >
-                    {cand}
-                  </span>
-                ));
-
-                if (
-                  underlined.length < 5
-                  && coord.ancestors[coord.ancestors.length - 1] !== "Exhausted"
-                ) {
-                  underlined.push(<span>(All)</span>);
-                }
-
-                const joined = underlined.reduce((a, b) => (
-                  <span>
-                    {a} &gt; {b}
-                  </span>
-                ));
-
-                const tooltip = (
-                  <span>
-                    {coord.value} voters ranked {joined}
-                  </span>
-                );
-                setTooltip(tooltip);
+                setHoverInfo(coord);
                 return;
               }
             }
-            setTooltip(defaultTooltip);
+            setHoverInfo(null);
           }}
         />
       </div>
