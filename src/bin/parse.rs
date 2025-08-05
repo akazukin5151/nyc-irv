@@ -110,18 +110,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     println!("Found {} ballots total", all_ballots.len());
 
-    let mut mayoral_candidates = HashSet::new();
-    let mut first_prefs = HashMap::new();
-    for ballot in all_ballots.iter() {
-        // flatten removes the Nones, then we get the first candidate
-        if let Some(first_pref) = ballot.iter().flatten().next() {
-            mayoral_candidates.insert(*first_pref);
-            first_prefs
-                .entry(first_pref)
-                .and_modify(|c| *c += 1)
-                .or_insert(1);
-        }
-    }
+    let (mayoral_candidates, first_prefs) = find_first_prefs(&all_ballots);
 
     dbg!(&first_prefs);
 
@@ -137,9 +126,27 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+fn find_first_prefs<'a>(
+    all_ballots: &[[Option<&'a str>; 5]],
+) -> (HashSet<&'a str>, HashMap<&'a str, i32>) {
+    let mut mayoral_candidates = HashSet::new();
+    let mut first_prefs = HashMap::new();
+    for ballot in all_ballots.iter() {
+        // flatten removes the Nones, then we get the first candidate
+        if let Some(first_pref) = ballot.iter().flatten().next() {
+            mayoral_candidates.insert(*first_pref);
+            first_prefs
+                .entry(*first_pref)
+                .and_modify(|c| *c += 1)
+                .or_insert(1);
+        }
+    }
+    (mayoral_candidates, first_prefs)
+}
+
 fn write_cands<'a>(
     mayoral_candidates: HashSet<&'a str>,
-    first_prefs: &HashMap<&&str, i32>,
+    first_prefs: &HashMap<&str, i32>,
 ) -> Result<Vec<&'a str>, Box<dyn Error>> {
     let mut sorted_cands: Vec<_> = mayoral_candidates.into_iter().collect();
     sorted_cands
