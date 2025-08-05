@@ -1,4 +1,15 @@
+import { CANDIDATE_COLORS } from "./core";
+
 export function PairwiseWins() {
+  const Mamdani = (
+    <span
+      className="underline decoration-3"
+      style={{ textDecorationColor: CANDIDATE_COLORS.Mamdani }}
+    >
+      Mamdani
+    </span>
+  );
+
   return (
     <>
       <div className="rounded-md bg-white pb-3 shadow-md">
@@ -9,15 +20,15 @@ export function PairwiseWins() {
             <li>There were 11 candidates for Mayor.</li>
             <li>Each candidate can have 10 other 1 v 1 matchups.</li>
             <li>
-              Mamdani won all 10 of his matchups, so he is the{" "}
+              {Mamdani} won all 10 of his matchups, so he is the{" "}
               <span className="underline decoration-green-600 decoration-3">
                 Condorcet winner
               </span>
               .
             </li>
             <li>
-              Mamdani was also the winner of this IRV (RCV) election, so in this
-              case, IRV successfully elected the Condorcet winner.
+              {Mamdani} was also the winner of this IRV (RCV) election, so in
+              this case, IRV successfully elected the Condorcet winner.
             </li>
           </ul>
 
@@ -31,49 +42,73 @@ export function PairwiseWins() {
                 <th>pairwise wins</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="[&_td]:first:underline [&_td]:first:decoration-3">
               <tr>
-                <td>Zohran Kwame Mamdani</td>
+                <td style={{ textDecorationColor: CANDIDATE_COLORS.Mamdani }}>
+                  Zohran Kwame Mamdani
+                </td>
                 <td>10</td>
               </tr>
               <tr>
-                <td>Brad Lander</td>
+                <td style={{ textDecorationColor: CANDIDATE_COLORS.Lander }}>
+                  Brad Lander
+                </td>
                 <td>9</td>
               </tr>
               <tr>
-                <td>Adrienne E. Adams</td>
+                <td style={{ textDecorationColor: CANDIDATE_COLORS.Adams }}>
+                  Adrienne E. Adams
+                </td>
                 <td>8</td>
               </tr>
               <tr>
-                <td>Andrew M. Cuomo</td>
+                <td style={{ textDecorationColor: CANDIDATE_COLORS.Cuomo }}>
+                  Andrew M. Cuomo
+                </td>
                 <td>7</td>
               </tr>
               <tr>
-                <td>Zellnor Myrie</td>
+                <td style={{ textDecorationColor: CANDIDATE_COLORS.Myrie }}>
+                  Zellnor Myrie
+                </td>
                 <td>6</td>
               </tr>
               <tr>
-                <td>Scott M. Stringer</td>
+                <td style={{ textDecorationColor: CANDIDATE_COLORS.Stringer }}>
+                  Scott M. Stringer
+                </td>
                 <td>5</td>
               </tr>
               <tr>
-                <td>Michael Blake</td>
+                <td style={{ textDecorationColor: CANDIDATE_COLORS.Blake }}>
+                  Michael Blake
+                </td>
                 <td>4</td>
               </tr>
               <tr>
-                <td>Jessica Ramos</td>
+                <td style={{ textDecorationColor: CANDIDATE_COLORS.Ramos }}>
+                  Jessica Ramos
+                </td>
                 <td>3</td>
               </tr>
               <tr>
-                <td>Whitney R. Tilson</td>
+                <td style={{ textDecorationColor: CANDIDATE_COLORS.Tilson }}>
+                  Whitney R. Tilson
+                </td>
                 <td>2</td>
               </tr>
               <tr>
-                <td>Selma K. Bartholomew</td>
+                <td
+                  style={{ textDecorationColor: CANDIDATE_COLORS.Bartholomew }}
+                >
+                  Selma K. Bartholomew
+                </td>
                 <td>1</td>
               </tr>
               <tr>
-                <td>Paperboy Love Prince</td>
+                <td style={{ textDecorationColor: CANDIDATE_COLORS.Prince }}>
+                  Paperboy Love Prince
+                </td>
                 <td>0</td>
               </tr>
             </tbody>
