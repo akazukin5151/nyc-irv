@@ -130,7 +130,18 @@ fn main() -> Result<(), Box<dyn Error>> {
         mayoral_candidates.len()
     );
 
-    let mut sorted_cands: Vec<_> = mayoral_candidates.iter().collect();
+    let sorted_cands = write_cands(mayoral_candidates, &first_prefs)?;
+
+    write_compact_ballots(all_ballots, sorted_cands)?;
+
+    Ok(())
+}
+
+fn write_cands<'a>(
+    mayoral_candidates: HashSet<&'a str>,
+    first_prefs: &HashMap<&&str, i32>,
+) -> Result<Vec<&'a str>, Box<dyn Error>> {
+    let mut sorted_cands: Vec<_> = mayoral_candidates.into_iter().collect();
     sorted_cands
         .sort_unstable_by(|a, b| first_prefs.get(b).unwrap().cmp(first_prefs.get(a).unwrap()));
 
@@ -147,9 +158,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
     cands_file.write_all(buf.as_bytes())?;
 
-    // convert strings to indices of the candidates (sorted by first preferences)
-    // 0 means invalid/ignored candidate (undervote/overvote/write-in)
-    // all other numbers means `index+1`
+    Ok(sorted_cands)
+}
+
+fn write_compact_ballots(
+    all_ballots: Vec<[Option<&str>; 5]>,
+    sorted_cands: Vec<&str>,
+) -> Result<(), Box<dyn Error>> {
     let compact_ballots: Vec<[u8; 5]> = all_ballots
         .iter()
         .map(|ballot| {
@@ -157,7 +172,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             ballot.map(|choice| {
                 choice.map_or_else(
                     || 0,
-                    |cand| (sorted_cands.iter().position(|c| **c == cand).unwrap() as u8) + 1,
+                    |cand| (sorted_cands.iter().position(|c| *c == cand).unwrap() as u8) + 1,
                 )
             })
         })
