@@ -11,6 +11,13 @@ export type Tree = {
   children: Array<Tree>;
 };
 
+export type HoverInfo = {
+  this_cand: string;
+  other_cand: string;
+  votes_for_this: number | null;
+  votes_for_other: number | null;
+};
+
 export type Coordinate = {
   x: number;
   y: number;

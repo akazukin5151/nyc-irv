@@ -5,6 +5,7 @@ import { WeightedTransfers } from "./WeightedTransfers";
 import { ExternalLink } from "./ExternalLink";
 import { Icicle } from "./Icicle";
 import { PairwiseWins } from "./PairwiseWins";
+import { PairwiseMatrix } from "./PairwiseMatrix";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
@@ -32,6 +33,10 @@ function App() {
       </p>
 
       <PairwiseWins />
+
+      <div style={{ height: "8%" }}></div>
+
+      <PairwiseMatrix cands={cands} />
 
       <div style={{ height: "8%" }}></div>
 
