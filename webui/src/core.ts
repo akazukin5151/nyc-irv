@@ -39,7 +39,7 @@ export const CANDIDATE_COLORS = {
   Myrie: "#b2e061",
   Stringer: "#7eb0d5",
   Blake: "#b28b34",
-  Ramos: "#f9b615",
+  Ramos: "#ffaaff",
   Tilson: "#0bbaeb",
   Bartholomew: "#c30eff",
   Prince: "#06cb13",
