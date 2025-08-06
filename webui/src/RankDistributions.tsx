@@ -8,6 +8,7 @@ import {
   BarController,
   Colors,
   type ChartData,
+  type ChartDataset,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import {
@@ -28,19 +29,33 @@ ChartJS.register(
   Colors,
 );
 
+type ChartType = "bar";
+type ChartDataType = Array<number>;
+type BarChartData = ChartData<ChartType, ChartDataType, string>;
+
 type RankDistributionsProps = {
   cands: Array<string>;
 };
 
 export function RankDistributions({ cands }: RankDistributionsProps) {
-  const [rankDistData, setRankDistData] = useState<Array<Array<number>>>([]);
+  const initChartData: BarChartData = {
+    labels: [],
+    datasets: [],
+  };
+
+  const [chartData, setChartData] = useState<BarChartData>(initChartData);
 
   useEffect(() => {
+    if (cands.length === 0) {
+      return;
+    }
+
     fetch("rank-distributions.tsv")
       .then((x) => x.text())
       .then((tsv) => {
         const rank_distributions_csv = tsv.split("\n");
         const rank_dist_data: Array<Array<number>> = [];
+
         for (const row of rank_distributions_csv.slice(1)) {
           if (row.length === 0) {
             continue;
@@ -56,31 +71,20 @@ export function RankDistributions({ cands }: RankDistributionsProps) {
           rank_dist_data[rank] = cand_arr;
         }
 
-        setRankDistData(rank_dist_data);
+        const datasets: Array<ChartDataset<ChartType, ChartDataType>> = [];
+        for (let rank = 0; rank < rank_dist_data.length; rank++) {
+          const label = rank === 5 ? "Unranked" : `Rank ${rank + 1}`;
+          const color = rank === 5 ? GRAY : SEQUENTIAL_COLORS_TRANS[rank];
+          datasets.push({
+            label,
+            data: rank_dist_data[rank],
+            backgroundColor: color,
+          });
+        }
+
+        setChartData({ labels: cands, datasets });
       });
-  }, []);
-
-  const chartData: ChartData<"bar", Array<number>, string> = {
-    labels: [],
-    datasets: [],
-  };
-
-  if (rankDistData.length > 0) {
-    chartData.labels = cands;
-    const datasets = [];
-
-    for (let rank = 0; rank < rankDistData.length; rank++) {
-      const label = rank === 5 ? "Unranked" : `Rank ${rank + 1}`;
-      const color = rank === 5 ? GRAY : SEQUENTIAL_COLORS_TRANS[rank];
-      datasets.push({
-        label,
-        data: rankDistData[rank],
-        backgroundColor: color,
-      });
-    }
-
-    chartData.datasets = datasets;
-  }
+  }, [cands]);
 
   return (
     <div className="h-[calc(max(90%,400px))] rounded-md bg-white shadow-md">
