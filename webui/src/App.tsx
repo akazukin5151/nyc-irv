@@ -25,11 +25,11 @@ function App() {
         2025 New York City Democratic mayoral primary analysis
       </h1>
       <p className="mb-3">
-        This is the page containing interactive charts. See{" "}
-        <ExternalLink href="https://github.com/akazukin5151/nyc-irv/blob/main/README.md">
-          https://github.com/akazukin5151/nyc-irv/blob/main/README.md
+        This page is focused on interactive graphics. See{" "}
+        <ExternalLink href="https://fairvote.org/new-york-city-cast-vote-record-initial-analysis/">
+          https://fairvote.org/new-york-city-cast-vote-record-initial-analysis/
         </ExternalLink>{" "}
-        for static results
+        for some text commentary.
       </p>
 
       <PairwiseWins />
