@@ -71,20 +71,23 @@ export const SEQUENTIAL_COLORS_TRANS = [
 
 export const GRAY = "rgba(201, 203, 207, 0.3)";
 
-export function handleCandidateSelectCore(
+export async function handleCandidateSelectCore(
   idx: number,
-  setLaterChoices: Setter<Array<Array<number>>>,
-  setFlowData: Setter<Record<string, Record<string, number>>>,
-) {
-  fetch(`later_choices/${idx}.json`).then(async (res) => {
-    const json: Array<Array<number>> = await res.json();
-    setLaterChoices(json);
-  });
+): Promise<[Array<Array<number>>, Record<string, Record<string, number>>]> {
+  const promises = [
+    fetch(`later_choices/${idx}.json`).then(async (res) => {
+      const json: Array<Array<number>> = await res.json();
+      return json;
+    }),
 
-  fetch(`flows/${idx}.json`).then(async (res) => {
-    const json = await res.json();
-    setFlowData(json);
-  });
+    fetch(`flows/${idx}.json`).then(async (res) => {
+      const json: Record<string, Record<string, number>> = await res.json();
+      return json;
+    }),
+  ];
+
+  // @ts-expect-error
+  return Promise.all(promises);
 }
 
 export function percInFooter(context: Array<TooltipItem<"bar">>): string {

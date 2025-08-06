@@ -21,6 +21,7 @@ import {
   radioStyle,
   SEQUENTIAL_COLORS_SOLID,
   SEQUENTIAL_COLORS_TRANS,
+  type Setter,
 } from "./core";
 import { Sticky } from "./Sticky";
 
@@ -35,6 +36,10 @@ ChartJS.register(
   SankeyController,
   Flow,
 );
+
+type BarChartData = ChartData<"bar", Array<number>, string>;
+
+type SankeyChartData = ChartData<"sankey", Array<SankeyData>, string>;
 
 type SankeyData = {
   from: string;
@@ -52,66 +57,78 @@ type LaterChoicesProps = {
   cands: Array<string>;
 };
 
-export function LaterChoices({ cands }: LaterChoicesProps) {
-  const [allNVotes, setAllNVotes] = useState<Array<number>>([]);
-  const [laterChoices, setLaterChoices] = useState<Array<Array<number>>>([]);
-  const [flowData, setFlowData] = useState<
-    Record<string, Record<string, number>>
-  >({});
+function setupChart(
+  cands: Array<string>,
+  laterChoices: Array<Array<number>>,
+  firstChoiceCand: string,
+  setChartData: Setter<BarChartData>,
+  flowData: Record<string, Record<string, number>>,
+  setSankeyChartData: Setter<SankeyChartData>,
+) {
+  const labels = [
+    ...cands.filter((cand) => cand !== firstChoiceCand),
+    "Exhausted",
+  ];
+  const datasets = [];
 
-  const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
-  const [sankeyColor, setSankeyColor] = useState<SankeyColor>("cand");
+  for (let choice_idx = 0; choice_idx < 4; choice_idx++) {
+    const choice_num = choice_idx + 2;
+    const str = choice_num === 2 ? "nd" : choice_num === 3 ? "rd" : "th";
 
-  useEffect(() => {
-    fetch("n_voters.tsv")
-      .then((x) => x.text())
-      .then((n_votes_tsv) => {
-        const n_votes = n_votes_tsv.split("\t").map((s) => parseInt(s));
-        setAllNVotes(n_votes);
-      });
+    const data = laterChoices.map((freqs) => freqs[choice_idx]);
 
-    // fetch the first candidate's later choices and flow data now.
-    // we don't need to wait for candidate list to be loaded
-    handleCandidateSelectCore(0, setLaterChoices, setFlowData);
-  }, []);
+    const dataset = {
+      label: `${choice_num}${str} choice`,
+      data,
+      backgroundColor: SEQUENTIAL_COLORS_TRANS[choice_idx + 1],
+      borderColor: SEQUENTIAL_COLORS_TRANS[choice_idx + 1],
+    };
+    datasets.push(dataset);
+  }
 
-  useEffect(() => {
-    if (cands.length > 0 && firstChoiceCand == null) {
-      // we do need to wait for the candidate names to be loaded
-      // before setting the initial firstChoiceCand value
-      setFirstChoiceCand(cands[0]);
+  setChartData({ labels, datasets });
+
+  const sankey_data: Array<SankeyData> = [];
+  for (const [from, inner_map] of Object.entries(flowData)) {
+    for (const [to, flow] of Object.entries(inner_map)) {
+      sankey_data.push({
+        from,
+        to,
+        flow,
+        fromIdx: parseInt(from.slice(0, 1)),
+        toIdx: parseInt(to.slice(0, 1)),
+        fromCand: from.split(" ").pop(),
+        toCand: to.split(" ").pop(),
+      } as SankeyData);
     }
-  }, [cands, firstChoiceCand]);
+  }
 
-  const idx = cands.findIndex((c) => c === firstChoiceCand);
-  const nVotes =
-    allNVotes.length === 0
-      ? "xxx"
-      : allNVotes[idx] == null
-        ? "xxx"
-        : (new Intl.NumberFormat("en-US").format(allNVotes[idx]) ?? "xxx");
+  setSankeyChartData((s) => ({
+    datasets: [{ ...s.datasets[0], data: sankey_data }],
+  }));
+}
 
-  const chartData: ChartData<"bar", Array<number>, string> = {
+export function LaterChoices({ cands }: LaterChoicesProps) {
+  const [allNVotes, setAllNVotes] = useState<string>();
+  const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
+
+  const initChartData: BarChartData = {
     labels: [],
     datasets: [],
   };
 
-  const sankeyChartData: ChartData<"sankey", Array<SankeyData>, string> = {
+  const [chartData, setChartData] = useState<BarChartData>(initChartData);
+
+  const initSankeyChartData: SankeyChartData = {
     datasets: [
       {
         data: [],
         colorFrom: (c) => {
           const sd = c.dataset.data[c.dataIndex] as SankeyData;
-          if (sankeyColor === "rank") {
-            return SEQUENTIAL_COLORS_SOLID[sd.fromIdx - 1];
-          }
           return CANDIDATE_COLORS[sd.fromCand];
         },
         colorTo: (c) => {
           const sd = c.dataset.data[c.dataIndex] as SankeyData;
-          if (sankeyColor === "rank") {
-            return SEQUENTIAL_COLORS_SOLID[sd.toIdx - 1];
-          }
           return CANDIDATE_COLORS[sd.toCand];
         },
         // TODO: not working
@@ -124,44 +141,74 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
     ],
   };
 
-  if (laterChoices.length > 0 && firstChoiceCand != null) {
-    chartData.labels = [
-      ...cands.filter((cand) => cand !== firstChoiceCand),
-      "Exhausted",
-    ];
-    const datasets = [];
+  const [sankeyChartData, setSankeyChartData] =
+    useState<SankeyChartData>(initSankeyChartData);
 
-    for (let choice_idx = 0; choice_idx < 4; choice_idx++) {
-      const choice_num = choice_idx + 2;
-      const str = choice_num === 2 ? "nd" : choice_num === 3 ? "rd" : "th";
-
-      const data = laterChoices.map((freqs) => freqs[choice_idx]);
-
-      const dataset = {
-        label: `${choice_num}${str} choice`,
-        data,
-        backgroundColor: SEQUENTIAL_COLORS_TRANS[choice_idx + 1],
-        borderColor: SEQUENTIAL_COLORS_TRANS[choice_idx + 1],
-      };
-      datasets.push(dataset);
-    }
-
-    chartData.datasets = datasets;
-
-    for (const [from, inner_map] of Object.entries(flowData)) {
-      for (const [to, flow] of Object.entries(inner_map)) {
-        sankeyChartData.datasets[0].data.push({
-          from,
-          to,
-          flow,
-          fromIdx: parseInt(from.slice(0, 1)),
-          toIdx: parseInt(to.slice(0, 1)),
-          fromCand: from.split(" ").pop(),
-          toCand: to.split(" ").pop(),
-        } as SankeyData);
-      }
-    }
+  function onSankeyColorChange(sankeyColor: SankeyColor) {
+    setSankeyChartData((s) => ({
+      datasets: [
+        {
+          data: s.datasets[0].data,
+          colorFrom: (c) => {
+            const sd = c.dataset.data[c.dataIndex] as SankeyData;
+            if (sankeyColor === "rank") {
+              return SEQUENTIAL_COLORS_SOLID[sd.fromIdx - 1];
+            }
+            return CANDIDATE_COLORS[sd.fromCand];
+          },
+          colorTo: (c) => {
+            const sd = c.dataset.data[c.dataIndex] as SankeyData;
+            if (sankeyColor === "rank") {
+              return SEQUENTIAL_COLORS_SOLID[sd.toIdx - 1];
+            }
+            return CANDIDATE_COLORS[sd.toCand];
+          },
+        },
+      ],
+    }));
   }
+
+  useEffect(() => {
+    if (cands.length === 0 || firstChoiceCand != null) {
+      return;
+    }
+
+    const fn = async () => {
+      const newFirstCand = cands[0];
+      setFirstChoiceCand(firstChoiceCand);
+
+      fetch("n_voters.tsv")
+        .then((x) => x.text())
+        .then((n_votes_tsv) => {
+          const n_votes = n_votes_tsv.split("\t").map((s) => parseInt(s));
+
+          const idx = cands.findIndex((c) => c === newFirstCand);
+          const nVotes =
+            n_votes.length === 0
+              ? "xxx"
+              : n_votes[idx] == null
+                ? "xxx"
+                : (new Intl.NumberFormat("en-US").format(n_votes[idx])
+                  ?? "xxx");
+
+          setAllNVotes(nVotes);
+        });
+
+      // fetch the first candidate's later choices and flow data now.
+      const [laterChoices, flowData] = await handleCandidateSelectCore(0);
+
+      setupChart(
+        cands,
+        laterChoices,
+        newFirstCand,
+        setChartData,
+        flowData,
+        setSankeyChartData,
+      );
+    };
+
+    fn();
+  }, [cands, firstChoiceCand]);
 
   let cur_cand_last_name = "";
   if (firstChoiceCand != null) {
@@ -173,7 +220,8 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
       <h2 className="ml-4 pt-2">Later choices</h2>
       <Sticky className={`mb-2 inline-flex w-full flex-wrap justify-center`}>
         <p>
-          For the <span className="font-mono">{nVotes}</span> voters who ranked
+          For the <span className="font-mono">{allNVotes}</span> voters who
+          ranked
         </p>
         <select
           className="mx-2 rounded-md border-1 px-2"
@@ -181,7 +229,16 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
             const cand = evt.target.value;
             setFirstChoiceCand(cand);
             const idx = cands.findIndex((c) => c === cand);
-            handleCandidateSelectCore(idx, setLaterChoices, setFlowData);
+            handleCandidateSelectCore(idx).then(([laterChoices, flowData]) =>
+              setupChart(
+                cands,
+                laterChoices,
+                cand,
+                setChartData,
+                flowData,
+                setSankeyChartData,
+              ),
+            );
           }}
         >
           {cands.map((cand) => (
@@ -257,8 +314,8 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
                 type="radio"
                 name="sankey-colors"
                 className={radioStyle + " mr-1"}
-                checked={sankeyColor === "cand"}
-                onChange={() => setSankeyColor("cand")}
+                defaultChecked
+                onChange={() => onSankeyColorChange("cand")}
               />
               Color by candidate
             </label>
@@ -267,8 +324,7 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
                 type="radio"
                 name="sankey-colors"
                 className={radioStyle + " mr-1"}
-                checked={sankeyColor === "rank"}
-                onChange={() => setSankeyColor("rank")}
+                onChange={() => onSankeyColorChange("rank")}
               />
               Color by position on ballot
             </label>
