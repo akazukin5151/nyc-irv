@@ -3,6 +3,8 @@ import { Chord } from "./Chord";
 import { ExternalLink } from "./ExternalLink";
 import { Explainer } from "./Explainer";
 import { CANDIDATE_COLORS, radioStyle } from "./core";
+import { Frac } from "./math/Frac";
+import { Pow } from "./math/Pow";
 
 const metrics = [
   {
@@ -28,13 +30,23 @@ const metrics = [
         </ExternalLink>
       </>
     ),
-    weights: ["⅟", "½", "⅓", "¼"],
+    weights: [
+      <Frac numerator={1} denominator={1} key="h-1/1" />,
+      <Frac numerator={1} denominator={2} key="h-1/2" />,
+      <Frac numerator={1} denominator={3} key="h-1/3" />,
+      <Frac numerator={1} denominator={4} key="h-1/4" />,
+    ],
   },
   {
     name: "Geometric",
     dataIdx: 3,
     description: <>Weights are halved every transfer</>,
-    weights: ["⅟", "½", "¼", "⅛"],
+    weights: [
+      <Frac numerator={1} denominator={1} key="g-1/1" />,
+      <Frac numerator={1} denominator={2} key="g-1/2" />,
+      <Frac numerator={1} denominator={4} key="g-1/4" />,
+      <Frac numerator={1} denominator={8} key="g-1/8" />,
+    ],
   },
   {
     name: "Inverse square",
@@ -49,18 +61,10 @@ const metrics = [
       </>
     ),
     weights: [
-      <>
-        1<sup>-2</sup>
-      </>,
-      <>
-        2<sup>-2</sup>
-      </>,
-      <>
-        3<sup>-2</sup>
-      </>,
-      <>
-        4<sup>-2</sup>
-      </>,
+      <Pow base={1} power={-2} key="i-1" />,
+      <Pow base={2} power={-2} key="i-2" />,
+      <Pow base={3} power={-2} key="i-3" />,
+      <Pow base={4} power={-2} key="i-4" />,
     ],
   },
   {
@@ -151,7 +155,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
                       onChange={() => setMetricName(name)}
                     />
                   </td>
-                  <td className="px-2 py-1">
+                  <td className="px-2 py-2">
                     <label key={name} htmlFor={name}>
                       {name}
                     </label>
