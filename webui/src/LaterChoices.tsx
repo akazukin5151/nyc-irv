@@ -57,14 +57,15 @@ type LaterChoicesProps = {
   cands: Array<string>;
 };
 
-function setupChart(
-  cands: Array<string>,
-  laterChoices: Array<Array<number>>,
+async function setupChart(
   firstChoiceCand: string,
+  cands: Array<string>,
   setChartData: Setter<BarChartData>,
-  flowData: Record<string, Record<string, number>>,
   setSankeyChartData: Setter<SankeyChartData>,
 ) {
+  const idx = cands.findIndex((c) => c === firstChoiceCand);
+  const [laterChoices, flowData] = await handleCandidateSelectCore(idx);
+
   const labels = [
     ...cands.filter((cand) => cand !== firstChoiceCand),
     "Exhausted",
@@ -194,17 +195,7 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
           setAllNVotes(nVotes);
         });
 
-      // fetch the first candidate's later choices and flow data now.
-      const [laterChoices, flowData] = await handleCandidateSelectCore(0);
-
-      setupChart(
-        cands,
-        laterChoices,
-        newFirstCand,
-        setChartData,
-        flowData,
-        setSankeyChartData,
-      );
+      await setupChart(newFirstCand, cands, setChartData, setSankeyChartData);
     };
 
     fn();
@@ -225,20 +216,10 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
         </p>
         <select
           className="mx-2 rounded-md border-1 px-2"
-          onChange={(evt) => {
+          onChange={async (evt) => {
             const cand = evt.target.value;
             setFirstChoiceCand(cand);
-            const idx = cands.findIndex((c) => c === cand);
-            handleCandidateSelectCore(idx).then(([laterChoices, flowData]) =>
-              setupChart(
-                cands,
-                laterChoices,
-                cand,
-                setChartData,
-                flowData,
-                setSankeyChartData,
-              ),
-            );
+            await setupChart(cand, cands, setChartData, setSankeyChartData);
           }}
         >
           {cands.map((cand) => (
