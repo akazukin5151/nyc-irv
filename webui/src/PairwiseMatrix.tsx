@@ -2,35 +2,34 @@ import { useEffect, useState } from "react";
 import type { HoverInfo } from "./core";
 import { PairwiseMatrixHoverInfo } from "./PairwiseMatrixHoverInfo";
 
-type Matrix = Array<[string, string, number]>;
+type RawData = Array<[string, string, number]>;
 
 type PairwiseMatrixProps = {
   cands: Array<string>;
 };
 
 export function PairwiseMatrix({ cands: cands_ }: PairwiseMatrixProps) {
-  const [matrix, setMatrix] = useState<Matrix>([]);
+  const [matrix, setMatrix] = useState<Map<string, Record<string, number>>>();
   const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
+
+  const cands = cands_.map((cand) => cand.split(" ").pop() ?? "");
 
   useEffect(() => {
     fetch("matrix.json")
       .then((x) => x.json())
-      .then((x) => setMatrix(x));
+      .then((data: RawData) => {
+        const newMatrix = new Map<string, Record<string, number>>();
+        for (const [this_cand, other_cand, value] of data) {
+          const row = newMatrix.get(this_cand);
+          if (row == null) {
+            newMatrix.set(this_cand, { [other_cand]: value });
+          } else {
+            row[other_cand] = value;
+          }
+        }
+        setMatrix(newMatrix);
+      });
   }, []);
-
-  const cands = cands_.map((cand) => cand.split(" ").pop() ?? "");
-
-  const data = new Map<string, Record<string, number>>();
-  if (matrix.length > 0) {
-    for (const [this_cand, other_cand, value] of matrix) {
-      const row = data.get(this_cand);
-      if (row == null) {
-        data.set(this_cand, { [other_cand]: value });
-      } else {
-        row[other_cand] = value;
-      }
-    }
-  }
 
   return (
     <>
@@ -52,11 +51,11 @@ export function PairwiseMatrix({ cands: cands_ }: PairwiseMatrixProps) {
             const value = elem.dataset.value;
             const this_cand = elem.dataset.row;
             const other_cand = elem.dataset.col;
-            if (this_cand == null || other_cand == null) {
+            if (this_cand == null || other_cand == null || matrix == null) {
               setHoverInfo(null);
               return;
             }
-            const record = data.get(other_cand)!;
+            const record = matrix.get(other_cand)!;
 
             setHoverInfo({
               this_cand,
@@ -85,9 +84,10 @@ export function PairwiseMatrix({ cands: cands_ }: PairwiseMatrixProps) {
           </thead>
 
           <tbody className="[&_tr]:hover:bg-slate-100">
-            {data.size > 0
+            {matrix != null
+              && matrix.size > 0
               && cands.map((this_cand) => {
-                const cols = data.get(this_cand);
+                const cols = matrix.get(this_cand);
                 if (cols == null) {
                   return null;
                 }
