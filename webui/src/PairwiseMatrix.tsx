@@ -64,6 +64,9 @@ export function PairwiseMatrix({ cands: cands_ }: PairwiseMatrixProps) {
               votes_for_other: value == null ? null : record[this_cand],
             });
           }}
+          onMouseLeave={() => {
+            setHoverInfo(null);
+          }}
         >
           <thead className="border-b-2 border-slate-200/50 [&_th]:font-normal">
             <tr>
