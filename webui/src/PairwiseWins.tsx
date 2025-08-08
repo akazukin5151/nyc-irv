@@ -12,7 +12,7 @@ export function PairwiseWins() {
 
   return (
     <>
-      <div className="rounded-md bg-white pb-3 shadow-md">
+      <section className="rounded-md bg-white pb-3 shadow-md">
         <h2 className="ml-4 pt-2">Number of pairwise wins</h2>
 
         <div className="mx-auto flex items-center justify-center pb-3 max-lg:mx-4 max-md:flex-wrap md:justify-between lg:w-[70%]">
@@ -116,7 +116,7 @@ export function PairwiseWins() {
             </tbody>
           </table>
         </div>
-      </div>
+      </section>
     </>
   );
 }

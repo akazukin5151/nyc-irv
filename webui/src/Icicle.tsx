@@ -94,7 +94,7 @@ export function Icicle() {
   }, [treeData, canvasRef]);
 
   return (
-    <div className="rounded-md bg-white shadow-md">
+    <section className="rounded-md bg-white shadow-md">
       <h2 className="ml-4 pt-2">All preferences</h2>
 
       <div className="mx-4">
@@ -149,6 +149,6 @@ export function Icicle() {
           }}
         />
       </div>
-    </div>
+    </section>
   );
 }

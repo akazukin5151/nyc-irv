@@ -95,7 +95,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
   const [metricName, setMetricName] = useState<MetricName>("First transfer");
 
   return (
-    <div className="rounded-md bg-white shadow-md">
+    <section className="rounded-md bg-white shadow-md">
       <h2 className="ml-4 pt-2">Weighted preferences</h2>
 
       <div className="flex items-center max-lg:flex-wrap">
@@ -208,6 +208,6 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
           start arc is the outgoing flow.
         </Explainer>
       </p>
-    </div>
+    </section>
   );
 }

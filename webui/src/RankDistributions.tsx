@@ -87,7 +87,7 @@ export function RankDistributions({ cands }: RankDistributionsProps) {
   }, [cands]);
 
   return (
-    <div className="h-[calc(max(90%,400px))] rounded-md bg-white shadow-md">
+    <section className="h-[calc(max(90%,400px))] rounded-md bg-white shadow-md">
       <h2 className="ml-4 pt-2">
         Distributions of ranks received by candidate
       </h2>
@@ -135,6 +135,6 @@ export function RankDistributions({ cands }: RankDistributionsProps) {
           />
         )}
       </div>
-    </div>
+    </section>
   );
 }

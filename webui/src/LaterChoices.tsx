@@ -205,7 +205,7 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
         : (new Intl.NumberFormat("en-US").format(allNVotes[idx]) ?? "xxx");
 
   return (
-    <div className="h-[calc(100vh*2.1)] rounded-md bg-white shadow-md">
+    <section className="h-[calc(100vh*2.1)] rounded-md bg-white shadow-md">
       <h2 className="ml-4 pt-2">Later choices</h2>
       <Sticky className={`mb-2 inline-flex w-full flex-wrap justify-center`}>
         <p>
@@ -329,6 +329,6 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
           />
         </div>
       )}
-    </div>
+    </section>
   );
 }
