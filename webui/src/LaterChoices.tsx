@@ -110,7 +110,7 @@ async function setupChart(
 }
 
 export function LaterChoices({ cands }: LaterChoicesProps) {
-  const [allNVotes, setAllNVotes] = useState<string>();
+  const [allNVotes, setAllNVotes] = useState<Array<number>>([]);
   const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
 
   const initChartData: BarChartData = {
@@ -176,23 +176,13 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
 
     const fn = async () => {
       const newFirstCand = cands[0];
-      setFirstChoiceCand(firstChoiceCand);
+      setFirstChoiceCand(newFirstCand);
 
       fetch("n_voters.tsv")
         .then((x) => x.text())
         .then((n_votes_tsv) => {
           const n_votes = n_votes_tsv.split("\t").map((s) => parseInt(s));
-
-          const idx = cands.findIndex((c) => c === newFirstCand);
-          const nVotes =
-            n_votes.length === 0
-              ? "xxx"
-              : n_votes[idx] == null
-                ? "xxx"
-                : (new Intl.NumberFormat("en-US").format(n_votes[idx])
-                  ?? "xxx");
-
-          setAllNVotes(nVotes);
+          setAllNVotes(n_votes);
         });
 
       await setupChart(newFirstCand, cands, setChartData, setSankeyChartData);
@@ -206,12 +196,20 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
     cur_cand_last_name = firstChoiceCand.split(" ").pop() ?? "";
   }
 
+  const idx = cands.findIndex((c) => c === firstChoiceCand);
+  const nVotes =
+    allNVotes.length === 0
+      ? "xxx"
+      : allNVotes[idx] == null
+        ? "xxx"
+        : (new Intl.NumberFormat("en-US").format(allNVotes[idx]) ?? "xxx");
+
   return (
     <div className="h-[calc(100vh*2.1)] rounded-md bg-white shadow-md">
       <h2 className="ml-4 pt-2">Later choices</h2>
       <Sticky className={`mb-2 inline-flex w-full flex-wrap justify-center`}>
         <p>
-          For the <output className="font-mono">{allNVotes}</output> voters who
+          For the <output className="font-mono">{nVotes}</output> voters who
           ranked
         </p>
         <select
