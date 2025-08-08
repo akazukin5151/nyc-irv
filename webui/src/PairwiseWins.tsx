@@ -45,9 +45,11 @@ export function PairwiseWins() {
             <tbody className="[&_td]:first:underline [&_td]:first:decoration-3">
               <tr>
                 <td style={{ textDecorationColor: CANDIDATE_COLORS.Mamdani }}>
-                  Zohran Kwame Mamdani
+                  <b>Zohran Kwame Mamdani</b>
                 </td>
-                <td>10</td>
+                <td>
+                  <b>10</b>
+                </td>
               </tr>
               <tr>
                 <td style={{ textDecorationColor: CANDIDATE_COLORS.Lander }}>
