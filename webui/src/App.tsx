@@ -58,6 +58,20 @@ function App() {
       <div style={{ height: "8%" }}></div>
 
       <LaterChoices cands={cands} />
+
+      <div style={{ height: "8%" }}></div>
+
+      <footer>
+        <ul>
+          <li>
+            Source code:{" "}
+            <ExternalLink href="https://github.com/akazukin5151/nyc-irv">
+              https://github.com/akazukin5151/nyc-irv
+            </ExternalLink>
+          </li>
+          <li>License: AGPLv3 or later</li>
+        </ul>
+      </footer>
     </div>
   );
 }
