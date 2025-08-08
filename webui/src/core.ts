@@ -46,6 +46,21 @@ export const CANDIDATE_COLORS = {
   Exhausted: "#888",
 };
 
+export const IS_CAND_COLOR_DARK = {
+  Mamdani: false,
+  Lander: false,
+  Adams: true,
+  Cuomo: true,
+  Myrie: false,
+  Stringer: false,
+  Blake: false,
+  Ramos: false,
+  Tilson: false,
+  Bartholomew: false,
+  Prince: false,
+  Exhausted: true,
+};
+
 /**
  * for continuous variables
  */
@@ -88,6 +103,10 @@ export async function handleCandidateSelectCore(
 
   // @ts-expect-error
   return Promise.all(promises);
+}
+
+export function format(n: number): string {
+  return new Intl.NumberFormat("en-US").format(n);
 }
 
 export function percInFooter(context: Array<TooltipItem<"bar">>): string {

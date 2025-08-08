@@ -6,6 +6,7 @@ import { ExternalLink } from "./ExternalLink";
 import { Icicle } from "./Icicle";
 import { PairwiseWins } from "./PairwiseWins";
 import { PairwiseMatrix } from "./PairwiseMatrix";
+import { Matchups } from "./Matchups";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
@@ -37,6 +38,10 @@ function App() {
       <div style={{ height: "8%" }}></div>
 
       <PairwiseMatrix cands={cands} />
+
+      <div style={{ height: "8%" }}></div>
+
+      <Matchups />
 
       <div style={{ height: "8%" }}></div>
 

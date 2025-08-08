@@ -90,7 +90,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     print_n_wins(&cands_to_n_wins);
-    print_pairwise_matchups(&sorted_cands, &matrix, &cands_to_n_wins)?;
+    compute_pairwise_matchups(&sorted_cands, &matrix, &cands_to_n_wins)?;
     write_pairwise_matrix(&sorted_cands, &matrix)?;
 
     compute_rank_distributions(&all_ballots, &cands_to_n_wins)?;
@@ -108,7 +108,7 @@ fn print_n_wins(cands_to_n_wins: &[(&&str, &i32)]) {
     }
 }
 
-fn print_pairwise_matchups(
+fn compute_pairwise_matchups(
     sorted_cands: &[&str],
     matrix: &HashMap<(&str, &str), u32>,
     cands_to_n_wins: &[(&&str, &i32)],
@@ -117,6 +117,7 @@ fn print_pairwise_matchups(
         "\nCandidate A | Result | Candidate B | Votes for A | Votes for B | % for A | % for B"
     );
     println!("--- | --- | --- | --- | --- | --- | ---");
+    let mut rows = vec![];
     for (this_cand, _) in cands_to_n_wins {
         let this_cand = *this_cand;
         for other_cand in sorted_cands.iter().filter(|c| *c != this_cand) {
@@ -140,8 +141,18 @@ fn print_pairwise_matchups(
                     "{this_cand} | beats ✅ | {other_cand} | {n_prefer_this_cand} | {n_prefer_other_cand} | {this_perc:.2}% | {other_perc:.2}%"
                 );
             }
+
+            rows.push((
+                this_cand,
+                other_cand,
+                n_prefer_this_cand,
+                n_prefer_other_cand,
+            ));
         }
     }
+
+    let mut f = writeable_file("./out/matchups.json")?;
+    serde_json::to_writer(&mut f, &rows)?;
 
     Ok(())
 }
