@@ -29,7 +29,7 @@ export type Coordinate = {
 };
 
 export const radioStyle =
-  "box-content h-1 w-1 appearance-none rounded-full border border-[5px] border-white bg-white bg-clip-padding ring-1 ring-gray-300 outline-none checked:border-blue-500 checked:border-blue-500 transition-all";
+  "box-content h-1 w-1 appearance-none rounded-full border border-[5px] border-white bg-white bg-clip-padding ring-1 ring-gray-300 outline-none checked:border-sky-600 checked:border-sky-600 transition-all focus:ring-blue-600 focus:ring-2";
 
 export const CANDIDATE_COLORS = {
   Mamdani: "#ffad00",
