@@ -36,8 +36,8 @@ export function IcicleHoverInfo({ coord }: IcicleHoverInfoProps) {
   ));
 
   return (
-    <span>
+    <output>
       {coord.value} voters ranked {joined}
-    </span>
+    </output>
   );
 }

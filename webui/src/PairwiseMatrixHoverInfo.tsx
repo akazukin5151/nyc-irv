@@ -45,7 +45,7 @@ export function PairwiseMatrixHoverInfo({
   const perc_diff = Math.abs(perc_for_this - perc_for_other);
 
   return (
-    <div className="ml-4 h-[72px]">
+    <output className="ml-4 block h-[72px]">
       <p>
         {vthis} voters ranked{" "}
         <span className="font-bold text-sky-500">{hoverInfo.this_cand}</span>{" "}
@@ -64,6 +64,6 @@ export function PairwiseMatrixHoverInfo({
         <span className={`font-bold ${winner_color}`}>{winner}</span> wins the
         matchup by {vdiff} votes ({perc_diff.toFixed(2)}%)
       </p>
-    </div>
+    </output>
   );
 }

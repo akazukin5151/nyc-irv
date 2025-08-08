@@ -211,7 +211,7 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
       <h2 className="ml-4 pt-2">Later choices</h2>
       <Sticky className={`mb-2 inline-flex w-full flex-wrap justify-center`}>
         <p>
-          For the <span className="font-mono">{allNVotes}</span> voters who
+          For the <output className="font-mono">{allNVotes}</output> voters who
           ranked
         </p>
         <select
