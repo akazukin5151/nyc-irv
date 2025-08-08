@@ -110,7 +110,7 @@ async function setupChart(
 }
 
 export function LaterChoices({ cands }: LaterChoicesProps) {
-  const [allNVotes, setAllNVotes] = useState<Array<number>>([]);
+  const [allFirstPrefs, setAllFirstPrefs] = useState<Array<number>>([]);
   const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
 
   const initChartData: BarChartData = {
@@ -178,11 +178,13 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
       const newFirstCand = cands[0];
       setFirstChoiceCand(newFirstCand);
 
-      fetch("n_voters.tsv")
+      fetch("n_first_prefs.tsv")
         .then((x) => x.text())
-        .then((n_votes_tsv) => {
-          const n_votes = n_votes_tsv.split("\t").map((s) => parseInt(s));
-          setAllNVotes(n_votes);
+        .then((n_first_prefs_tsv) => {
+          const n_first_prefs = n_first_prefs_tsv
+            .split("\t")
+            .map((s) => parseInt(s));
+          setAllFirstPrefs(n_first_prefs);
         });
 
       await setupChart(newFirstCand, cands, setChartData, setSankeyChartData);
@@ -197,20 +199,20 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
   }
 
   const idx = cands.findIndex((c) => c === firstChoiceCand);
-  const nVotes =
-    allNVotes.length === 0
+  const nFirstPrefs =
+    allFirstPrefs.length === 0
       ? "xxx"
-      : allNVotes[idx] == null
+      : allFirstPrefs[idx] == null
         ? "xxx"
-        : (new Intl.NumberFormat("en-US").format(allNVotes[idx]) ?? "xxx");
+        : (new Intl.NumberFormat("en-US").format(allFirstPrefs[idx]) ?? "xxx");
 
   return (
     <section className="h-[calc(100vh*2.1)] rounded-md bg-white shadow-md">
       <h2 className="ml-4 pt-2">Later choices</h2>
       <Sticky className={`mb-2 inline-flex w-full flex-wrap justify-center`}>
         <p>
-          For the <output className="font-mono">{nVotes}</output> voters who
-          ranked
+          For the <output className="font-mono">{nFirstPrefs}</output> voters
+          who ranked
         </p>
         <select
           className="mx-2 rounded-md border-1 px-2"

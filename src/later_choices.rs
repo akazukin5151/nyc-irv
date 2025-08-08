@@ -129,7 +129,7 @@ pub fn compute_later_choices(
         serde_json::to_writer(&mut f, &flows)?;
     }
 
-    let mut f = writeable_file("./out/n_voters.tsv")?;
+    let mut f = writeable_file("./out/n_first_prefs.tsv")?;
 
     for n_voters in all_n_voters {
         f.write_all(n_voters.to_string().as_bytes())?;
