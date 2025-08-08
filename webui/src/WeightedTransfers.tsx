@@ -87,7 +87,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
   );
 
   useEffect(() => {
-    fetch("matrices.json")
+    fetch("weighted_matrices.json")
       .then((x) => x.json())
       .then((matrices) => setAllChordData(matrices));
   }, []);

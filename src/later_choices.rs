@@ -136,12 +136,12 @@ pub fn compute_later_choices(
         f.write_all(b"\t")?;
     }
 
-    println!("Writing pairwise graph data");
+    println!("Writing weighted matrices data");
     for matrix in matrices.iter_mut() {
         matrix.push(vec![0.0; cands_to_n_wins.len() + 1]);
     }
 
-    let mut f = writeable_file("./out/matrices.json")?;
+    let mut f = writeable_file("./out/weighted_matrices.json")?;
     serde_json::to_writer(&mut f, &matrices)?;
 
     Ok(())
