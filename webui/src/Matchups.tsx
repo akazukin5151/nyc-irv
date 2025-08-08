@@ -54,13 +54,8 @@ export function Matchups() {
     const number_cutoff = 14;
 
     return (
-      <div
-        key={cand1 + cand2}
-        className={
-          "flex w-full [&_*]:shrink-0" + (is_section_end ? " mb-4" : "")
-        }
-      >
-        <svg height="30" width={400 + bar_width}>
+      <div key={cand1 + cand2} className={is_section_end ? "mb-4" : ""}>
+        <svg height="30" width={400 + bar_width} className="mx-auto">
           <g className="[&_text]:text-sm">
             <line
               x1={bar_start - 5}
@@ -164,7 +159,7 @@ export function Matchups() {
         <h2 className="ml-4 pt-2">Pairwise matchups</h2>
 
         <div className="flex flex-col items-center">
-          <div className="m-4 mx-auto my-3 h-[70vh] overflow-auto px-4">
+          <div className="m-4 mx-auto my-3 h-[70vh] w-full overflow-auto px-4">
             {rows}
           </div>
         </div>
