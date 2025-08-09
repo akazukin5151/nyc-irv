@@ -1,7 +1,23 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Nimbus Sans";
+  font-weight: 400;
+  src:
+    local("Nimbus Sans"),
+    url("./fonts/NimbusSans-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Nimbus Sans";
+  font-weight: 700;
+  src:
+    local("Nimbus Sans Bold"),
+    url("./fonts/NimbusSans-Bold.otf") format("opentype");
+}
+
 @theme {
-  --font-sans: sans-serif;
+  --font-sans: "Nimbus Sans", sans-serif;
   --font-serif: serif;
   --font-mono: monospace;
 }
