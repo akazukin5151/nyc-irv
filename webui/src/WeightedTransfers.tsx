@@ -100,7 +100,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
     <section>
       <h2 className="ml-4 pt-2">Weighted preferences</h2>
 
-      <div className="6xl:flex-row flex flex-col-reverse items-center">
+      <div className="flex flex-col-reverse items-center min-[72rem]:flex-row">
         <div className="mx-4 flex w-[387px] flex-col">
           <ul className="[&_li]:my-3 [&_li]:leading-2">
             <li>
@@ -186,7 +186,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
           </dl>
         </div>
 
-        <div className="max-6xl:mt-5 max-6xl:mb-3 mx-auto rounded-xl bg-white shadow-md">
+        <div className="mx-auto rounded-xl bg-white shadow-md max-[72rem]:mt-5 max-[72rem]:mb-3">
           <div className="flex justify-center">
             {cands.length > 0 && allChordData.length > 0 && (
               <Chord
