@@ -32,7 +32,7 @@ export function PairwiseMatrix({ cands: cands_ }: PairwiseMatrixProps) {
   }, []);
 
   return (
-    <section className="rounded-md bg-white pb-3 shadow-md">
+    <section>
       <h2 className="ml-4 pt-2">Pairwise matrix</h2>
 
       <p className="ml-4">
@@ -44,7 +44,7 @@ export function PairwiseMatrix({ cands: cands_ }: PairwiseMatrixProps) {
       <PairwiseMatrixHoverInfo hoverInfo={hoverInfo} />
 
       <table
-        className="mt-3 ml-4 [&_td]:px-3 [&_td]:py-1 [&_td]:text-right [&_td]:first:text-left [&_th]:px-3 [&_th]:py-1"
+        className="mt-3 ml-4 rounded-xl bg-white pb-3 shadow-md [&_td]:px-3 [&_td]:py-1 [&_td]:text-right [&_td]:first:text-left [&_th]:px-3 [&_th]:py-1"
         onMouseMove={(evt) => {
           const elem = evt.target as HTMLElement;
           const value = elem.dataset.value;
