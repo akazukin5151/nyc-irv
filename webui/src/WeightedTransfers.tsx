@@ -120,7 +120,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
             </li>
           </ul>
 
-          <table className="w-full rounded-xl bg-white text-left text-sm text-neutral-500 shadow-md [&_td]:not-first:px-3 [&_th]:px-3">
+          <table className="w-full rounded-xl bg-white text-left text-sm text-neutral-500 shadow-md [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:not-first:px-3 [&_th]:px-3">
             <thead>
               <tr className="[&_th]:pt-1 [&_th]:text-right">
                 <th></th>
