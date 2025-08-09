@@ -187,27 +187,29 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
           <hr className="text-neutral-300 lg:hidden" />
         </div>
 
-        <div className="mx-auto flex justify-center rounded-xl bg-white shadow-md max-lg:mt-5">
-          {cands.length > 0 && allChordData.length > 0 && (
-            <Chord
-              matrix={
-                allChordData[
-                  metrics.find((m) => m.name === metricName)?.dataIdx ?? 0
-                ]
-              }
-              colors={Object.values(CANDIDATE_COLORS)}
-              names={[...cands, "Exhausted"]}
-            />
-          )}
+        <div className="mx-auto rounded-xl bg-white shadow-md max-lg:mt-5">
+          <div className="flex justify-center">
+            {cands.length > 0 && allChordData.length > 0 && (
+              <Chord
+                matrix={
+                  allChordData[
+                    metrics.find((m) => m.name === metricName)?.dataIdx ?? 0
+                  ]
+                }
+                colors={Object.values(CANDIDATE_COLORS)}
+                names={[...cands, "Exhausted"]}
+              />
+            )}
+          </div>
+
+          <p className="relative right-0 bottom-0 my-2 pr-3 text-right">
+            <Explainer>
+              Each ribbon shows both the incoming and outgoing flow. The width
+              of start arc is the outgoing flow.
+            </Explainer>
+          </p>
         </div>
       </div>
-
-      <p className="relative right-0 bottom-0 my-2 pr-3 text-right">
-        <Explainer>
-          Each ribbon shows both the incoming and outgoing flow. The width of
-          start arc is the outgoing flow.
-        </Explainer>
-      </p>
     </section>
   );
 }
