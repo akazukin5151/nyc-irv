@@ -94,7 +94,7 @@ export function Icicle() {
   }, [treeData, canvasRef]);
 
   return (
-    <section className="rounded-md bg-white shadow-md">
+    <section>
       <h2 className="ml-4 pt-2">All preferences</h2>
 
       <div className="mx-4">
@@ -112,7 +112,7 @@ export function Icicle() {
           width={width * 2}
           height={height * 2}
           style={{ height: `${height}px` }}
-          className="w-full max-w-max"
+          className="w-full max-w-max rounded-xl bg-white pt-1 pl-3 shadow-md"
           onMouseMove={(evt) => {
             const canvas = canvasRef.current;
             if (allCoords == null || canvas == null) {
