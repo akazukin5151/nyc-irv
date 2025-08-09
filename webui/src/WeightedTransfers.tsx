@@ -101,78 +101,82 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
       <h2 className="ml-4 pt-2">Weighted preferences</h2>
 
       <div className="flex flex-col-reverse items-center min-[72rem]:flex-row">
-        <div className="mx-4 flex w-[387px] flex-col">
-          <ul className="[&_li]:my-3 [&_li]:leading-2">
-            <li>
-              <Explainer>
-                The chord shows all preferences flows (except when{" "}
-                <span className="italic">First transfer</span> is selected).
-              </Explainer>
-            </li>
-            <li>
-              <Explainer>
-                The first transfer from the first choice to the second choice is
-                weighted the highest. Later preferences are weighted less.
-              </Explainer>
-            </li>
-            <li>
-              <Explainer>Choose how to weight the later preferences:</Explainer>
-            </li>
-          </ul>
+        <div className="flex w-full max-w-[850px] flex-col items-center min-[850px]:max-[72rem]:flex-row">
+          <div className="mx-auto flex w-[387px] flex-col">
+            <ul className="[&_li]:my-3 [&_li]:leading-2">
+              <li>
+                <Explainer>
+                  The chord shows all preferences flows (except when{" "}
+                  <span className="italic">First transfer</span> is selected).
+                </Explainer>
+              </li>
+              <li>
+                <Explainer>
+                  The first transfer from the first choice to the second choice
+                  is weighted the highest. Later preferences are weighted less.
+                </Explainer>
+              </li>
+              <li>
+                <Explainer>
+                  Choose how to weight the later preferences:
+                </Explainer>
+              </li>
+            </ul>
 
-          <table className="w-full rounded-xl bg-white text-left text-sm whitespace-nowrap text-neutral-500 shadow-md [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:not-first:px-3 [&_th]:px-3">
-            <thead>
-              <tr className="[&_th]:pt-1 [&_th]:text-right">
-                <th></th>
-                <th></th>
-                <th>
-                  <abbr title="1st choice to 2nd choice">1 → 2</abbr>
-                </th>
-                <th>
-                  <abbr title="2nd choice to 3rd choice">2 → 3</abbr>
-                </th>
-                <th>
-                  <abbr title="3rd choice to 4th choice">3 → 4</abbr>
-                </th>
-                <th>
-                  <abbr title="4th choice to 5th choice">4 → 5</abbr>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {metrics.map(({ name, weights }) => (
-                <tr
-                  className="transition-all hover:bg-sky-100"
-                  key={name}
-                  onClick={() => setMetricName(name)}
-                >
-                  <td className="pt-1 pl-3">
-                    <input
-                      key={name}
-                      type="radio"
-                      id={name}
-                      name="weighting-metric"
-                      className={radioStyle}
-                      checked={metricName === name}
-                      onChange={() => setMetricName(name)}
-                    />
-                  </td>
-                  <td className="py-2">
-                    <label key={name} htmlFor={name}>
-                      {name}
-                    </label>
-                  </td>
-                  {weights.map((weight, idx) => (
-                    <td key={`${name}-weight-${idx}`} className="text-right">
-                      {weight}
-                    </td>
-                  ))}
+            <table className="w-full rounded-xl bg-white text-left text-sm whitespace-nowrap text-neutral-500 shadow-md [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:not-first:px-3 [&_th]:px-3">
+              <thead>
+                <tr className="[&_th]:pt-1 [&_th]:text-right">
+                  <th></th>
+                  <th></th>
+                  <th>
+                    <abbr title="1st choice to 2nd choice">1 → 2</abbr>
+                  </th>
+                  <th>
+                    <abbr title="2nd choice to 3rd choice">2 → 3</abbr>
+                  </th>
+                  <th>
+                    <abbr title="3rd choice to 4th choice">3 → 4</abbr>
+                  </th>
+                  <th>
+                    <abbr title="4th choice to 5th choice">4 → 5</abbr>
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {metrics.map(({ name, weights }) => (
+                  <tr
+                    className="transition-all hover:bg-sky-100"
+                    key={name}
+                    onClick={() => setMetricName(name)}
+                  >
+                    <td className="pt-1 pl-3">
+                      <input
+                        key={name}
+                        type="radio"
+                        id={name}
+                        name="weighting-metric"
+                        className={radioStyle}
+                        checked={metricName === name}
+                        onChange={() => setMetricName(name)}
+                      />
+                    </td>
+                    <td className="py-2">
+                      <label key={name} htmlFor={name}>
+                        {name}
+                      </label>
+                    </td>
+                    {weights.map((weight, idx) => (
+                      <td key={`${name}-weight-${idx}`} className="text-right">
+                        {weight}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-          <dl className="mt-5">
+          <dl className="mx-auto mt-5 w-[387px]">
             {metrics.map(({ name, description }) => (
               <Fragment key={name}>
                 <dt className="font-bold whitespace-nowrap">
