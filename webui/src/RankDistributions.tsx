@@ -92,11 +92,11 @@ export function RankDistributions({ cands }: RankDistributionsProps) {
         Distributions of ranks received by candidate
       </h2>
 
-      <p className="ml-4">
+      <p className="ml-4 dark:text-white">
         Some candidates are mostly voter's second or later choices.
       </p>
 
-      <div className="h-[85%] rounded-xl bg-white px-1 shadow-md">
+      <div className="h-[85%] rounded-xl bg-white px-1 shadow-md dark:bg-neutral-800">
         {chartData.datasets.length > 0 && (
           <Chart
             type="bar"

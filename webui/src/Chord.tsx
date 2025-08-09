@@ -118,7 +118,12 @@ export function Chord({ matrix, colors, names }: ChordProps) {
 
   return (
     <>
-      <svg width={width} height={height} viewBox={viewBox}>
+      <svg
+        width={width}
+        height={height}
+        viewBox={viewBox}
+        className="dark:[&_text]:fill-white"
+      >
         <defs>
           {ribbonPaths.map(({ rotation, sourceColor, targetColor }, idx) => (
             <linearGradient
@@ -147,7 +152,10 @@ export function Chord({ matrix, colors, names }: ChordProps) {
           ))}
         </g>
 
-        <g fillOpacity="0.7" stroke="#55555566" strokeWidth="0.5">
+        <g
+          strokeWidth="0.5"
+          className="stroke-[#55555566] dark:stroke-neutral-300/66 [&_path]:[fill-opacity:0.7]"
+        >
           {ribbonPaths.map(
             (
               { ribbonPath, title, source_value, target_value, coord1, coord2 },

@@ -13,7 +13,7 @@ export function PairwiseMatrixHoverInfo({
     || hoverInfo.votes_for_other == null
   ) {
     return (
-      <div className="ml-4 h-[72px]">
+      <div className="ml-4 h-[72px] dark:text-white">
         <p>Hover over a cell to view the matchup details</p>
       </div>
     );
@@ -45,7 +45,7 @@ export function PairwiseMatrixHoverInfo({
   const perc_diff = Math.abs(perc_for_this - perc_for_other);
 
   return (
-    <output className="ml-4 block h-[72px]">
+    <output className="ml-4 block h-[72px] dark:text-white">
       <p>
         {vthis} voters ranked{" "}
         <span className="font-bold text-sky-500">{hoverInfo.this_cand}</span>{" "}

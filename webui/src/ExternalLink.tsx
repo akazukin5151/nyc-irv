@@ -6,7 +6,9 @@ type LinkProps = React.DetailedHTMLProps<
 export function ExternalLink({ children, className, ...props }: LinkProps) {
   return (
     <a
-      className={`text-blue-500 underline ` + (className ?? "")}
+      className={
+        `text-blue-500 underline dark:text-blue-200 ` + (className ?? "")
+      }
       rel="noopener"
       target="_blank"
       {...props}

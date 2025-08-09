@@ -197,7 +197,7 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
         : (new Intl.NumberFormat("en-US").format(allFirstPrefs[idx]) ?? "xxx");
 
   return (
-    <section className="h-[calc(100vh*2.1)] rounded-md bg-white shadow-md">
+    <section className="h-[calc(100vh*2.1)] rounded-md bg-white shadow-md dark:bg-neutral-800">
       <h2 className="ml-4 pt-2">Later choices</h2>
       <Sticky className={`mb-2 inline-flex w-full flex-wrap justify-center`}>
         <p>
@@ -213,7 +213,7 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
           }}
         >
           {cands.map((cand) => (
-            <option value={cand} key={cand}>
+            <option value={cand} key={cand} className="dark:text-black">
               {cand}
             </option>
           ))}
@@ -265,7 +265,7 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
         <div style={{ maxHeight: "calc(100vh - 40px)" }}>
           <h2 className="mb-1 ml-4">Sankey</h2>
 
-          <div className="mx-4">
+          <div className="mx-4 dark:text-white">
             <p className="mb-1">
               This is similar to the Icicle chart in the beginning, but only
               shows the preferences for voters that ranked{" "}

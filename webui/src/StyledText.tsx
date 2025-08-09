@@ -22,9 +22,8 @@ export function StyledText({
     <text
       x={x}
       y={y}
-      className="drop-shadow-md drop-shadow-white transition-opacity hover:opacity-100"
+      className="stroke-white drop-shadow-md drop-shadow-white transition-opacity hover:opacity-100 dark:stroke-none dark:drop-shadow-black"
       style={{ opacity: tooltipData === idx ? 1 : 0 }}
-      stroke="white"
       strokeWidth={3}
       paintOrder="stroke"
       textAnchor="middle"

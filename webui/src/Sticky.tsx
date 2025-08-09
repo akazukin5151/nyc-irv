@@ -11,7 +11,7 @@ export function Sticky({ children, className, ...props }: StickyProps) {
     <>
       <div
         className={
-          `sticky-blurred-div sticky top-0 z-1 rounded-lg px-4 py-2 `
+          `sticky-blurred-div sticky top-0 z-1 rounded-lg px-4 py-2 dark:text-white `
           + (className ?? "")
         }
         {...props}

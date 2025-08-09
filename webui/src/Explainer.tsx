@@ -7,7 +7,11 @@ type ExplainerProps = {
 
 export function Explainer({ children, className }: ExplainerProps) {
   return (
-    <span className={`text-sm text-neutral-500 ` + (className ?? "")}>
+    <span
+      className={
+        `text-sm text-neutral-500 dark:text-neutral-200 ` + (className ?? "")
+      }
+    >
       {children}
     </span>
   );

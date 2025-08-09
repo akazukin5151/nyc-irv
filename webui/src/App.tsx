@@ -33,11 +33,11 @@ function App() {
   }, []);
 
   return (
-    <div className="h-screen overflow-y-auto bg-neutral-100 p-6 pt-0">
-      <h1 className="mb-3 pt-6">
+    <div className="h-screen overflow-y-auto bg-neutral-100 p-6 pt-0 dark:bg-neutral-700 dark:[&_h2]:text-neutral-100">
+      <h1 className="mb-3 pt-6 dark:text-neutral-100">
         2025 New York City Democratic mayoral primary analysis
       </h1>
-      <p className="mb-3">
+      <p className="mb-3 dark:text-white">
         This page is focused on interactive graphics. See{" "}
         <ExternalLink href="https://fairvote.org/new-york-city-cast-vote-record-initial-analysis/">
           https://fairvote.org/new-york-city-cast-vote-record-initial-analysis/
@@ -73,7 +73,7 @@ function App() {
 
       <div style={{ height: "8%" }}></div>
 
-      <footer>
+      <footer className="dark:text-white">
         <ul>
           <li>
             Source code:{" "}

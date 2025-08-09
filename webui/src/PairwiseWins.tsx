@@ -16,9 +16,9 @@ export function PairwiseWins() {
         <h2 className="ml-4 pt-2">Number of pairwise wins</h2>
 
         <div className="mx-auto flex max-w-[850px] items-center justify-center py-3 max-[860px]:flex-col min-[860px]:justify-between">
-          <table className="rounded-xl bg-white pb-3 whitespace-nowrap shadow-md max-[860px]:mb-2 [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:px-3 [&_td]:py-1 [&_td]:nth-[2n]:text-right [&_th]:px-3 [&_th]:py-1 [&_tr]:hover:bg-slate-100/50">
+          <table className="rounded-xl bg-white pb-3 whitespace-nowrap shadow-md max-[860px]:mb-2 dark:bg-neutral-800 [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:px-3 [&_td]:py-1 [&_td]:nth-[2n]:text-right dark:[&_td]:text-white [&_th]:px-3 [&_th]:py-1 [&_tr]:hover:bg-slate-100/50">
             <thead
-              className="border-b-2 border-slate-200/50 bg-slate-100 tracking-wider text-slate-500"
+              className="border-b-2 border-slate-200/50 bg-slate-100 tracking-wider text-slate-500 dark:bg-slate-700 dark:text-slate-100"
               style={{ fontVariant: "small-caps" }}
             >
               <tr>
@@ -100,7 +100,7 @@ export function PairwiseWins() {
             </tbody>
           </table>
 
-          <ul className="w-sm list-disc [&>li]:my-2">
+          <ul className="w-sm list-disc dark:text-white [&>li]:my-2">
             <li>There were 11 candidates for Mayor.</li>
             <li>Each candidate can have 10 other 1 v 1 matchups.</li>
             <li>

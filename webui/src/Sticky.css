@@ -7,6 +7,16 @@
   background: linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0.5));
 }
 
+@media (prefers-color-scheme: dark) {
+  .sticky-blurred-div {
+    background: linear-gradient(
+      to bottom,
+      var(--bg-neutral-800),
+      rgba(0, 0, 0, 0.5)
+    );
+  }
+}
+
 /* covers the shadow under the sticky-blurred-div when it's not sticky yet.
  * there's no need to have a shadow when it's not yet sticky. */
 .shadow-coverer {
@@ -15,6 +25,12 @@
   width: 100%;
   height: 15px;
   top: -5px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .shadow-coverer {
+    background: var(--bg-neutral-800);
+  }
 }
 
 .shadow-under-blur {

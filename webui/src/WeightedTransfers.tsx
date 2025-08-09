@@ -123,7 +123,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
               </li>
             </ul>
 
-            <table className="w-full rounded-xl bg-white text-left text-sm whitespace-nowrap text-neutral-500 shadow-md [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:not-first:px-3 [&_th]:px-3">
+            <table className="w-full rounded-xl bg-white text-left text-sm whitespace-nowrap text-neutral-500 shadow-md dark:bg-neutral-800 dark:text-neutral-200 [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:not-first:px-3 [&_th]:px-3">
               <thead>
                 <tr className="[&_th]:pt-1 [&_th]:text-right">
                   <th></th>
@@ -145,7 +145,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
               <tbody>
                 {metrics.map(({ name, weights }) => (
                   <tr
-                    className="transition-all hover:bg-sky-100"
+                    className="transition-all hover:bg-sky-100 dark:hover:bg-sky-700"
                     key={name}
                     onClick={() => setMetricName(name)}
                   >
@@ -190,7 +190,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
           </dl>
         </div>
 
-        <div className="mx-auto h-fit rounded-xl bg-white shadow-md max-[72rem]:mt-5 max-[72rem]:mb-3">
+        <div className="mx-auto h-fit rounded-xl bg-white shadow-md max-[72rem]:mt-5 max-[72rem]:mb-3 dark:bg-neutral-800">
           <div className="flex justify-center">
             {cands.length > 0 && allChordData.length > 0 && (
               <Chord

@@ -29,7 +29,7 @@ export function PairwiseMatrix({
     <section>
       <h2 className="ml-4 pt-2">Pairwise matrix</h2>
 
-      <p className="ml-4">
+      <p className="ml-4 dark:text-white">
         The numbers are the number of voters that ranked{" "}
         <span className="font-bold text-sky-500">row</span> over{" "}
         <span className="font-bold text-amber-600">column</span>
@@ -39,7 +39,7 @@ export function PairwiseMatrix({
 
       <div className="max-w-screen overflow-auto">
         <table
-          className="mt-3 ml-4 rounded-xl bg-white pb-3 shadow-md [&_td]:px-3 [&_td]:py-1 [&_td]:text-right [&_td]:first:text-left [&_th]:px-3 [&_th]:py-1"
+          className="mt-3 ml-4 rounded-xl bg-white pb-3 shadow-md dark:bg-neutral-800 [&_td]:px-3 [&_td]:py-1 [&_td]:text-right [&_td]:first:text-left [&_th]:px-3 [&_th]:py-1"
           onMouseMove={(evt) => {
             const elem = evt.target as HTMLElement;
             const value = elem.dataset.value;
@@ -80,7 +80,7 @@ export function PairwiseMatrix({
             </tr>
           </thead>
 
-          <tbody className="[&_tr]:hover:bg-slate-100">
+          <tbody className="dark:[&_td]:not-first:text-white [&_tr]:hover:bg-slate-100 dark:[&_tr]:hover:bg-slate-500">
             {matrix != null
               && matrix.size > 0
               && cands.map((this_cand) => {
@@ -140,12 +140,12 @@ function getCellStyle(
     hoverInfo.other_cand === this_cand
     && hoverInfo.this_cand === other_cand
   ) {
-    return "bg-slate-100";
+    return "bg-slate-100 dark:bg-slate-500";
   }
 
   // same column
   if (hoverInfo.other_cand === other_cand) {
-    return "bg-slate-100";
+    return "bg-slate-100 dark:bg-slate-500";
   }
 
   return "";

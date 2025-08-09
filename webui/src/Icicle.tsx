@@ -97,7 +97,7 @@ export function Icicle() {
     <section>
       <h2 className="ml-4 pt-2">All preferences</h2>
 
-      <div className="mx-4">
+      <div className="mx-4 dark:text-white">
         <p>
           The first level is the first choice. Lower levels are the voter's
           later choices. This chart shows every preference from every voter.
@@ -112,7 +112,7 @@ export function Icicle() {
           width={width * 2}
           height={height * 1.8}
           style={{ height: `${height}px` }}
-          className="mx-auto w-full max-w-max rounded-xl bg-white pt-1 pl-3 shadow-md"
+          className="mx-auto w-full max-w-max rounded-xl bg-white pt-1 pl-3 shadow-md dark:bg-neutral-800"
           onMouseMove={(evt) => {
             const canvas = canvasRef.current;
             if (allCoords == null || canvas == null) {

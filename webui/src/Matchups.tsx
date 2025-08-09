@@ -51,7 +51,11 @@ export function Matchups({ matchups }: MatchupsProps) {
 
     return (
       <div key={cand1 + cand2} className={is_section_end ? "mb-4" : ""}>
-        <svg height="30" width={400 + bar_width} className="mx-auto">
+        <svg
+          height="30"
+          width={400 + bar_width}
+          className="mx-auto dark:[&_.axis-label]:fill-white [&_.tick-mark]:stroke-black dark:[&_.tick-mark]:stroke-white"
+        >
           <g className="[&_text]:text-sm">
             <line
               x1={bar_start - 5}
@@ -59,7 +63,7 @@ export function Matchups({ matchups }: MatchupsProps) {
               x2={bar_start}
               y2="15"
               strokeWidth="1"
-              stroke="black"
+              className="tick-mark"
             ></line>
 
             <rect
@@ -99,10 +103,15 @@ export function Matchups({ matchups }: MatchupsProps) {
               x2={bar_start + lwidth + uwidth + rwidth + 5}
               y2="15"
               strokeWidth="1"
-              stroke="black"
+              className="tick-mark"
             ></line>
 
-            <text x="190" y="20" textAnchor="end" className="text-sm">
+            <text
+              x="190"
+              y="20"
+              textAnchor="end"
+              className="axis-label text-sm"
+            >
               {cand1}
             </text>
             {perc1 > number_cutoff && (
@@ -139,7 +148,7 @@ export function Matchups({ matchups }: MatchupsProps) {
               x={bar_start + lwidth + uwidth + rwidth + 10}
               y="20"
               textAnchor="start"
-              className="text-sm"
+              className="axis-label text-sm"
             >
               {cand2}
             </text>
@@ -154,7 +163,7 @@ export function Matchups({ matchups }: MatchupsProps) {
       <h2 className="ml-4 pt-2">Pairwise matchups</h2>
 
       <div className="flex flex-col items-center">
-        <div className="mx-auto my-3 h-[70vh] max-w-full overflow-auto rounded-xl bg-white px-4 py-3 shadow-md">
+        <div className="mx-auto my-3 h-[70vh] max-w-full overflow-auto rounded-xl bg-white px-4 py-3 shadow-md dark:bg-neutral-800">
           {rows}
         </div>
       </div>
