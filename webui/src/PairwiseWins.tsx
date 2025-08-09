@@ -15,8 +15,8 @@ export function PairwiseWins() {
       <section>
         <h2 className="ml-4 pt-2">Number of pairwise wins</h2>
 
-        <div className="mx-auto flex items-center justify-center py-3 max-lg:mx-4 max-md:flex-wrap md:justify-between lg:w-[70%]">
-          <table className="rounded-xl bg-white pb-3 shadow-md max-md:mt-2 [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:px-3 [&_td]:py-1 [&_td]:nth-[2n]:text-right [&_th]:px-3 [&_th]:py-1 [&_tr]:hover:bg-slate-100/50">
+        <div className="max-md2:flex-col md2:justify-between mx-auto flex max-w-[850px] items-center justify-center py-3">
+          <table className="max-md2:mb-2 rounded-xl bg-white pb-3 whitespace-nowrap shadow-md [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:px-3 [&_td]:py-1 [&_td]:nth-[2n]:text-right [&_th]:px-3 [&_th]:py-1 [&_tr]:hover:bg-slate-100/50">
             <thead
               className="border-b-2 border-slate-200/50 bg-slate-100 text-slate-500"
               style={{ fontVariant: "small-caps" }}

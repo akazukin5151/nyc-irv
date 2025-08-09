@@ -4,6 +4,8 @@
   --font-sans: sans-serif;
   --font-serif: serif;
   --font-mono: monospace;
+  /* 860px / 16 */
+  --breakpoint-md2: 53.75rem;
 }
 
 @layer base {
