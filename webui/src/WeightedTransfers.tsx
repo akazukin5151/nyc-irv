@@ -190,7 +190,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
           </dl>
         </div>
 
-        <div className="mx-auto rounded-xl bg-white shadow-md max-[72rem]:mt-5 max-[72rem]:mb-3">
+        <div className="mx-auto h-fit rounded-xl bg-white shadow-md max-[72rem]:mt-5 max-[72rem]:mb-3">
           <div className="flex justify-center">
             {cands.length > 0 && allChordData.length > 0 && (
               <Chord
