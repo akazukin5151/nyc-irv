@@ -154,11 +154,11 @@ export function Matchups() {
   });
 
   return (
-    <section className="rounded-md bg-white pb-3 shadow-md">
+    <section>
       <h2 className="ml-4 pt-2">Pairwise matchups</h2>
 
       <div className="flex flex-col items-center">
-        <div className="m-4 mx-auto my-3 h-[70vh] w-full overflow-auto px-4">
+        <div className="m-4 mx-auto my-3 h-[70vh] overflow-auto rounded-xl bg-white px-4 py-3 shadow-md">
           {rows}
         </div>
       </div>
