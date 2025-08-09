@@ -55,6 +55,7 @@ type SankeyColor = "rank" | "cand";
 
 type LaterChoicesProps = {
   cands: Array<string>;
+  allFirstPrefs: Array<number>;
 };
 
 async function setupChart(
@@ -109,8 +110,7 @@ async function setupChart(
   }));
 }
 
-export function LaterChoices({ cands }: LaterChoicesProps) {
-  const [allFirstPrefs, setAllFirstPrefs] = useState<Array<number>>([]);
+export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
   const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
 
   const initChartData: BarChartData = {
@@ -177,16 +177,6 @@ export function LaterChoices({ cands }: LaterChoicesProps) {
     const fn = async () => {
       const newFirstCand = cands[0];
       setFirstChoiceCand(newFirstCand);
-
-      fetch("n_first_prefs.tsv")
-        .then((x) => x.text())
-        .then((n_first_prefs_tsv) => {
-          const n_first_prefs = n_first_prefs_tsv
-            .split("\t")
-            .map((s) => parseInt(s));
-          setAllFirstPrefs(n_first_prefs);
-        });
-
       await setupChart(newFirstCand, cands, setChartData, setSankeyChartData);
     };
 

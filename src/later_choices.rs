@@ -1,4 +1,4 @@
-use std::{collections::HashMap, error::Error, fs, io::Write, path::PathBuf};
+use std::{collections::HashMap, error::Error, fs, path::PathBuf};
 
 use crate::core::writeable_file;
 
@@ -74,7 +74,7 @@ pub fn compute_later_choices(
         }
 
         let n_voters = later_choices.len();
-        all_n_voters.push(n_voters);
+        all_n_voters.push((**first_choice_cand, n_voters));
 
         let mut flows: HashMap<String, HashMap<String, i64>> = HashMap::new();
 
@@ -129,12 +129,8 @@ pub fn compute_later_choices(
         serde_json::to_writer(&mut f, &flows)?;
     }
 
-    let mut f = writeable_file("./out/n_first_prefs.tsv")?;
-
-    for n_voters in all_n_voters {
-        f.write_all(n_voters.to_string().as_bytes())?;
-        f.write_all(b"\t")?;
-    }
+    let mut f = writeable_file("./out/sorted_cands.json")?;
+    serde_json::to_writer(&mut f, &all_n_voters)?;
 
     println!("Writing weighted matrices data");
     for matrix in matrices.iter_mut() {

@@ -11,6 +11,7 @@ import type { Matchup } from "./core";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
+  const [allFirstPrefs, setAllFirstPrefs] = useState<Array<number>>([]);
   const [matchups, setMatchups] = useState<Array<Matchup>>([]);
 
   useEffect(() => {
@@ -22,11 +23,12 @@ function App() {
   }, []);
 
   useEffect(() => {
-    fetch("sorted_cands.tsv")
-      .then((x) => x.text())
-      .then((cands_csv) => {
-        const cands = cands_csv.split("\t").filter((cand) => cand !== "");
+    fetch("sorted_cands.json")
+      .then((x) => x.json())
+      .then((cands_json: Array<[string, number]>) => {
+        const cands = cands_json.map((x) => x[0]);
         setCands(cands);
+        setAllFirstPrefs(cands_json.map((x) => x[1]));
       });
   }, []);
 
@@ -67,7 +69,7 @@ function App() {
 
       <div style={{ height: "8%" }}></div>
 
-      <LaterChoices cands={cands} />
+      <LaterChoices cands={cands} allFirstPrefs={allFirstPrefs} />
 
       <div style={{ height: "8%" }}></div>
 

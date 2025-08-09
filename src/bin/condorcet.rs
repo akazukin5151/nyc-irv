@@ -2,7 +2,7 @@ use std::{
     collections::{HashMap, HashSet},
     error::Error,
     fs::File,
-    io::{Read, Write},
+    io::Read,
     time::Instant,
 };
 
@@ -82,13 +82,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     cands_to_n_wins.sort_by_key(|x| x.1);
     let cands_to_n_wins: Vec<_> = cands_to_n_wins.into_iter().rev().collect();
 
-    let mut f = writeable_file("./out/sorted_cands.tsv")?;
-
-    for (cand, _) in &cands_to_n_wins {
-        f.write_all(cand.as_bytes())?;
-        f.write_all(b"\t")?;
-    }
-
     print_n_wins(&cands_to_n_wins);
     compute_pairwise_matchups(&sorted_cands, &matrix, &cands_to_n_wins)?;
 
@@ -155,4 +148,3 @@ fn compute_pairwise_matchups(
 
     Ok(())
 }
-
