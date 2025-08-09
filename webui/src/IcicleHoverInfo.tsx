@@ -1,4 +1,4 @@
-import { getCandColor, type Coordinate } from "./core";
+import { format, getCandColor, type Coordinate } from "./core";
 
 type IcicleHoverInfoProps = {
   coord: Coordinate | null;
@@ -37,7 +37,7 @@ export function IcicleHoverInfo({ coord }: IcicleHoverInfoProps) {
 
   return (
     <output>
-      {coord.value} voters ranked {joined}
+      {format(coord.value)} voters ranked {joined}
     </output>
   );
 }
