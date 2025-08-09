@@ -98,9 +98,9 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
     <section>
       <h2 className="ml-4 pt-2">Weighted preferences</h2>
 
-      <div className="flex items-center max-lg:flex-wrap">
-        <div className="mx-4 flex flex-col gap-2">
-          <ul>
+      <div className="flex items-start max-lg:flex-wrap">
+        <div className="mx-4 flex flex-col">
+          <ul className="[&_li]:my-3 [&_li]:leading-2">
             <li>
               <Explainer>
                 The chord shows all preferences flows (except when{" "}
@@ -118,9 +118,9 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
             </li>
           </ul>
 
-          <table className="text-left text-sm text-neutral-500">
+          <table className="w-full rounded-xl bg-white text-left text-sm text-neutral-500 shadow-md [&_td]:not-first:px-3 [&_th]:px-3">
             <thead>
-              <tr>
+              <tr className="[&_th]:pt-1 [&_th]:text-right">
                 <th></th>
                 <th></th>
                 <th>
@@ -144,7 +144,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
                   key={name}
                   onClick={() => setMetricName(name)}
                 >
-                  <td className="pt-1 pl-1">
+                  <td className="pt-1 pl-3">
                     <input
                       key={name}
                       type="radio"
@@ -155,22 +155,22 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
                       onChange={() => setMetricName(name)}
                     />
                   </td>
-                  <td className="px-2 py-2">
+                  <td className="py-2">
                     <label key={name} htmlFor={name}>
                       {name}
                     </label>
                   </td>
                   {weights.map((weight, idx) => (
-                    <td key={`${name}-weight-${idx}`}>{weight}</td>
+                    <td key={`${name}-weight-${idx}`} className="text-right">
+                      {weight}
+                    </td>
                   ))}
                 </tr>
               ))}
             </tbody>
           </table>
 
-          <hr className="text-neutral-300" />
-
-          <table>
+          <table className="mt-5">
             <tbody>
               {metrics.map(({ name, description }) => (
                 <tr key={name}>
