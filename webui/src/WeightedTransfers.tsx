@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Chord } from "./Chord";
 import { ExternalLink } from "./ExternalLink";
 import { Explainer } from "./Explainer";
@@ -16,6 +16,8 @@ const metrics = [
         <ExternalLink href="https://en.wikipedia.org/wiki/Arithmetic_progression">
           arithmetic sequence
         </ExternalLink>
+        . Candidates with many 2<sup>nd</sup> and 3<sup>rd</sup> place votes are
+        exaggerated.
       </>
     ),
     weights: ["4", "3", "2", "1"],
@@ -170,20 +172,18 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
             </tbody>
           </table>
 
-          <table className="mt-5">
-            <tbody>
-              {metrics.map(({ name, description }) => (
-                <tr key={name}>
-                  <th className="pr-3 text-left whitespace-nowrap" scope="row">
-                    <Explainer>{name}</Explainer>
-                  </th>
-                  <td>
-                    <Explainer>{description}</Explainer>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <dl className="mt-5">
+            {metrics.map(({ name, description }) => (
+              <Fragment key={name}>
+                <dt className="font-bold whitespace-nowrap">
+                  <Explainer>{name}</Explainer>
+                </dt>
+                <dd className="ml-4">
+                  <Explainer>{description}</Explainer>
+                </dd>
+              </Fragment>
+            ))}
+          </dl>
           <hr className="text-neutral-300 lg:hidden" />
         </div>
 
