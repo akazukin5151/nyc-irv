@@ -95,7 +95,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
   const [metricName, setMetricName] = useState<MetricName>("First transfer");
 
   return (
-    <section className="rounded-md bg-white shadow-md">
+    <section>
       <h2 className="ml-4 pt-2">Weighted preferences</h2>
 
       <div className="flex items-center max-lg:flex-wrap">
@@ -187,7 +187,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
           <hr className="text-neutral-300 lg:hidden" />
         </div>
 
-        <div className="mx-auto flex justify-center max-lg:mt-5">
+        <div className="mx-auto flex justify-center rounded-xl bg-white shadow-md max-lg:mt-5">
           {cands.length > 0 && allChordData.length > 0 && (
             <Chord
               matrix={
