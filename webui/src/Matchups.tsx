@@ -158,7 +158,7 @@ export function Matchups() {
       <h2 className="ml-4 pt-2">Pairwise matchups</h2>
 
       <div className="flex flex-col items-center">
-        <div className="m-4 mx-auto my-3 h-[70vh] overflow-auto rounded-xl bg-white px-4 py-3 shadow-md">
+        <div className="mx-auto my-3 h-[70vh] max-w-full overflow-auto rounded-xl bg-white px-4 py-3 shadow-md">
           {rows}
         </div>
       </div>
