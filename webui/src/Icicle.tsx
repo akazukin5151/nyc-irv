@@ -12,8 +12,8 @@ function rectWidth(d: HierarchyRectangularNode<Tree>) {
 }
 
 const width = 1000;
-const height = 500;
-const offsetY = -160;
+const height = 400;
+const offsetY = -130;
 
 export function Icicle() {
   const [treeData, setTreeData] = useState<Tree | null>(null);
@@ -110,9 +110,9 @@ export function Icicle() {
         <canvas
           ref={canvasRef}
           width={width * 2}
-          height={height * 2}
+          height={height * 1.8}
           style={{ height: `${height}px` }}
-          className="w-full max-w-max rounded-xl bg-white pt-1 pl-3 shadow-md"
+          className="mx-auto w-full max-w-max rounded-xl bg-white pt-1 pl-3 shadow-md"
           onMouseMove={(evt) => {
             const canvas = canvasRef.current;
             if (allCoords == null || canvas == null) {
