@@ -18,7 +18,7 @@ export function PairwiseWins() {
         <div className="mx-auto flex max-w-[850px] items-center justify-center py-3 max-[860px]:flex-col min-[860px]:justify-between">
           <table className="rounded-xl bg-white pb-3 whitespace-nowrap shadow-md max-[860px]:mb-2 [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:px-3 [&_td]:py-1 [&_td]:nth-[2n]:text-right [&_th]:px-3 [&_th]:py-1 [&_tr]:hover:bg-slate-100/50">
             <thead
-              className="border-b-2 border-slate-200/50 bg-slate-100 text-slate-500"
+              className="border-b-2 border-slate-200/50 bg-slate-100 tracking-wider text-slate-500"
               style={{ fontVariant: "small-caps" }}
             >
               <tr>
