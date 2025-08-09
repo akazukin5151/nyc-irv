@@ -7,9 +7,19 @@ import { Icicle } from "./Icicle";
 import { PairwiseWins } from "./PairwiseWins";
 import { PairwiseMatrix } from "./PairwiseMatrix";
 import { Matchups } from "./Matchups";
+import type { Matchup } from "./core";
 
 function App() {
   const [cands, setCands] = useState<Array<string>>([]);
+  const [matchups, setMatchups] = useState<Array<Matchup>>([]);
+
+  useEffect(() => {
+    fetch("matchups.json")
+      .then((x) => x.json())
+      .then((matchups: Array<Matchup>) => {
+        setMatchups(matchups);
+      });
+  }, []);
 
   useEffect(() => {
     fetch("sorted_cands.tsv")
@@ -37,11 +47,11 @@ function App() {
 
       <div style={{ height: "8%" }}></div>
 
-      <PairwiseMatrix cands={cands} />
+      <PairwiseMatrix cands={cands} matchups={matchups} />
 
       <div style={{ height: "8%" }}></div>
 
-      <Matchups />
+      <Matchups matchups={matchups} />
 
       <div style={{ height: "8%" }}></div>
 

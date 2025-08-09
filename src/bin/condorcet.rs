@@ -91,7 +91,6 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     print_n_wins(&cands_to_n_wins);
     compute_pairwise_matchups(&sorted_cands, &matrix, &cands_to_n_wins)?;
-    write_pairwise_matrix(&sorted_cands, &matrix)?;
 
     compute_rank_distributions(&all_ballots, &cands_to_n_wins)?;
     compute_later_choices(&all_ballots, &cands_to_n_wins)?;
@@ -157,49 +156,3 @@ fn compute_pairwise_matchups(
     Ok(())
 }
 
-fn write_pairwise_matrix(
-    sorted_cands: &[&str],
-    matrix: &HashMap<(&str, &str), u32>,
-) -> Result<(), Box<dyn Error>> {
-    let mut buf = String::new();
-    buf.push_str("| | ");
-    for cand in sorted_cands {
-        buf.push_str(cand);
-        buf.push_str(" | ");
-    }
-    buf.push_str("\n| --- | ");
-    for _ in sorted_cands {
-        buf.push_str("--- | ");
-    }
-
-    println!("\n{buf}");
-    drop(buf);
-
-    let mut rows = vec![];
-    for this_cand in sorted_cands.iter() {
-        print!("{this_cand} | ");
-        for other_cand in sorted_cands.iter() {
-            if *other_cand == *this_cand {
-                print!("| ");
-                continue;
-            }
-            let n_prefer_this_cand = matrix.get(&(this_cand, other_cand)).unwrap();
-            print!("{n_prefer_this_cand} | ");
-
-            rows.push((
-                last_name(this_cand),
-                last_name(other_cand),
-                n_prefer_this_cand,
-            ));
-        }
-        println!();
-    }
-
-    let mut f = writeable_file("./out/matrix.json")?;
-    serde_json::to_writer(&mut f, &rows)?;
-    Ok(())
-}
-
-fn last_name(full_name: &str) -> &str {
-    full_name.split(' ').next_back().unwrap()
-}

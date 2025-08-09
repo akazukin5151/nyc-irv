@@ -1,35 +1,29 @@
-import { useEffect, useState } from "react";
-import type { HoverInfo } from "./core";
+import { useState } from "react";
+import type { HoverInfo, Matchup } from "./core";
 import { PairwiseMatrixHoverInfo } from "./PairwiseMatrixHoverInfo";
-
-type RawData = Array<[string, string, number]>;
 
 type PairwiseMatrixProps = {
   cands: Array<string>;
+  matchups: Array<Matchup>;
 };
 
-export function PairwiseMatrix({ cands: cands_ }: PairwiseMatrixProps) {
-  const [matrix, setMatrix] = useState<Map<string, Record<string, number>>>();
+export function PairwiseMatrix({
+  cands: cands_,
+  matchups,
+}: PairwiseMatrixProps) {
   const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
 
-  const cands = cands_.map((cand) => cand.split(" ").pop() ?? "");
+  const cands = cands_.map((cand) => lastName(cand));
 
-  useEffect(() => {
-    fetch("matrix.json")
-      .then((x) => x.json())
-      .then((data: RawData) => {
-        const newMatrix = new Map<string, Record<string, number>>();
-        for (const [this_cand, other_cand, value] of data) {
-          const row = newMatrix.get(this_cand);
-          if (row == null) {
-            newMatrix.set(this_cand, { [other_cand]: value });
-          } else {
-            row[other_cand] = value;
-          }
-        }
-        setMatrix(newMatrix);
-      });
-  }, []);
+  const matrix = new Map<string, Record<string, number>>();
+  for (const [this_cand, other_cand, value] of matchups) {
+    const row = matrix.get(lastName(this_cand));
+    if (row == null) {
+      matrix.set(lastName(this_cand), { [lastName(other_cand)]: value });
+    } else {
+      row[lastName(other_cand)] = value;
+    }
+  }
 
   return (
     <section>
@@ -155,4 +149,8 @@ function getCellStyle(
   }
 
   return "";
+}
+
+function lastName(cand: string): string {
+  return cand.split(" ").pop() ?? "";
 }

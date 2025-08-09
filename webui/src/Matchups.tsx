@@ -1,21 +1,17 @@
-import { useEffect, useState } from "react";
-import { CANDIDATE_COLORS, format, IS_CAND_COLOR_DARK } from "./core";
-
-type Matchup = [string, string, number, number];
+import {
+  CANDIDATE_COLORS,
+  format,
+  IS_CAND_COLOR_DARK,
+  type Matchup,
+} from "./core";
 
 const TOTAL_BALLOTS = 1114433;
 
-export function Matchups() {
-  const [matchups, setMatchups] = useState<Array<Matchup>>([]);
+type MatchupsProps = {
+  matchups: Array<Matchup>;
+};
 
-  useEffect(() => {
-    fetch("matchups.json")
-      .then((x) => x.json())
-      .then((matchups: Array<Matchup>) => {
-        setMatchups(matchups);
-      });
-  }, []);
-
+export function Matchups({ matchups }: MatchupsProps) {
   const rows = matchups.map(([cand1, cand2, v1, v2], idx) => {
     const sum = v1 + v2;
     const perc1 = (v1 / TOTAL_BALLOTS) * 100;

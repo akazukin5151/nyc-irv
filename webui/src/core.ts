@@ -5,6 +5,8 @@ export type Setter<T> = Dispatch<SetStateAction<T>>;
 
 export type TextAnchor = "start" | "middle" | "end";
 
+export type Matchup = [string, string, number, number];
+
 export type Tree = {
   name: string;
   value: number;
