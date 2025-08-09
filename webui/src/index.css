@@ -6,6 +6,7 @@
   --font-mono: monospace;
   /* 860px / 16 */
   --breakpoint-md2: 53.75rem;
+  --breakpoint-6xl: 72rem;
 }
 
 @layer base {

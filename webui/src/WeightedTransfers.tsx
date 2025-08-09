@@ -100,8 +100,8 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
     <section>
       <h2 className="ml-4 pt-2">Weighted preferences</h2>
 
-      <div className="flex items-start max-lg:flex-wrap">
-        <div className="mx-4 flex flex-col">
+      <div className="6xl:flex-row flex flex-col-reverse items-center">
+        <div className="mx-4 flex w-[387px] flex-col">
           <ul className="[&_li]:my-3 [&_li]:leading-2">
             <li>
               <Explainer>
@@ -120,7 +120,7 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
             </li>
           </ul>
 
-          <table className="w-full rounded-xl bg-white text-left text-sm text-neutral-500 shadow-md [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:not-first:px-3 [&_th]:px-3">
+          <table className="w-full rounded-xl bg-white text-left text-sm whitespace-nowrap text-neutral-500 shadow-md [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:not-first:px-3 [&_th]:px-3">
             <thead>
               <tr className="[&_th]:pt-1 [&_th]:text-right">
                 <th></th>
@@ -184,10 +184,9 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
               </Fragment>
             ))}
           </dl>
-          <hr className="text-neutral-300 lg:hidden" />
         </div>
 
-        <div className="mx-auto rounded-xl bg-white shadow-md max-lg:mt-5">
+        <div className="max-6xl:mt-5 max-6xl:mb-3 mx-auto rounded-xl bg-white shadow-md">
           <div className="flex justify-center">
             {cands.length > 0 && allChordData.length > 0 && (
               <Chord
