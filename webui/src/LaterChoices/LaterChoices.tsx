@@ -175,10 +175,10 @@ export function LaterChoices(props: LaterChoicesProps) {
         </p>
         <select
           class="mx-2 rounded-md border-1 px-2"
-          onChange={async (evt) => {
+          onChange={(evt) => {
             const cand = evt.target.value;
             setFirstChoiceCand(cand);
-            await setupChart(
+            setupChart(
               cand,
               props.candsFirstPrefs[0],
               setChartData,

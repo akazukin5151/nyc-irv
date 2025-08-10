@@ -39,12 +39,7 @@ export function Icicle() {
   const [hoverInfo, setHoverInfo] = createSignal<Coordinate | null>(null);
 
   createEffect(() => {
-    if (
-      !treeData.loading
-      && !treeData.error
-      && treeData() != null
-      && canvasRef != null
-    ) {
+    if (!treeData.loading && !treeData.error && treeData() != null) {
       const ctx = canvasRef.getContext("2d")!;
       ctx.translate(0, offsetY);
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio);

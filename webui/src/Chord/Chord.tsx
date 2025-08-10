@@ -231,7 +231,7 @@ export function Chord(props: ChordProps) {
 }
 
 // https://github.com/d3/d3-array/blob/main/src/descending.js
-function descending(a: any, b: any): number {
+function descending(a: unknown, b: unknown): number {
   return a == null || b == null
     ? NaN
     : b < a

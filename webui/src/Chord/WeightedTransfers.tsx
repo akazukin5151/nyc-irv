@@ -203,9 +203,7 @@ export function WeightedTransfers(props: WeightedTransfersProps) {
             <Show when={allChordData.loading}>Cands loading</Show>
             <Switch>
               <Match when={allChordData.error}>Cands error</Match>
-              <Match
-                when={props.cands.length > 0 && allChordData()?.length > 0}
-              >
+              <Match when={props.cands.length > 0 && allChordData().length > 0}>
                 <Chord
                   matrix={
                     allChordData()[
