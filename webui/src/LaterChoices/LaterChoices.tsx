@@ -14,7 +14,6 @@ import { SankeyController, Flow } from "chartjs-chart-sankey";
 import {
   CANDIDATE_COLORS,
   getCandColor,
-  handleCandidateSelectCore,
   numToOrdinal,
   percInFooter,
   radioStyle,
@@ -50,58 +49,6 @@ type SankeyColor = "rank" | "cand";
 type LaterChoicesProps = {
   candsFirstPrefs: [Array<string>, Array<number>];
 };
-
-async function setupChart(
-  firstChoiceCand: string,
-  cands: Array<string>,
-  setChartData: Setter<BarChartData>,
-  setSankeyChartData: Setter<SankeyChartData>,
-) {
-  const idx = cands.findIndex((c) => c === firstChoiceCand);
-  const [laterChoices, flowData] = await handleCandidateSelectCore(idx);
-
-  const labels = [
-    ...cands.filter((cand) => cand !== firstChoiceCand),
-    "Exhausted",
-  ];
-  const datasets = [];
-
-  for (let choice_idx = 0; choice_idx < 4; choice_idx++) {
-    const choice_num = choice_idx + 2;
-    const str = choice_num === 2 ? "nd" : choice_num === 3 ? "rd" : "th";
-
-    const data = laterChoices.map((freqs) => freqs[choice_idx]);
-
-    const dataset = {
-      label: `${choice_num}${str} choice`,
-      data,
-      backgroundColor: SEQUENTIAL_COLORS_TRANS[choice_idx + 1],
-      borderColor: SEQUENTIAL_COLORS_TRANS[choice_idx + 1],
-    };
-    datasets.push(dataset);
-  }
-
-  setChartData({ labels, datasets });
-
-  const sankey_data: Array<SankeyData> = [];
-  for (const [from, inner_map] of Object.entries(flowData)) {
-    for (const [to, flow] of Object.entries(inner_map)) {
-      sankey_data.push({
-        from,
-        to,
-        flow,
-        fromIdx: parseInt(from.slice(0, 1)),
-        toIdx: parseInt(to.slice(0, 1)),
-        fromCand: from.split(" ").pop(),
-        toCand: to.split(" ").pop(),
-      } as SankeyData);
-    }
-  }
-
-  setSankeyChartData((s) => ({
-    datasets: [{ ...s.datasets[0], data: sankey_data }],
-  }));
-}
 
 export function LaterChoices(props: LaterChoicesProps) {
   onMount(() => {
@@ -359,4 +306,74 @@ export function LaterChoices(props: LaterChoicesProps) {
       )}
     </section>
   );
+}
+
+async function setupChart(
+  firstChoiceCand: string,
+  cands: Array<string>,
+  setChartData: Setter<BarChartData>,
+  setSankeyChartData: Setter<SankeyChartData>,
+) {
+  const idx = cands.findIndex((c) => c === firstChoiceCand);
+  const [laterChoices, flowData] = await handleCandidateSelectCore(idx);
+
+  const labels = [
+    ...cands.filter((cand) => cand !== firstChoiceCand),
+    "Exhausted",
+  ];
+  const datasets = [];
+
+  for (let choice_idx = 0; choice_idx < 4; choice_idx++) {
+    const choice_num = choice_idx + 2;
+    const str = choice_num === 2 ? "nd" : choice_num === 3 ? "rd" : "th";
+
+    const data = laterChoices.map((freqs) => freqs[choice_idx]);
+
+    const dataset = {
+      label: `${choice_num}${str} choice`,
+      data,
+      backgroundColor: SEQUENTIAL_COLORS_TRANS[choice_idx + 1],
+      borderColor: SEQUENTIAL_COLORS_TRANS[choice_idx + 1],
+    };
+    datasets.push(dataset);
+  }
+
+  setChartData({ labels, datasets });
+
+  const sankey_data: Array<SankeyData> = [];
+  for (const [from, inner_map] of Object.entries(flowData)) {
+    for (const [to, flow] of Object.entries(inner_map)) {
+      sankey_data.push({
+        from,
+        to,
+        flow,
+        fromIdx: parseInt(from.slice(0, 1)),
+        toIdx: parseInt(to.slice(0, 1)),
+        fromCand: from.split(" ").pop(),
+        toCand: to.split(" ").pop(),
+      } as SankeyData);
+    }
+  }
+
+  setSankeyChartData((s) => ({
+    datasets: [{ ...s.datasets[0], data: sankey_data }],
+  }));
+}
+
+async function handleCandidateSelectCore(
+  idx: number,
+): Promise<[Array<Array<number>>, Record<string, Record<string, number>>]> {
+  const promises = [
+    fetch(`later_choices/${idx}.json`).then(async (res) => {
+      const json: Array<Array<number>> = await res.json();
+      return json;
+    }),
+
+    fetch(`flows/${idx}.json`).then(async (res) => {
+      const json: Record<string, Record<string, number>> = await res.json();
+      return json;
+    }),
+  ] as const;
+
+  return Promise.all(promises);
 }

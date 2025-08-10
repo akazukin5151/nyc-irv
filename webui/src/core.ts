@@ -77,24 +77,6 @@ export const SEQUENTIAL_COLORS_TRANS = [
 
 export const GRAY = "rgba(201, 203, 207, 0.3)";
 
-export async function handleCandidateSelectCore(
-  idx: number,
-): Promise<[Array<Array<number>>, Record<string, Record<string, number>>]> {
-  const promises = [
-    fetch(`later_choices/${idx}.json`).then(async (res) => {
-      const json: Array<Array<number>> = await res.json();
-      return json;
-    }),
-
-    fetch(`flows/${idx}.json`).then(async (res) => {
-      const json: Record<string, Record<string, number>> = await res.json();
-      return json;
-    }),
-  ] as const;
-
-  return Promise.all(promises);
-}
-
 export function format(n: number): string {
   return new Intl.NumberFormat("en-US").format(n);
 }
