@@ -1,26 +1,26 @@
-import type { ReactNode } from "react";
+import type { JSX } from "solid-js/jsx-runtime";
 import "./Sticky.css";
 
 type StickyProps = {
-  children?: ReactNode;
-  className?: string;
+  children?: JSX.Element;
+  class_?: string;
 };
 
-export function Sticky({ children, className, ...props }: StickyProps) {
+export function Sticky(props: StickyProps) {
   return (
     <>
       <div
-        className={
+        class={
           `sticky-blurred-div sticky top-0 z-1 rounded-lg px-4 py-2 dark:text-white `
-          + (className ?? "")
+          + (props.class_ ?? "")
         }
         {...props}
       >
-        {children}
+        {props.children}
       </div>
-      <div className="shadow-under-blur" />
-      <div className="relative">
-        <div className="shadow-coverer" />
+      <div class="shadow-under-blur" />
+      <div class="relative">
+        <div class="shadow-coverer" />
       </div>
     </>
   );

@@ -1,18 +1,19 @@
-import type { ReactNode } from "react";
+import type { JSX } from "solid-js/jsx-runtime";
 
 type ExplainerProps = {
   className?: string;
-  children?: ReactNode;
+  children?: JSX.Element;
 };
 
-export function Explainer({ children, className }: ExplainerProps) {
+export function Explainer(props: ExplainerProps) {
   return (
     <span
-      className={
-        `text-sm text-neutral-500 dark:text-neutral-200 ` + (className ?? "")
+      class={
+        `text-sm text-neutral-500 dark:text-neutral-200 `
+        + (props.className ?? "")
       }
     >
-      {children}
+      {props.children}
     </span>
   );
 }

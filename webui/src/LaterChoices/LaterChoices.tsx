@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   Tooltip,
@@ -10,7 +9,7 @@ import {
   Colors,
   type ChartData,
 } from "chart.js";
-import { Chart } from "react-chartjs-2";
+import { Bar } from "solid-chartjs";
 import { SankeyController, Flow } from "chartjs-chart-sankey";
 import {
   CANDIDATE_COLORS,
@@ -21,22 +20,16 @@ import {
   radioStyle,
   SEQUENTIAL_COLORS_SOLID,
   SEQUENTIAL_COLORS_TRANS,
-  type Setter,
 } from "../core";
 import { Sticky } from "./Sticky";
 import { axisLabelColor, useTheme } from "../themeColors";
-
-ChartJS.register(
-  Tooltip,
-  Legend,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  BarController,
-  Colors,
-  SankeyController,
-  Flow,
-);
+import {
+  createEffect,
+  createSignal,
+  For,
+  onMount,
+  type Setter,
+} from "solid-js";
 
 type BarChartData = ChartData<"bar", Array<number>, string>;
 
@@ -55,8 +48,7 @@ type SankeyData = {
 type SankeyColor = "rank" | "cand";
 
 type LaterChoicesProps = {
-  cands: Array<string>;
-  allFirstPrefs: Array<number>;
+  candsFirstPrefs: [Array<string>, Array<number>];
 };
 
 async function setupChart(
@@ -111,8 +103,24 @@ async function setupChart(
   }));
 }
 
-export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
-  const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
+export function LaterChoices(props: LaterChoicesProps) {
+  onMount(() => {
+    ChartJS.register(
+      Tooltip,
+      Legend,
+      CategoryScale,
+      LinearScale,
+      BarElement,
+      BarController,
+      Colors,
+      SankeyController,
+      Flow,
+    );
+  });
+
+  const [firstChoiceCand, setFirstChoiceCand] = createSignal<string | null>(
+    null,
+  );
   const isDark = useTheme();
 
   const initChartData: BarChartData = {
@@ -120,7 +128,7 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
     datasets: [],
   };
 
-  const [chartData, setChartData] = useState<BarChartData>(initChartData);
+  const [chartData, setChartData] = createSignal<BarChartData>(initChartData);
 
   const initSankeyChartData: SankeyChartData = {
     datasets: [
@@ -145,23 +153,26 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
   };
 
   const [sankeyChartData, setSankeyChartData] =
-    useState<SankeyChartData>(initSankeyChartData);
+    createSignal<SankeyChartData>(initSankeyChartData);
 
-  function onSankeyColorChange(sankeyColor: SankeyColor) {
+  const [sankeyColor, setSankeyColor] = createSignal<"cand" | "rank">("cand");
+
+  function onSankeyColorChange(newSankeyColor: SankeyColor) {
+    setSankeyColor(newSankeyColor);
     setSankeyChartData((s) => ({
       datasets: [
         {
           data: s.datasets[0].data,
           colorFrom: (c) => {
             const sd = c.dataset.data[c.dataIndex] as SankeyData;
-            if (sankeyColor === "rank") {
+            if (newSankeyColor === "rank") {
               return SEQUENTIAL_COLORS_SOLID[sd.fromIdx - 1];
             }
             return CANDIDATE_COLORS[sd.fromCand];
           },
           colorTo: (c) => {
             const sd = c.dataset.data[c.dataIndex] as SankeyData;
-            if (sankeyColor === "rank") {
+            if (newSankeyColor === "rank") {
               return SEQUENTIAL_COLORS_SOLID[sd.toIdx - 1];
             }
             return CANDIDATE_COLORS[sd.toCand];
@@ -171,8 +182,9 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
     }));
   }
 
-  useEffect(() => {
-    if (cands.length === 0 || firstChoiceCand != null) {
+  createEffect(() => {
+    const cands = props.candsFirstPrefs[0];
+    if (cands.length === 0 || firstChoiceCand() != null) {
       return;
     }
 
@@ -183,51 +195,63 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
     };
 
     fn();
-  }, [cands, firstChoiceCand]);
+  });
 
-  let cur_cand_last_name = "";
-  if (firstChoiceCand != null) {
-    cur_cand_last_name = firstChoiceCand.split(" ").pop() ?? "";
-  }
+  const curCandLastName = () => {
+    if (firstChoiceCand() != null) {
+      return firstChoiceCand()!.split(" ").pop() ?? "";
+    }
+    return "";
+  };
 
-  const idx = cands.findIndex((c) => c === firstChoiceCand);
-  const nFirstPrefs =
-    allFirstPrefs.length === 0
+  const nFirstPrefs = () => {
+    const idx = props.candsFirstPrefs[0].findIndex(
+      (c) => c === firstChoiceCand(),
+    );
+    const allFirstPrefs = props.candsFirstPrefs[1];
+    return allFirstPrefs.length === 0
       ? "xxx"
       : allFirstPrefs[idx] == null
         ? "xxx"
         : (new Intl.NumberFormat("en-US").format(allFirstPrefs[idx]) ?? "xxx");
+  };
 
   return (
-    <section className="h-[calc(100vh*2.1)] rounded-md bg-white shadow-md dark:bg-neutral-800">
-      <h2 className="ml-4 pt-2">Later choices</h2>
-      <Sticky className={`mb-2 inline-flex w-full flex-wrap justify-center`}>
+    <section class="h-[calc(100vh*2.1)] rounded-md bg-white shadow-md dark:bg-neutral-800">
+      <h2 class="ml-4 pt-2">Later choices</h2>
+      <Sticky class_={`mb-2 inline-flex w-full flex-wrap justify-center`}>
         <p>
-          For the <output className="font-mono">{nFirstPrefs}</output> voters
-          who ranked
+          For the <output class="font-mono">{nFirstPrefs()}</output> voters who
+          ranked
         </p>
         <select
-          className="mx-2 rounded-md border-1 px-2"
+          class="mx-2 rounded-md border-1 px-2"
           onChange={async (evt) => {
             const cand = evt.target.value;
             setFirstChoiceCand(cand);
-            await setupChart(cand, cands, setChartData, setSankeyChartData);
+            await setupChart(
+              cand,
+              props.candsFirstPrefs[0],
+              setChartData,
+              setSankeyChartData,
+            );
           }}
         >
-          {cands.map((cand) => (
-            <option value={cand} key={cand} className="dark:text-black">
-              {cand}
-            </option>
-          ))}
+          <For each={props.candsFirstPrefs[0]}>
+            {(cand) => (
+              <option value={cand} class="dark:text-black">
+                {cand}
+              </option>
+            )}
+          </For>
         </select>
         <p>first, their later choices were:</p>
       </Sticky>
 
-      <div className="mb-6 h-[calc(100vh*0.8)] px-1">
-        {(chartData.labels?.length ?? 0) > 0 && (
-          <Chart
-            type="bar"
-            data={chartData}
+      <div class="mb-6 h-[calc(100vh*0.8)] px-1">
+        {(chartData().labels?.length ?? 0) > 0 && (
+          <Bar
+            data={chartData()}
             options={{
               responsive: true,
               maintainAspectRatio: false,
@@ -239,7 +263,7 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
                 y: {
                   stacked: true,
                   ticks: {
-                    color: axisLabelColor(isDark),
+                    color: axisLabelColor(isDark()),
                   },
                 },
               },
@@ -247,22 +271,22 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
                 tooltip: {
                   footerFont: { weight: "normal" },
                   callbacks: {
-                    title: (c) => c[0].formattedValue,
-                    label: (c) => {
+                    title: (c: any) => c[0].formattedValue,
+                    label: (c: any) => {
                       const n = c.formattedValue;
                       const choice_num = c.datasetIndex + 2;
                       const str = numToOrdinal(choice_num);
                       if (c.label === "Exhausted") {
-                        return `${n} ${cur_cand_last_name} voters exhausted their ballot by the ${choice_num}${str} choice`;
+                        return `${n} ${curCandLastName()} voters exhausted their ballot by the ${choice_num}${str} choice`;
                       }
-                      return `${n} ${cur_cand_last_name} voters ranked ${c.label} as their ${choice_num}${str} choice`;
+                      return `${n} ${curCandLastName()} voters ranked ${c.label} as their ${choice_num}${str} choice`;
                     },
                     footer: percInFooter,
                   },
                 },
                 legend: {
                   labels: {
-                    color: axisLabelColor(isDark),
+                    color: axisLabelColor(isDark()),
                   },
                 },
               },
@@ -271,31 +295,31 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
         )}
       </div>
 
-      {(sankeyChartData.datasets[0].data.length ?? 0) > 0 && (
-        <div style={{ maxHeight: "calc(100vh - 40px)" }}>
-          <h2 className="mb-1 ml-4">Sankey</h2>
+      {(sankeyChartData().datasets[0].data.length ?? 0) > 0 && (
+        <div style={{ "max-height": "calc(100vh - 40px)" }}>
+          <h2 class="mb-1 ml-4">Sankey</h2>
 
-          <div className="mx-4 dark:text-white">
-            <p className="mb-1">
+          <div class="mx-4 dark:text-white">
+            <p class="mb-1">
               This is similar to the Icicle chart in the beginning, but only
               shows the preferences for voters that ranked{" "}
               <span
-                className="underline decoration-3"
+                class="underline decoration-3"
                 style={{
-                  textDecorationColor: getCandColor(firstChoiceCand),
+                  "text-decoration-color": getCandColor(firstChoiceCand()),
                 }}
               >
-                {firstChoiceCand}
+                {firstChoiceCand()}
               </span>{" "}
               first.
             </p>
 
-            <label className="mr-4">
+            <label class="mr-4">
               <input
                 type="radio"
                 name="sankey-colors"
-                className={radioStyle + " mr-1"}
-                defaultChecked
+                class={radioStyle + " mr-1"}
+                checked={sankeyColor() === "cand"}
                 onChange={() => onSankeyColorChange("cand")}
               />
               Color by candidate
@@ -304,16 +328,17 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
               <input
                 type="radio"
                 name="sankey-colors"
-                className={radioStyle + " mr-1"}
+                class={radioStyle + " mr-1"}
+                checked={sankeyColor() === "rank"}
                 onChange={() => onSankeyColorChange("rank")}
               />
               Color by position on ballot
             </label>
           </div>
 
-          <Chart
+          <Bar
             type="sankey"
-            data={sankeyChartData}
+            data={sankeyChartData()}
             options={{
               animation: false,
               responsive: true,
@@ -327,7 +352,7 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
                   stacked: true,
                 },
               },
-              color: isDark ? "white" : "black",
+              color: isDark() ? "white" : "black",
             }}
           />
         </div>

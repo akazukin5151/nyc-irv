@@ -1,9 +1,8 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import solid from "vite-plugin-solid";
 import tailwindcss from "@tailwindcss/vite";
 
-// https://vite.dev/config/
 export default defineConfig({
   base: "/nyc-irv/",
-  plugins: [react(), tailwindcss()],
+  plugins: [solid(), tailwindcss()],
 });

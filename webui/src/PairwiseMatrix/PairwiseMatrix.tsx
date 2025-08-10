@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { createSignal, For, Show } from "solid-js";
 import type { HoverInfo, Matchup } from "../core";
 import { PairwiseMatrixHoverInfo } from "./PairwiseMatrixHoverInfo";
 
@@ -7,49 +7,49 @@ type PairwiseMatrixProps = {
   matchups: Array<Matchup>;
 };
 
-export function PairwiseMatrix({
-  cands: cands_,
-  matchups,
-}: PairwiseMatrixProps) {
-  const [hoverInfo, setHoverInfo] = useState<HoverInfo | null>(null);
+export function PairwiseMatrix(props: PairwiseMatrixProps) {
+  const [hoverInfo, setHoverInfo] = createSignal<HoverInfo | null>(null);
 
-  const cands = cands_.map((cand) => lastName(cand));
+  const cands = () => props.cands.map((cand) => lastName(cand));
 
-  const matrix = new Map<string, Record<string, number>>();
-  for (const [this_cand, other_cand, value] of matchups) {
-    const row = matrix.get(lastName(this_cand));
-    if (row == null) {
-      matrix.set(lastName(this_cand), { [lastName(other_cand)]: value });
-    } else {
-      row[lastName(other_cand)] = value;
+  const matrix = () => {
+    const m = new Map<string, Record<string, number>>();
+    for (const [this_cand, other_cand, value] of props.matchups) {
+      const row = m.get(lastName(this_cand));
+      if (row == null) {
+        m.set(lastName(this_cand), { [lastName(other_cand)]: value });
+      } else {
+        row[lastName(other_cand)] = value;
+      }
     }
-  }
+    return m;
+  };
 
   return (
     <section>
-      <h2 className="ml-4 pt-2">Pairwise matrix</h2>
+      <h2 class="ml-4 pt-2">Pairwise matrix</h2>
 
-      <p className="ml-4 dark:text-white">
+      <p class="ml-4 dark:text-white">
         The numbers are the number of voters that ranked{" "}
-        <span className="font-bold text-sky-500">row</span> over{" "}
-        <span className="font-bold text-amber-600">column</span>
+        <span class="font-bold text-sky-500">row</span> over{" "}
+        <span class="font-bold text-amber-600">column</span>
       </p>
 
-      <PairwiseMatrixHoverInfo hoverInfo={hoverInfo} />
+      <PairwiseMatrixHoverInfo hoverInfo={hoverInfo()} />
 
-      <div className="max-w-screen overflow-auto">
+      <div class="max-w-screen overflow-auto">
         <table
-          className="mt-3 ml-4 rounded-xl bg-white pb-3 shadow-md dark:bg-neutral-800 [&_td]:px-3 [&_td]:py-1 [&_td]:text-right [&_td]:first:text-left [&_th]:px-3 [&_th]:py-1"
+          class="mt-3 ml-4 rounded-xl bg-white pb-3 shadow-md dark:bg-neutral-800 [&_td]:px-3 [&_td]:py-1 [&_td]:text-right [&_td]:first:text-left [&_th]:px-3 [&_th]:py-1"
           onMouseMove={(evt) => {
             const elem = evt.target as HTMLElement;
             const value = elem.dataset.value;
             const this_cand = elem.dataset.row;
             const other_cand = elem.dataset.col;
-            if (this_cand == null || other_cand == null || matrix == null) {
+            if (this_cand == null || other_cand == null) {
               setHoverInfo(null);
               return;
             }
-            const record = matrix.get(other_cand)!;
+            const record = matrix().get(other_cand)!;
 
             setHoverInfo({
               this_cand,
@@ -62,63 +62,68 @@ export function PairwiseMatrix({
             setHoverInfo(null);
           }}
         >
-          <thead className="border-b-2 border-slate-200/50 [&_th]:font-normal">
+          <thead class="border-b-2 border-slate-200/50 [&_th]:font-normal">
             <tr>
-              <th className="border-r-2 border-slate-200/50"></th>
-              {cands.length > 0
-                && cands.map((cand) => (
-                  <th
-                    key={cand}
-                    className={
-                      `text-amber-600 ` + getCellStyle(hoverInfo, "", cand)
-                    }
-                    data-col={cand}
-                  >
-                    {cand}
-                  </th>
-                ))}
+              <th class="border-r-2 border-slate-200/50"></th>
+              <Show when={cands().length > 0}>
+                <For each={cands()}>
+                  {(cand) => (
+                    <th
+                      class={
+                        `text-amber-600 ` + getCellStyle(hoverInfo(), "", cand)
+                      }
+                      data-col={cand}
+                    >
+                      {cand}
+                    </th>
+                  )}
+                </For>
+              </Show>
             </tr>
           </thead>
 
-          <tbody className="dark:[&_td]:not-first:text-white [&_tr]:hover:bg-slate-100 dark:[&_tr]:hover:bg-slate-500">
-            {matrix != null
-              && matrix.size > 0
-              && cands.map((this_cand) => {
-                const cols = matrix.get(this_cand);
-                if (cols == null) {
-                  return null;
-                }
-                return (
-                  <tr key={this_cand}>
-                    <td className="border-r-2 border-slate-200/50 text-sky-500">
-                      {this_cand}
-                    </td>
-                    {cands.map((other_cand) => {
-                      const value = cols[other_cand];
-                      const formatted = isNaN(value)
-                        ? ""
-                        : new Intl.NumberFormat("en-US").format(
-                            cols[other_cand],
+          <tbody class="dark:[&_td]:not-first:text-white [&_tr]:hover:bg-slate-100 dark:[&_tr]:hover:bg-slate-500">
+            <Show when={matrix().size > 0}>
+              <For each={cands()}>
+                {(this_cand) => {
+                  const cols = matrix().get(this_cand);
+                  if (cols == null) {
+                    return null;
+                  }
+                  return (
+                    <tr>
+                      <td class="border-r-2 border-slate-200/50 text-sky-500">
+                        {this_cand}
+                      </td>
+                      <For each={cands()}>
+                        {(other_cand) => {
+                          const value = cols[other_cand];
+                          const formatted = isNaN(value)
+                            ? ""
+                            : new Intl.NumberFormat("en-US").format(
+                                cols[other_cand],
+                              );
+                          return (
+                            <td
+                              data-row={this_cand}
+                              data-col={other_cand}
+                              data-value={value}
+                              class={getCellStyle(
+                                hoverInfo(),
+                                this_cand,
+                                other_cand,
+                              )}
+                            >
+                              {formatted}
+                            </td>
                           );
-                      return (
-                        <td
-                          key={other_cand}
-                          data-row={this_cand}
-                          data-col={other_cand}
-                          data-value={value}
-                          className={getCellStyle(
-                            hoverInfo,
-                            this_cand,
-                            other_cand,
-                          )}
-                        >
-                          {formatted}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
+                        }}
+                      </For>
+                    </tr>
+                  );
+                }}
+              </For>
+            </Show>
           </tbody>
         </table>
       </div>

@@ -3,8 +3,8 @@ import { CANDIDATE_COLORS } from "./core";
 export function PairwiseWins() {
   const Mamdani = (
     <span
-      className="underline decoration-3"
-      style={{ textDecorationColor: CANDIDATE_COLORS.Mamdani }}
+      class="underline decoration-3"
+      style={{ "text-decoration-color": CANDIDATE_COLORS.Mamdani }}
     >
       Mamdani
     </span>
@@ -13,22 +13,24 @@ export function PairwiseWins() {
   return (
     <>
       <section>
-        <h2 className="ml-4 pt-2">Number of pairwise wins</h2>
+        <h2 class="ml-4 pt-2">Number of pairwise wins</h2>
 
-        <div className="mx-auto flex max-w-[850px] items-center justify-center py-3 max-[860px]:flex-col min-[860px]:justify-between">
-          <table className="rounded-xl bg-white pb-3 whitespace-nowrap shadow-md max-[860px]:mb-2 dark:bg-neutral-800 [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:px-3 [&_td]:py-1 [&_td]:nth-[2n]:text-right dark:[&_td]:text-white [&_th]:px-3 [&_th]:py-1 [&_tr]:hover:bg-slate-100/50">
+        <div class="mx-auto flex max-w-[850px] items-center justify-center py-3 max-[860px]:flex-col min-[860px]:justify-between">
+          <table class="rounded-xl bg-white pb-3 whitespace-nowrap shadow-md max-[860px]:mb-2 dark:bg-neutral-800 [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:px-3 [&_td]:py-1 [&_td]:nth-[2n]:text-right dark:[&_td]:text-white [&_th]:px-3 [&_th]:py-1 [&_tr]:hover:bg-slate-100/50">
             <thead
-              className="border-b-2 border-slate-200/50 bg-slate-100 tracking-wider text-slate-500 dark:bg-slate-700 dark:text-slate-100"
-              style={{ fontVariant: "small-caps" }}
+              class="border-b-2 border-slate-200/50 bg-slate-100 tracking-wider text-slate-500 dark:bg-slate-700 dark:text-slate-100"
+              style={{ "font-variant": "small-caps" }}
             >
               <tr>
                 <th>candidate</th>
                 <th>pairwise wins</th>
               </tr>
             </thead>
-            <tbody className="[&_td]:first:underline [&_td]:first:decoration-3">
+            <tbody class="[&_td]:first:underline [&_td]:first:decoration-3">
               <tr>
-                <td style={{ textDecorationColor: CANDIDATE_COLORS.Mamdani }}>
+                <td
+                  style={{ "text-decoration-color": CANDIDATE_COLORS.Mamdani }}
+                >
                   <b>Zohran Kwame Mamdani</b>
                 </td>
                 <td>
@@ -36,63 +38,73 @@ export function PairwiseWins() {
                 </td>
               </tr>
               <tr>
-                <td style={{ textDecorationColor: CANDIDATE_COLORS.Lander }}>
+                <td
+                  style={{ "text-decoration-color": CANDIDATE_COLORS.Lander }}
+                >
                   Brad Lander
                 </td>
                 <td>9</td>
               </tr>
               <tr>
-                <td style={{ textDecorationColor: CANDIDATE_COLORS.Adams }}>
+                <td style={{ "text-decoration-color": CANDIDATE_COLORS.Adams }}>
                   Adrienne E. Adams
                 </td>
                 <td>8</td>
               </tr>
               <tr>
-                <td style={{ textDecorationColor: CANDIDATE_COLORS.Cuomo }}>
+                <td style={{ "text-decoration-color": CANDIDATE_COLORS.Cuomo }}>
                   Andrew M. Cuomo
                 </td>
                 <td>7</td>
               </tr>
               <tr>
-                <td style={{ textDecorationColor: CANDIDATE_COLORS.Myrie }}>
+                <td style={{ "text-decoration-color": CANDIDATE_COLORS.Myrie }}>
                   Zellnor Myrie
                 </td>
                 <td>6</td>
               </tr>
               <tr>
-                <td style={{ textDecorationColor: CANDIDATE_COLORS.Stringer }}>
+                <td
+                  style={{ "text-decoration-color": CANDIDATE_COLORS.Stringer }}
+                >
                   Scott M. Stringer
                 </td>
                 <td>5</td>
               </tr>
               <tr>
-                <td style={{ textDecorationColor: CANDIDATE_COLORS.Blake }}>
+                <td style={{ "text-decoration-color": CANDIDATE_COLORS.Blake }}>
                   Michael Blake
                 </td>
                 <td>4</td>
               </tr>
               <tr>
-                <td style={{ textDecorationColor: CANDIDATE_COLORS.Ramos }}>
+                <td style={{ "text-decoration-color": CANDIDATE_COLORS.Ramos }}>
                   Jessica Ramos
                 </td>
                 <td>3</td>
               </tr>
               <tr>
-                <td style={{ textDecorationColor: CANDIDATE_COLORS.Tilson }}>
+                <td
+                  style={{ "text-decoration-color": CANDIDATE_COLORS.Tilson }}
+                >
                   Whitney R. Tilson
                 </td>
                 <td>2</td>
               </tr>
               <tr>
                 <td
-                  style={{ textDecorationColor: CANDIDATE_COLORS.Bartholomew }}
+                  style={{
+                    "text-decoration-color": CANDIDATE_COLORS.Bartholomew,
+                  }}
                 >
                   Selma K. Bartholomew
                 </td>
                 <td>1</td>
               </tr>
               <tr>
-                <td style={{ textDecorationColor: CANDIDATE_COLORS.Prince }}>
+                <td
+                  style={{ "text-decoration-color": CANDIDATE_COLORS.Prince }}
+                >
                   Paperboy Love Prince
                 </td>
                 <td>0</td>
@@ -100,12 +112,12 @@ export function PairwiseWins() {
             </tbody>
           </table>
 
-          <ul className="w-sm list-disc dark:text-white [&>li]:my-2">
+          <ul class="w-sm list-disc dark:text-white [&>li]:my-2">
             <li>There were 11 candidates for Mayor.</li>
             <li>Each candidate can have 10 other 1 v 1 matchups.</li>
             <li>
               {Mamdani} won all 10 of his matchups, so he is the{" "}
-              <span className="underline decoration-green-600 decoration-3">
+              <span class="underline decoration-green-600 decoration-3">
                 Condorcet winner
               </span>
               .

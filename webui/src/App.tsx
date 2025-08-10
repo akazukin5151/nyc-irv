@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createResource, Match, Show, Switch } from "solid-js";
 import { LaterChoices } from "./LaterChoices/LaterChoices";
 import { RankDistributions } from "./RankDistributions";
 import { WeightedTransfers } from "./Chord/WeightedTransfers";
@@ -9,35 +9,27 @@ import { PairwiseMatrix } from "./PairwiseMatrix/PairwiseMatrix";
 import { Matchups } from "./Matchups";
 import type { Matchup } from "./core";
 
+async function fetchCandsFirstPrefs(): Promise<[Array<string>, Array<number>]> {
+  const sorted_cands = await fetch("sorted_cands.json");
+  const json: Array<[string, number]> = await sorted_cands.json();
+  return [json.map((x) => x[0]), json.map((x) => x[1])];
+}
+
+async function fetchMatchups(): Promise<Array<Matchup>> {
+  const x = await fetch("matchups.json");
+  return x.json();
+}
+
 function App() {
-  const [cands, setCands] = useState<Array<string>>([]);
-  const [allFirstPrefs, setAllFirstPrefs] = useState<Array<number>>([]);
-  const [matchups, setMatchups] = useState<Array<Matchup>>([]);
-
-  useEffect(() => {
-    fetch("matchups.json")
-      .then((x) => x.json())
-      .then((matchups: Array<Matchup>) => {
-        setMatchups(matchups);
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch("sorted_cands.json")
-      .then((x) => x.json())
-      .then((cands_json: Array<[string, number]>) => {
-        const cands = cands_json.map((x) => x[0]);
-        setCands(cands);
-        setAllFirstPrefs(cands_json.map((x) => x[1]));
-      });
-  }, []);
+  const [candsFirstPrefs] = createResource(fetchCandsFirstPrefs);
+  const [matchups] = createResource(fetchMatchups);
 
   return (
-    <div className="h-screen overflow-y-auto bg-neutral-100 p-6 pt-0 dark:bg-neutral-700 dark:[&_h2]:text-neutral-100">
-      <h1 className="mb-3 pt-6 dark:text-neutral-100">
+    <div class="h-screen overflow-y-auto bg-neutral-100 p-6 pt-0 dark:bg-neutral-700 dark:[&_h2]:text-neutral-100">
+      <h1 class="mb-3 pt-6 dark:text-neutral-100">
         2025 New York City Democratic mayoral primary analysis
       </h1>
-      <p className="mb-3 dark:text-white">
+      <p class="mb-3 dark:text-white">
         This page is focused on interactive graphics. See{" "}
         <ExternalLink href="https://fairvote.org/new-york-city-cast-vote-record-initial-analysis/">
           https://fairvote.org/new-york-city-cast-vote-record-initial-analysis/
@@ -49,31 +41,51 @@ function App() {
 
       <div style={{ height: "8%" }}></div>
 
-      <PairwiseMatrix cands={cands} matchups={matchups} />
+      <Show when={candsFirstPrefs.loading}>Cands loading</Show>
+      <Switch>
+        <Match when={candsFirstPrefs.error}>Cands error</Match>
+        <Match when={candsFirstPrefs()}>
+          <Show when={matchups.loading}>matchups loading</Show>
+          <Switch>
+            <Match when={matchups.error}>matchups error</Match>
+            <Match when={matchups()}>
+              <PairwiseMatrix
+                cands={candsFirstPrefs()![0]}
+                matchups={matchups()!}
+              />
 
-      <div style={{ height: "8%" }}></div>
+              <div style={{ height: "8%" }}></div>
 
-      <Matchups matchups={matchups} />
-
-      <div style={{ height: "8%" }}></div>
+              <Matchups matchups={matchups()!} />
+            </Match>
+          </Switch>
+          <div style={{ height: "8%" }}></div>
+        </Match>
+      </Switch>
 
       <Icicle />
 
       <div style={{ height: "8%" }}></div>
 
-      <RankDistributions cands={cands} />
+      <Show when={candsFirstPrefs.loading}>Cands loading</Show>
+      <Switch>
+        <Match when={candsFirstPrefs.error}>Cands error</Match>
+        <Match when={candsFirstPrefs()}>
+          <RankDistributions cands={candsFirstPrefs()![0]} />
 
-      <div style={{ height: "8%" }}></div>
+          <div style={{ height: "8%" }}></div>
 
-      <WeightedTransfers cands={cands} />
+          <WeightedTransfers cands={candsFirstPrefs()![0]} />
 
-      <div style={{ height: "8%" }}></div>
+          <div style={{ height: "8%" }}></div>
 
-      <LaterChoices cands={cands} allFirstPrefs={allFirstPrefs} />
+          <LaterChoices candsFirstPrefs={candsFirstPrefs()!} />
 
-      <div style={{ height: "8%" }}></div>
+          <div style={{ height: "8%" }}></div>
+        </Match>
+      </Switch>
 
-      <footer className="dark:text-white">
+      <footer class="dark:text-white">
         <ul>
           <li>
             Source code:{" "}

@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import type { Setter } from "../core";
+import type { Setter } from "solid-js";
+import type { JSX } from "solid-js/jsx-runtime";
 
 type StyledTextProps = {
   idx: number;
@@ -7,34 +7,27 @@ type StyledTextProps = {
   y: number;
   tooltipData: number | null;
   setTooltipData: Setter<number | null>;
-  children?: ReactNode;
+  children?: JSX.Element;
 };
 
-export function StyledText({
-  idx,
-  x,
-  y,
-  tooltipData,
-  setTooltipData,
-  children,
-}: StyledTextProps) {
+export function StyledText(props: StyledTextProps) {
   return (
     <text
-      x={x}
-      y={y}
-      className="stroke-white drop-shadow-md drop-shadow-white transition-opacity hover:opacity-100 dark:stroke-none dark:drop-shadow-black"
-      style={{ opacity: tooltipData === idx ? 1 : 0 }}
-      strokeWidth={3}
-      paintOrder="stroke"
-      textAnchor="middle"
+      x={props.x}
+      y={props.y}
+      class="stroke-white drop-shadow-md drop-shadow-white transition-opacity hover:opacity-100 dark:stroke-none dark:drop-shadow-black"
+      style={{ opacity: props.tooltipData === props.idx ? 1 : 0 }}
+      stroke-width={3}
+      paint-order="stroke"
+      text-anchor="middle"
       onMouseOver={() => {
-        setTooltipData(idx);
+        props.setTooltipData(props.idx);
       }}
       onMouseLeave={() => {
-        setTooltipData(null);
+        props.setTooltipData(null);
       }}
     >
-      {children}
+      {props.children}
     </text>
   );
 }

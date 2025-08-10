@@ -3,12 +3,12 @@ type FracProps = {
   denominator: number;
 };
 
-export function Frac({ numerator, denominator }: FracProps) {
+export function Frac(props: FracProps) {
   return (
     <math>
       <mfrac>
-        <mn>{numerator}</mn>
-        <mn>{denominator}</mn>
+        <mn>{props.numerator}</mn>
+        <mn>{props.denominator}</mn>
       </mfrac>
     </math>
   );

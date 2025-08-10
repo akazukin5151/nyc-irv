@@ -6,7 +6,19 @@ import {
   compute_chord_info,
 } from "./angles";
 import { StyledText } from "./StyledText";
-import { useState } from "react";
+import { createSignal, For } from "solid-js";
+
+type RibbonPath = {
+  ribbonPath: string | null;
+  title: string;
+  rotation: number;
+  sourceColor: string;
+  targetColor: string;
+  source_value: number;
+  target_value: number;
+  coord1: readonly [number, number];
+  coord2: readonly [number, number];
+};
 
 type ChordProps = {
   matrix: Array<Array<number>>;
@@ -14,8 +26,8 @@ type ChordProps = {
   names: Array<string>;
 };
 
-export function Chord({ matrix, colors, names }: ChordProps) {
-  const [tooltipData, setTooltipData] = useState<number | null>(null);
+export function Chord(props: ChordProps) {
+  const [tooltipData, setTooltipData] = createSignal<number | null>(null);
 
   const width = 700;
   const height = 500;
@@ -25,89 +37,94 @@ export function Chord({ matrix, colors, names }: ChordProps) {
   const calcChords = chord()
     .padAngle(20 / innerRadius)
     .sortSubgroups(descending);
-
-  const chords = calcChords(matrix);
-
   const calcRibbon = ribbon().radius(innerRadius);
-  const ribbonPaths = chords.map((chord) => {
-    const source = { ...chord.source, radius: innerRadius };
-    const target = { ...chord.target, radius: innerRadius };
-    const ribbonPath = calcRibbon({ source, target }) as unknown as
-      | string
-      | null;
-
-    const source_name = names[chord.source.index];
-    const target_name = names[chord.target.index];
-    const source_value = chord.source.value;
-    const target_value = chord.target.value;
-    const title = `${source_value} ${source_name} → ${target_name}\n${target_value} ${target_name} → ${source_name}`;
-
-    const { degrees, coord1, coord2 } = compute_chord_info(
-      chord.source,
-      chord.target,
-      innerRadius - 30,
-    );
-
-    return {
-      ribbonPath,
-      title,
-      rotation: degrees,
-      sourceColor: colors[chord.source.index],
-      targetColor: colors[chord.target.index],
-      source_value,
-      target_value,
-      coord1,
-      coord2,
-    };
-  });
-
   const calcArc = arc().innerRadius(innerRadius).outerRadius(outerRadius);
 
-  const arcData = chords.map((chord) => {
-    const arc = calcArc({
-      innerRadius,
-      outerRadius,
-      startAngle: chord.source.startAngle,
-      endAngle: chord.source.endAngle,
-    });
-    const color = colors[chord.source.index];
-    return { arc, color };
-  });
+  const chords = () => calcChords(props.matrix);
 
-  arcData.push(
-    ...chords.map((chord) => {
+  const ribbonPaths: () => Array<RibbonPath> = () =>
+    chords().map((chord) => {
+      const source = { ...chord.source, radius: innerRadius };
+      const target = { ...chord.target, radius: innerRadius };
+      const ribbonPath = calcRibbon({ source, target }) as unknown as
+        | string
+        | null;
+
+      const source_name = props.names[chord.source.index];
+      const target_name = props.names[chord.target.index];
+      const source_value = chord.source.value;
+      const target_value = chord.target.value;
+      const title = `${source_value} ${source_name} → ${target_name}\n${target_value} ${target_name} → ${source_name}`;
+
+      const { degrees, coord1, coord2 } = compute_chord_info(
+        chord.source,
+        chord.target,
+        innerRadius - 30,
+      );
+
+      return {
+        ribbonPath,
+        title,
+        rotation: degrees,
+        sourceColor: props.colors[chord.source.index],
+        targetColor: props.colors[chord.target.index],
+        source_value,
+        target_value,
+        coord1,
+        coord2,
+      };
+    });
+
+  const arcData = () => {
+    const ad = chords().map((chord) => {
       const arc = calcArc({
         innerRadius,
         outerRadius,
-        startAngle: chord.target.startAngle,
-        endAngle: chord.target.endAngle,
+        startAngle: chord.source.startAngle,
+        endAngle: chord.source.endAngle,
       });
-      const color = colors[chord.target.index];
+      const color = props.colors[chord.source.index];
       return { arc, color };
-    }),
-  );
+    });
 
-  const candidateLabels = chords.groups.map((group) => {
-    const name = names[group.index].split(" ").pop();
-    if (name === "Bartholomew" || name === "Prince") {
-      // exclude very minor candidates with no space for label
-      return null;
-    }
-
-    const anchor = bearing_to_anchor(group.startAngle, group.endAngle);
-
-    // for some reason, Exhausted doesn't need a vertical offset
-    const radius =
-      outerRadius + (anchor === "middle" && name !== "Exhausted" ? 20 : 10);
-
-    const coord = bearing_to_coord(group.startAngle, group.endAngle, radius);
-
-    return (
-      <text x={coord[0]} y={-coord[1]} textAnchor={anchor} key={name}>
-        {name}
-      </text>
+    ad.push(
+      ...chords().map((chord) => {
+        const arc = calcArc({
+          innerRadius,
+          outerRadius,
+          startAngle: chord.target.startAngle,
+          endAngle: chord.target.endAngle,
+        });
+        const color = props.colors[chord.target.index];
+        return { arc, color };
+      }),
     );
-  });
+
+    return ad;
+  };
+
+  const candidateLabels = () =>
+    chords().groups.map((group) => {
+      const name = props.names[group.index].split(" ").pop();
+      if (name === "Bartholomew" || name === "Prince") {
+        // exclude very minor candidates with no space for label
+        return null;
+      }
+
+      const anchor = bearing_to_anchor(group.startAngle, group.endAngle);
+
+      // for some reason, Exhausted doesn't need a vertical offset
+      const radius =
+        outerRadius + (anchor === "middle" && name !== "Exhausted" ? 20 : 10);
+
+      const coord = bearing_to_coord(group.startAngle, group.endAngle, radius);
+
+      return (
+        <text x={coord[0]} y={-coord[1]} text-anchor={anchor}>
+          {name}
+        </text>
+      );
+    });
 
   const offset = 70;
   const zoomedWidth = width - offset;
@@ -122,55 +139,61 @@ export function Chord({ matrix, colors, names }: ChordProps) {
         width={width}
         height={height}
         viewBox={viewBox}
-        className="dark:[&_text]:fill-white"
+        class="dark:[&_text]:fill-white"
       >
         <defs>
-          {ribbonPaths.map(({ rotation, sourceColor, targetColor }, idx) => (
-            <linearGradient
-              id={`grad-${idx}`}
-              gradientTransform={`rotate(${rotation}, 0.5, 0.5)`}
-              key={idx}
-            >
-              <stop offset="0%" stopColor={sourceColor}></stop>
-              <stop offset="100%" stopColor={targetColor}></stop>
-            </linearGradient>
-          ))}
+          <For each={ribbonPaths()}>
+            {({ rotation, sourceColor, targetColor }, idx) => (
+              <linearGradient
+                id={`grad-${idx()}`}
+                gradientTransform={`rotate(${rotation}, 0.5, 0.5)`}
+              >
+                <stop offset="0%" stop-color={sourceColor}></stop>
+                <stop offset="100%" stop-color={targetColor}></stop>
+              </linearGradient>
+            )}
+          </For>
         </defs>
         <g>
-          {arcData.map(({ arc, color }, idx) => (
-            <path
-              fill={color}
-              d={arc ?? ""}
-              key={idx}
-              onMouseOver={() => {
-                setTooltipData(idx);
-              }}
-              onMouseLeave={() => {
-                setTooltipData(null);
-              }}
-            ></path>
-          ))}
+          <For each={arcData()}>
+            {({ arc, color }, idx) => (
+              <path
+                fill={color}
+                d={arc ?? ""}
+                onMouseOver={() => {
+                  setTooltipData(idx());
+                }}
+                onMouseLeave={() => {
+                  setTooltipData(null);
+                }}
+              ></path>
+            )}
+          </For>
         </g>
 
         <g
-          strokeWidth="0.5"
-          className="stroke-[#55555566] dark:stroke-neutral-300/66 [&_path]:[fill-opacity:0.7]"
+          stroke-width="0.5"
+          class="stroke-[#55555566] dark:stroke-neutral-300/66 [&_path]:[fill-opacity:0.7]"
         >
-          {ribbonPaths.map(
-            (
+          <For each={ribbonPaths()}>
+            {(
               { ribbonPath, title, source_value, target_value, coord1, coord2 },
               idx,
             ) => (
-              <g className="group" key={idx}>
+              <g class="group">
                 <path
-                  fill={`url(#grad-${idx})`}
+                  fill={`url(#grad-${idx()})`}
                   d={ribbonPath ?? ""}
                   opacity={
-                    tooltipData == null ? 1 : tooltipData !== idx ? 0.1 : 1
+                    tooltipData() == null
+                      ? 1
+                      : tooltipData() !== idx()
+                        ? 0.1
+                        : 1
                   }
-                  className="transition-opacity"
+                  class="transition-opacity"
                   onMouseOver={() => {
-                    setTooltipData(idx);
+                    setTooltipData(idx());
                   }}
                   onMouseLeave={() => {
                     setTooltipData(null);
@@ -179,29 +202,29 @@ export function Chord({ matrix, colors, names }: ChordProps) {
                   <title>{title}</title>
                 </path>
                 <StyledText
-                  idx={idx}
+                  idx={idx()}
                   x={coord1[0]}
                   y={-coord1[1]}
-                  tooltipData={tooltipData}
+                  tooltipData={tooltipData()}
                   setTooltipData={setTooltipData}
                 >
                   {source_value}
                 </StyledText>
                 <StyledText
-                  idx={idx}
+                  idx={idx()}
                   x={coord2[0]}
                   y={-coord2[1]}
-                  tooltipData={tooltipData}
+                  tooltipData={tooltipData()}
                   setTooltipData={setTooltipData}
                 >
                   {target_value}
                 </StyledText>
               </g>
-            ),
-          )}
+            )}
+          </For>
         </g>
 
-        <g>{candidateLabels}</g>
+        <g>{candidateLabels()}</g>
       </svg>
     </>
   );

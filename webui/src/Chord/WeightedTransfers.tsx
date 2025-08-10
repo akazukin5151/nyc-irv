@@ -1,10 +1,17 @@
-import { Fragment, useEffect, useState } from "react";
 import { Chord } from "./Chord";
 import { ExternalLink } from "../ExternalLink";
 import { Explainer } from "../Explainer";
 import { CANDIDATE_COLORS, radioStyle } from "../core";
 import { Frac } from "../math/Frac";
 import { Pow } from "../math/Pow";
+import {
+  createResource,
+  createSignal,
+  For,
+  Match,
+  Show,
+  Switch,
+} from "solid-js";
 
 const metrics = [
   {
@@ -33,10 +40,10 @@ const metrics = [
       </>
     ),
     weights: [
-      <Frac numerator={1} denominator={1} key="h-1/1" />,
-      <Frac numerator={1} denominator={2} key="h-1/2" />,
-      <Frac numerator={1} denominator={3} key="h-1/3" />,
-      <Frac numerator={1} denominator={4} key="h-1/4" />,
+      <Frac numerator={1} denominator={1} />,
+      <Frac numerator={1} denominator={2} />,
+      <Frac numerator={1} denominator={3} />,
+      <Frac numerator={1} denominator={4} />,
     ],
   },
   {
@@ -44,10 +51,10 @@ const metrics = [
     dataIdx: 3,
     description: <>Weights are halved every transfer</>,
     weights: [
-      <Frac numerator={1} denominator={1} key="g-1/1" />,
-      <Frac numerator={1} denominator={2} key="g-1/2" />,
-      <Frac numerator={1} denominator={4} key="g-1/4" />,
-      <Frac numerator={1} denominator={8} key="g-1/8" />,
+      <Frac numerator={1} denominator={1} />,
+      <Frac numerator={1} denominator={2} />,
+      <Frac numerator={1} denominator={4} />,
+      <Frac numerator={1} denominator={8} />,
     ],
   },
   {
@@ -63,10 +70,10 @@ const metrics = [
       </>
     ),
     weights: [
-      <Pow base={1} power={-2} key="i-1" />,
-      <Pow base={2} power={-2} key="i-2" />,
-      <Pow base={3} power={-2} key="i-3" />,
-      <Pow base={4} power={-2} key="i-4" />,
+      <Pow base={1} power={-2} />,
+      <Pow base={2} power={-2} />,
+      <Pow base={3} power={-2} />,
+      <Pow base={4} power={-2} />,
     ],
   },
   {
@@ -79,35 +86,38 @@ const metrics = [
 
 type MetricName = (typeof metrics)[number]["name"];
 
+async function fetchWeightedMatrices(): Promise<Array<Array<Array<number>>>> {
+  const x = await fetch("weighted_matrices.json");
+  return x.json();
+}
+
 type WeightedTransfersProps = {
   cands: Array<string>;
 };
 
-export function WeightedTransfers({ cands }: WeightedTransfersProps) {
-  const [allChordData, setAllChordData] = useState<Array<Array<Array<number>>>>(
-    [],
+export function WeightedTransfers(props: WeightedTransfersProps) {
+  const [allChordData] = createResource<Array<Array<Array<number>>>>(
+    fetchWeightedMatrices,
+    {
+      initialValue: [],
+    },
   );
 
-  useEffect(() => {
-    fetch("weighted_matrices.json")
-      .then((x) => x.json())
-      .then((matrices) => setAllChordData(matrices));
-  }, []);
-
-  const [metricName, setMetricName] = useState<MetricName>("First transfer");
+  const [metricName, setMetricName] =
+    createSignal<MetricName>("First transfer");
 
   return (
     <section>
-      <h2 className="ml-4 pt-2">Weighted preferences</h2>
+      <h2 class="ml-4 pt-2">Weighted preferences</h2>
 
-      <div className="flex flex-col-reverse max-[72rem]:items-center min-[72rem]:flex-row">
-        <div className="flex w-full max-w-[850px] flex-col items-center min-[850px]:max-[72rem]:flex-row">
-          <div className="mx-auto flex w-[387px] flex-col">
-            <ul className="[&_li]:my-3 [&_li]:leading-2">
+      <div class="flex flex-col-reverse max-[72rem]:items-center min-[72rem]:flex-row">
+        <div class="flex w-full max-w-[850px] flex-col items-center min-[850px]:max-[72rem]:flex-row">
+          <div class="mx-auto flex w-[387px] flex-col">
+            <ul class="[&_li]:my-3 [&_li]:leading-2">
               <li>
                 <Explainer>
                   The chord shows all preferences flows (except when{" "}
-                  <span className="italic">First transfer</span> is selected).
+                  <span class="italic">First transfer</span> is selected).
                 </Explainer>
               </li>
               <li>
@@ -123,9 +133,9 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
               </li>
             </ul>
 
-            <table className="w-full rounded-xl bg-white text-left text-sm whitespace-nowrap text-neutral-500 shadow-md dark:bg-neutral-800 dark:text-neutral-200 [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:not-first:px-3 [&_th]:px-3">
+            <table class="w-full rounded-xl bg-white text-left text-sm whitespace-nowrap text-neutral-500 shadow-md dark:bg-neutral-800 dark:text-neutral-200 [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:not-first:px-3 [&_th]:px-3">
               <thead>
-                <tr className="[&_th]:pt-1 [&_th]:text-right">
+                <tr class="[&_th]:pt-1 [&_th]:text-right">
                   <th></th>
                   <th></th>
                   <th>
@@ -143,69 +153,73 @@ export function WeightedTransfers({ cands }: WeightedTransfersProps) {
                 </tr>
               </thead>
               <tbody>
-                {metrics.map(({ name, weights }) => (
-                  <tr
-                    className="transition-all hover:bg-sky-100 dark:hover:bg-sky-700"
-                    key={name}
-                    onClick={() => setMetricName(name)}
-                  >
-                    <td className="pt-1 pl-3">
-                      <input
-                        key={name}
-                        type="radio"
-                        id={name}
-                        name="weighting-metric"
-                        className={radioStyle}
-                        checked={metricName === name}
-                        onChange={() => setMetricName(name)}
-                      />
-                    </td>
-                    <td className="py-2">
-                      <label key={name} htmlFor={name}>
-                        {name}
-                      </label>
-                    </td>
-                    {weights.map((weight, idx) => (
-                      <td key={`${name}-weight-${idx}`} className="text-right">
-                        {weight}
+                <For each={metrics}>
+                  {({ name, weights }) => (
+                    <tr
+                      class="transition-all hover:bg-sky-100 dark:hover:bg-sky-700"
+                      onClick={() => setMetricName(name)}
+                    >
+                      <td class="pt-1 pl-3">
+                        <input
+                          type="radio"
+                          id={name}
+                          name="weighting-metric"
+                          class={radioStyle}
+                          checked={metricName() === name}
+                          onChange={() => setMetricName(name)}
+                        />
                       </td>
-                    ))}
-                  </tr>
-                ))}
+                      <td class="py-2">
+                        <label for={name}>{name}</label>
+                      </td>
+                      <For each={weights}>
+                        {(weight) => <td class="text-right">{weight}</td>}
+                      </For>
+                    </tr>
+                  )}
+                </For>
               </tbody>
             </table>
           </div>
 
-          <dl className="mx-auto mt-5 w-[387px]">
-            {metrics.map(({ name, description }) => (
-              <Fragment key={name}>
-                <dt className="font-bold whitespace-nowrap">
-                  <Explainer>{name}</Explainer>
-                </dt>
-                <dd className="ml-4">
-                  <Explainer>{description}</Explainer>
-                </dd>
-              </Fragment>
-            ))}
+          <dl class="mx-auto mt-5 w-[387px]">
+            <For each={metrics}>
+              {({ name, description }) => (
+                <>
+                  <dt class="font-bold whitespace-nowrap">
+                    <Explainer>{name}</Explainer>
+                  </dt>
+                  <dd class="ml-4">
+                    <Explainer>{description}</Explainer>
+                  </dd>
+                </>
+              )}
+            </For>
           </dl>
         </div>
 
-        <div className="mx-auto h-fit rounded-xl bg-white shadow-md max-[72rem]:mt-5 max-[72rem]:mb-3 dark:bg-neutral-800">
-          <div className="flex justify-center">
-            {cands.length > 0 && allChordData.length > 0 && (
-              <Chord
-                matrix={
-                  allChordData[
-                    metrics.find((m) => m.name === metricName)?.dataIdx ?? 0
-                  ]
-                }
-                colors={Object.values(CANDIDATE_COLORS)}
-                names={[...cands, "Exhausted"]}
-              />
-            )}
+        <div class="mx-auto h-fit rounded-xl bg-white shadow-md max-[72rem]:mt-5 max-[72rem]:mb-3 dark:bg-neutral-800">
+          <div class="flex justify-center">
+            <Show when={allChordData.loading}>Cands loading</Show>
+            <Switch>
+              <Match when={allChordData.error}>Cands error</Match>
+              <Match
+                when={props.cands.length > 0 && allChordData()?.length > 0}
+              >
+                <Chord
+                  matrix={
+                    allChordData()[
+                      metrics.find((m) => m.name === metricName())?.dataIdx ?? 0
+                    ]
+                  }
+                  colors={Object.values(CANDIDATE_COLORS)}
+                  names={[...props.cands, "Exhausted"]}
+                />
+              </Match>
+            </Switch>
           </div>
 
-          <p className="relative right-0 bottom-0 my-2 pr-3 text-right">
+          <p class="relative right-0 bottom-0 my-2 pr-3 text-right">
             <Explainer>
               Each ribbon shows both the incoming and outgoing flow. The width
               of start arc is the outgoing flow.

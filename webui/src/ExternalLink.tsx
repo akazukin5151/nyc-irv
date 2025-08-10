@@ -1,19 +1,18 @@
-type LinkProps = React.DetailedHTMLProps<
-  React.AnchorHTMLAttributes<HTMLAnchorElement>,
-  HTMLAnchorElement
->;
+import type { JSX } from "solid-js/jsx-runtime";
 
-export function ExternalLink({ children, className, ...props }: LinkProps) {
+type LinkProps = JSX.AnchorHTMLAttributes<HTMLAnchorElement>;
+
+export function ExternalLink(props: LinkProps) {
   return (
     <a
-      className={
-        `text-blue-500 underline dark:text-blue-200 ` + (className ?? "")
+      class={
+        `text-blue-500 underline dark:text-blue-200 ` + (props.class ?? "")
       }
       rel="noopener"
       target="_blank"
       {...props}
     >
-      {children}
+      {props.children}
     </a>
   );
 }

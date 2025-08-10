@@ -3,12 +3,12 @@ type PowProps = {
   power: number;
 };
 
-export function Pow({ base, power }: PowProps) {
+export function Pow(props: PowProps) {
   return (
     <math>
       <msup>
-        <mn>{base}</mn>
-        <mn>{power}</mn>
+        <mn>{props.base}</mn>
+        <mn>{props.power}</mn>
       </msup>
     </math>
   );

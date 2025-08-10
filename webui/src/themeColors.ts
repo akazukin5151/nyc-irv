@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 
 export function useTheme() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = createSignal(false);
 
-  useEffect(() => {
+  createEffect(() => {
     const handler = (evt: MediaQueryListEvent) => {
       setIsDark(evt.matches);
     };
@@ -12,8 +12,8 @@ export function useTheme() {
 
     setIsDark(mql.matches);
 
-    return () => mql.removeEventListener("change", handler);
-  }, []);
+    onCleanup(() => mql.removeEventListener("change", handler));
+  });
 
   return isDark;
 }

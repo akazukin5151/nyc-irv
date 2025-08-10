@@ -4,8 +4,18 @@ import {
   type HierarchyRectangularNode,
 } from "d3-hierarchy";
 import { CANDIDATE_COLORS, type Coordinate, type Tree } from "../core";
-import { useEffect, useRef, useState } from "react";
 import { IcicleHoverInfo } from "./IcicleHoverInfo";
+import {
+  createEffect,
+  createResource,
+  createSignal,
+  onCleanup,
+} from "solid-js";
+
+async function fetchTreeData(): Promise<Tree> {
+  const x = await fetch("tree.json");
+  return x.json();
+}
 
 function rectWidth(d: HierarchyRectangularNode<Tree>) {
   return d.x1 - d.x0 - Math.min(1, (d.x1 - d.x0) / 2);
@@ -16,27 +26,25 @@ const height = 400;
 const offsetY = -130;
 
 export function Icicle() {
-  const [treeData, setTreeData] = useState<Tree | null>(null);
+  const [treeData] = createResource<Tree>(fetchTreeData);
 
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [allCoords, setAllCoords] = useState<Array<Coordinate>>();
-  const [hoverInfo, setHoverInfo] = useState<Coordinate | null>(null);
+  let canvasRef!: HTMLCanvasElement;
+  const [allCoords, setAllCoords] = createSignal<Array<Coordinate>>([]);
+  const [hoverInfo, setHoverInfo] = createSignal<Coordinate | null>(null);
 
-  useEffect(() => {
-    fetch("tree.json")
-      .then((x) => x.json())
-      .then((tree) => setTreeData(tree));
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (treeData != null && canvas != null) {
-      const ctx = canvas.getContext("2d")!;
+  createEffect(() => {
+    if (
+      !treeData.loading
+      && !treeData.error
+      && treeData() != null
+      && canvasRef != null
+    ) {
+      const ctx = canvasRef.getContext("2d")!;
       ctx.translate(0, offsetY);
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
-      const root = hierarchy(treeData)
-        .sum((d) => d.value)
+      const root = hierarchy(treeData()!)
+        .sum((d) => d!.value)
         .sort((a, b) => b.height - a.height || b.value! - a.value!);
 
       // have to make the width shorter, otherwise it would overflow
@@ -85,26 +93,24 @@ export function Icicle() {
       setAllCoords(coords);
     }
 
-    return () => {
-      if (canvas != null) {
-        const ctx = canvas.getContext("2d")!;
-        ctx.reset();
-      }
-    };
-  }, [treeData, canvasRef]);
+    onCleanup(() => {
+      const ctx = canvasRef.getContext("2d")!;
+      ctx.reset();
+    });
+  });
 
   return (
     <section>
-      <h2 className="ml-4 pt-2">All preferences</h2>
+      <h2 class="ml-4 pt-2">All preferences</h2>
 
-      <div className="mx-4 dark:text-white">
+      <div class="mx-4 dark:text-white">
         <p>
           The first level is the first choice. Lower levels are the voter's
           later choices. This chart shows every preference from every voter.
         </p>
 
-        <div className="overflow-y-auto max-lg:h-[50px]">
-          <IcicleHoverInfo coord={hoverInfo} />
+        <div class="overflow-y-auto max-lg:h-[50px]">
+          <IcicleHoverInfo coord={hoverInfo()} />
         </div>
 
         <canvas
@@ -112,16 +118,11 @@ export function Icicle() {
           width={width * 2}
           height={height * 1.8}
           style={{ height: `${height}px` }}
-          className="mx-auto w-full max-w-max rounded-xl bg-white pt-1 pl-3 shadow-md dark:bg-neutral-800"
+          class="mx-auto w-full max-w-max rounded-xl bg-white pt-1 pl-3 shadow-md dark:bg-neutral-800"
           onMouseMove={(evt) => {
-            const canvas = canvasRef.current;
-            if (allCoords == null || canvas == null) {
-              return;
-            }
-
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
+            const rect = canvasRef.getBoundingClientRect();
+            const scaleX = canvasRef.width / rect.width;
+            const scaleY = canvasRef.height / rect.height;
             const mousePos = {
               x: ((evt.clientX - rect.left) * scaleX) / window.devicePixelRatio,
               y:
@@ -130,7 +131,7 @@ export function Icicle() {
             };
 
             // check which rectangle it is intersecting with
-            for (const coord of allCoords) {
+            for (const coord of allCoords()) {
               const minX = coord.x;
               const maxX = minX + coord.width;
               const minY = coord.y;
