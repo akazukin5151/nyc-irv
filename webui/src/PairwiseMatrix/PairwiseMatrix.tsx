@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { HoverInfo, Matchup } from "./core";
+import type { HoverInfo, Matchup } from "../core";
 import { PairwiseMatrixHoverInfo } from "./PairwiseMatrixHoverInfo";
 
 type PairwiseMatrixProps = {

@@ -1,4 +1,4 @@
-import type { HoverInfo } from "./core";
+import type { HoverInfo } from "../core";
 
 type PairwiseMatrixHoverInfoProps = {
   hoverInfo: HoverInfo | null;

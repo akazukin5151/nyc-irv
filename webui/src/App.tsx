@@ -5,7 +5,7 @@ import { WeightedTransfers } from "./WeightedTransfers";
 import { ExternalLink } from "./ExternalLink";
 import { Icicle } from "./Icicle";
 import { PairwiseWins } from "./PairwiseWins";
-import { PairwiseMatrix } from "./PairwiseMatrix";
+import { PairwiseMatrix } from "./PairwiseMatrix/PairwiseMatrix";
 import { Matchups } from "./Matchups";
 import type { Matchup } from "./core";
 
