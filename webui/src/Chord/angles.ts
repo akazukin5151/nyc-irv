@@ -1,5 +1,6 @@
 import type { ChordSubgroup } from "d3-chord";
-import type { TextAnchor } from "../core";
+
+type TextAnchor = "start" | "middle" | "end";
 
 export type ChordInfo = {
   degrees: number;

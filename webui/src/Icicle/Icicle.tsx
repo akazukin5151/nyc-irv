@@ -3,7 +3,7 @@ import {
   partition,
   type HierarchyRectangularNode,
 } from "d3-hierarchy";
-import { CANDIDATE_COLORS, type Coordinate, type Tree } from "../core";
+import { CANDIDATE_COLORS, type Coordinate } from "../core";
 import { IcicleHoverInfo } from "./IcicleHoverInfo";
 import {
   createEffect,
@@ -11,6 +11,12 @@ import {
   createSignal,
   onCleanup,
 } from "solid-js";
+
+type Tree = {
+  name: string;
+  value: number;
+  children: Array<Tree>;
+};
 
 async function fetchTreeData(): Promise<Tree> {
   const x = await fetch("tree.json");

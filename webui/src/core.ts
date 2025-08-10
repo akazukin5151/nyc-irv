@@ -1,14 +1,6 @@
 import type { TooltipItem } from "chart.js";
 
-export type TextAnchor = "start" | "middle" | "end";
-
 export type Matchup = [string, string, number, number];
-
-export type Tree = {
-  name: string;
-  value: number;
-  children: Array<Tree>;
-};
 
 export type HoverInfo = {
   this_cand: string;
