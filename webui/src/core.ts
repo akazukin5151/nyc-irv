@@ -98,9 +98,8 @@ export async function handleCandidateSelectCore(
       const json: Record<string, Record<string, number>> = await res.json();
       return json;
     }),
-  ];
+  ] as const;
 
-  // @ts-expect-error
   return Promise.all(promises);
 }
 
