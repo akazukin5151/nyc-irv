@@ -24,6 +24,7 @@ import {
   type Setter,
 } from "./core";
 import { Sticky } from "./Sticky";
+import { axisLabelColor, useTheme } from "./themeColors";
 
 ChartJS.register(
   Tooltip,
@@ -112,6 +113,7 @@ async function setupChart(
 
 export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
   const [firstChoiceCand, setFirstChoiceCand] = useState<string | null>(null);
+  const isDark = useTheme();
 
   const initChartData: BarChartData = {
     labels: [],
@@ -236,6 +238,9 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
                 },
                 y: {
                   stacked: true,
+                  ticks: {
+                    color: axisLabelColor(isDark),
+                  },
                 },
               },
               plugins: {
@@ -253,6 +258,11 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
                       return `${n} ${cur_cand_last_name} voters ranked ${c.label} as their ${choice_num}${str} choice`;
                     },
                     footer: percInFooter,
+                  },
+                },
+                legend: {
+                  labels: {
+                    color: axisLabelColor(isDark),
                   },
                 },
               },
@@ -317,6 +327,7 @@ export function LaterChoices({ cands, allFirstPrefs }: LaterChoicesProps) {
                   stacked: true,
                 },
               },
+              color: isDark ? "white" : "black",
             }}
           />
         </div>

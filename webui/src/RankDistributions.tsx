@@ -18,6 +18,7 @@ import {
   SEQUENTIAL_COLORS_TRANS,
 } from "./core";
 import { useEffect, useState } from "react";
+import { axisLabelColor, useTheme } from "./themeColors";
 
 ChartJS.register(
   Tooltip,
@@ -44,6 +45,7 @@ export function RankDistributions({ cands }: RankDistributionsProps) {
   };
 
   const [chartData, setChartData] = useState<BarChartData>(initChartData);
+  const isDark = useTheme();
 
   useEffect(() => {
     if (cands.length === 0) {
@@ -111,6 +113,9 @@ export function RankDistributions({ cands }: RankDistributionsProps) {
                 },
                 y: {
                   stacked: true,
+                  ticks: {
+                    color: axisLabelColor(isDark),
+                  },
                 },
               },
               plugins: {
@@ -128,6 +133,11 @@ export function RankDistributions({ cands }: RankDistributionsProps) {
                       return `${n} voters ranked ${c.label} as their ${choice_num}${str} choice`;
                     },
                     footer: percInFooter,
+                  },
+                },
+                legend: {
+                  labels: {
+                    color: axisLabelColor(isDark),
                   },
                 },
               },
