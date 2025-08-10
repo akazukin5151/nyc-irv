@@ -1,4 +1,4 @@
-import { format, getCandColor, type Coordinate } from "./core";
+import { format, getCandColor, type Coordinate } from "../core";
 
 type IcicleHoverInfoProps = {
   coord: Coordinate | null;

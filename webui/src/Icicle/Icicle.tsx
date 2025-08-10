@@ -3,7 +3,7 @@ import {
   partition,
   type HierarchyRectangularNode,
 } from "d3-hierarchy";
-import { CANDIDATE_COLORS, type Coordinate, type Tree } from "./core";
+import { CANDIDATE_COLORS, type Coordinate, type Tree } from "../core";
 import { useEffect, useRef, useState } from "react";
 import { IcicleHoverInfo } from "./IcicleHoverInfo";
 

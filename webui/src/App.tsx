@@ -3,7 +3,7 @@ import { LaterChoices } from "./LaterChoices";
 import { RankDistributions } from "./RankDistributions";
 import { WeightedTransfers } from "./WeightedTransfers";
 import { ExternalLink } from "./ExternalLink";
-import { Icicle } from "./Icicle";
+import { Icicle } from "./Icicle/Icicle";
 import { PairwiseWins } from "./PairwiseWins";
 import { PairwiseMatrix } from "./PairwiseMatrix/PairwiseMatrix";
 import { Matchups } from "./Matchups";
