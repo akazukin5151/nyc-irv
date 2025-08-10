@@ -148,8 +148,8 @@ export function Chord(props: ChordProps) {
                 id={`grad-${idx()}`}
                 gradientTransform={`rotate(${rotation}, 0.5, 0.5)`}
               >
-                <stop offset="0%" stop-color={sourceColor}></stop>
-                <stop offset="100%" stop-color={targetColor}></stop>
+                <stop offset="0%" stop-color={sourceColor} />
+                <stop offset="100%" stop-color={targetColor} />
               </linearGradient>
             )}
           </For>
@@ -166,7 +166,7 @@ export function Chord(props: ChordProps) {
                 onMouseLeave={() => {
                   setTooltipData(null);
                 }}
-              ></path>
+              />
             )}
           </For>
         </g>

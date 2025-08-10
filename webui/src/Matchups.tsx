@@ -80,7 +80,7 @@ export function Matchups(props: MatchupsProps) {
                         y2="15"
                         stroke-width="1"
                         class="tick-mark"
-                      ></line>
+                      />
 
                       <rect
                         x={bar_start}
@@ -120,7 +120,7 @@ export function Matchups(props: MatchupsProps) {
                         y2="15"
                         stroke-width="1"
                         class="tick-mark"
-                      ></line>
+                      />
 
                       <text
                         x="190"

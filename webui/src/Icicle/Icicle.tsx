@@ -44,7 +44,7 @@ export function Icicle() {
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
 
       const root = hierarchy(treeData()!)
-        .sum((d) => d!.value)
+        .sum((d) => d.value)
         .sort((a, b) => b.height - a.height || b.value! - a.value!);
 
       // have to make the width shorter, otherwise it would overflow

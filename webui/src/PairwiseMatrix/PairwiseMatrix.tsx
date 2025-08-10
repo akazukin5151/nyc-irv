@@ -64,7 +64,7 @@ export function PairwiseMatrix(props: PairwiseMatrixProps) {
         >
           <thead class="border-b-2 border-slate-200/50 [&_th]:font-normal">
             <tr>
-              <th class="border-r-2 border-slate-200/50"></th>
+              <th class="border-r-2 border-slate-200/50" />
               <Show when={cands().length > 0}>
                 <For each={cands()}>
                   {(cand) => (

@@ -136,8 +136,8 @@ export function WeightedTransfers(props: WeightedTransfersProps) {
             <table class="w-full rounded-xl bg-white text-left text-sm whitespace-nowrap text-neutral-500 shadow-md dark:bg-neutral-800 dark:text-neutral-200 [&_td]:border-b-2 [&_td]:border-neutral-200/20 [&_td]:not-first:px-3 [&_th]:px-3">
               <thead>
                 <tr class="[&_th]:pt-1 [&_th]:text-right">
-                  <th></th>
-                  <th></th>
+                  <th />
+                  <th />
                   <th>
                     <abbr title="1st choice to 2nd choice">1 → 2</abbr>
                   </th>

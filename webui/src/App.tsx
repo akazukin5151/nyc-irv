@@ -68,7 +68,7 @@ function App() {
 
       <PairwiseWins />
 
-      <div style={{ height: "8%" }}></div>
+      <div style={{ height: "8%" }} />
 
       <Show when={candsFirstPrefs.loading}>Cands loading</Show>
       <Switch>
@@ -83,18 +83,18 @@ function App() {
                 matchups={matchups()!}
               />
 
-              <div style={{ height: "8%" }}></div>
+              <div style={{ height: "8%" }} />
 
               <Matchups matchups={matchups()!} />
             </Match>
           </Switch>
-          <div style={{ height: "8%" }}></div>
+          <div style={{ height: "8%" }} />
         </Match>
       </Switch>
 
       <Icicle />
 
-      <div style={{ height: "8%" }}></div>
+      <div style={{ height: "8%" }} />
 
       <Show when={candsFirstPrefs.loading}>Cands loading</Show>
       <Switch>
@@ -102,15 +102,15 @@ function App() {
         <Match when={candsFirstPrefs()}>
           <RankDistributions cands={candsFirstPrefs()![0]} />
 
-          <div style={{ height: "8%" }}></div>
+          <div style={{ height: "8%" }} />
 
           <WeightedTransfers cands={candsFirstPrefs()![0]} />
 
-          <div style={{ height: "8%" }}></div>
+          <div style={{ height: "8%" }} />
 
           <LaterChoices candsFirstPrefs={candsFirstPrefs()!} />
 
-          <div style={{ height: "8%" }}></div>
+          <div style={{ height: "8%" }} />
         </Match>
       </Switch>
 
