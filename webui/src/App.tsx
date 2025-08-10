@@ -29,6 +29,12 @@ function App() {
       <h1 class="mb-3 pt-6 dark:text-neutral-100">
         2025 New York City Democratic mayoral primary analysis
       </h1>
+      <p class="dark:text-white">
+        The CVR data is from{" "}
+        <ExternalLink href="https://www.vote.nyc/page/election-results-summary">
+          https://www.vote.nyc/page/election-results-summary
+        </ExternalLink>
+      </p>
       <p class="mb-3 dark:text-white">
         This page is focused on interactive graphics. See{" "}
         <ExternalLink href="https://fairvote.org/new-york-city-cast-vote-record-initial-analysis/">
