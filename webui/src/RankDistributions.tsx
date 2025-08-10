@@ -9,6 +9,7 @@ import {
   Colors,
   type ChartData,
   type ChartDataset,
+  type TooltipItem,
 } from "chart.js";
 import { Bar } from "solid-chartjs";
 import {
@@ -127,8 +128,9 @@ export function RankDistributions(props: RankDistributionsProps) {
                   tooltip: {
                     footerFont: { weight: "normal" },
                     callbacks: {
-                      title: (context: any) => context[0].formattedValue,
-                      label: (c: any) => {
+                      title: (context: Array<TooltipItem<ChartType>>) =>
+                        context[0].formattedValue,
+                      label: (c: TooltipItem<ChartType>) => {
                         const n = c.formattedValue;
                         const choice_num = c.datasetIndex + 1;
                         if (choice_num === 6) {

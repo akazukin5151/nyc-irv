@@ -8,6 +8,7 @@ import {
   BarController,
   Colors,
   type ChartData,
+  type TooltipItem,
 } from "chart.js";
 import { Bar } from "solid-chartjs";
 import { SankeyController, Flow } from "chartjs-chart-sankey";
@@ -30,7 +31,8 @@ import {
   type Setter,
 } from "solid-js";
 
-type BarChartData = ChartData<"bar", Array<number>, string>;
+type ChartType = "bar";
+type BarChartData = ChartData<ChartType, Array<number>, string>;
 
 type SankeyChartData = ChartData<"sankey", Array<SankeyData>, string>;
 
@@ -218,8 +220,9 @@ export function LaterChoices(props: LaterChoicesProps) {
                 tooltip: {
                   footerFont: { weight: "normal" },
                   callbacks: {
-                    title: (c: any) => c[0].formattedValue,
-                    label: (c: any) => {
+                    title: (c: Array<TooltipItem<ChartType>>) =>
+                      c[0].formattedValue,
+                    label: (c: TooltipItem<ChartType>) => {
                       const n = c.formattedValue;
                       const choice_num = c.datasetIndex + 2;
                       const str = numToOrdinal(choice_num);
@@ -242,7 +245,7 @@ export function LaterChoices(props: LaterChoicesProps) {
         )}
       </div>
 
-      {(sankeyChartData().datasets[0].data.length ?? 0) > 0 && (
+      {sankeyChartData().datasets[0].data.length > 0 && (
         <div style={{ "max-height": "calc(100vh - 40px)" }}>
           <h2 class="mb-1 ml-4">Sankey</h2>
 
