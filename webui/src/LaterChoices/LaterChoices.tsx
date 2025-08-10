@@ -28,6 +28,7 @@ import {
   createSignal,
   For,
   onMount,
+  Show,
   type Setter,
 } from "solid-js";
 
@@ -198,7 +199,7 @@ export function LaterChoices(props: LaterChoicesProps) {
       </Sticky>
 
       <div class="mb-6 h-[calc(100vh*0.8)] px-1">
-        {(chartData().labels?.length ?? 0) > 0 && (
+        <Show when={(chartData().labels?.length ?? 0) > 0}>
           <Bar
             data={chartData()}
             options={{
@@ -242,10 +243,10 @@ export function LaterChoices(props: LaterChoicesProps) {
               },
             }}
           />
-        )}
+        </Show>
       </div>
 
-      {sankeyChartData().datasets[0].data.length > 0 && (
+      <Show when={sankeyChartData().datasets[0].data.length > 0}>
         <div style={{ "max-height": "calc(100vh - 40px)" }}>
           <h2 class="mb-1 ml-4">Sankey</h2>
 
@@ -306,7 +307,7 @@ export function LaterChoices(props: LaterChoicesProps) {
             }}
           />
         </div>
-      )}
+      </Show>
     </section>
   );
 }

@@ -1,4 +1,4 @@
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
 import {
   CANDIDATE_COLORS,
   format,
@@ -131,7 +131,7 @@ export function Matchups(props: MatchupsProps) {
                       >
                         {cand1}
                       </text>
-                      {perc1 > number_cutoff && (
+                      <Show when={perc1 > number_cutoff}>
                         <text
                           x={bar_start + lwidth - 5}
                           y="20"
@@ -140,8 +140,8 @@ export function Matchups(props: MatchupsProps) {
                         >
                           {perc1_f}
                         </text>
-                      )}
-                      {unranked_perc > number_cutoff && (
+                      </Show>
+                      <Show when={unranked_perc > number_cutoff}>
                         <text
                           x={bar_start + lwidth + uwidth / 2 + 5}
                           y="20"
@@ -150,8 +150,8 @@ export function Matchups(props: MatchupsProps) {
                         >
                           {percu_f}
                         </text>
-                      )}
-                      {perc2 > number_cutoff && (
+                      </Show>
+                      <Show when={perc2 > number_cutoff}>
                         <text
                           x={bar_start + lwidth + uwidth + 5}
                           y="20"
@@ -160,7 +160,7 @@ export function Matchups(props: MatchupsProps) {
                         >
                           {perc2_f}
                         </text>
-                      )}
+                      </Show>
                       <text
                         x={bar_start + lwidth + uwidth + rwidth + 10}
                         y="20"
