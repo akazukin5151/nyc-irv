@@ -1,7 +1,7 @@
 import { Chord } from "./Chord";
 import { ExternalLink } from "../ExternalLink";
 import { Explainer } from "../Explainer";
-import { CANDIDATE_COLORS, radioStyle } from "../core";
+import { CANDIDATE_COLORS } from "../core";
 import { Frac } from "../math/Frac";
 import { Pow } from "../math/Pow";
 import {
@@ -164,7 +164,6 @@ export function WeightedTransfers(props: WeightedTransfersProps) {
                           type="radio"
                           id={name}
                           name="weighting-metric"
-                          class={radioStyle}
                           checked={metricName() === name}
                           onChange={() => setMetricName(name)}
                         />

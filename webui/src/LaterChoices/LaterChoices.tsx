@@ -17,7 +17,6 @@ import {
   getCandColor,
   numToOrdinal,
   percInFooter,
-  radioStyle,
   SEQUENTIAL_COLORS_SOLID,
   SEQUENTIAL_COLORS_TRANS,
 } from "../core";
@@ -269,7 +268,7 @@ export function LaterChoices(props: LaterChoicesProps) {
               <input
                 type="radio"
                 name="sankey-colors"
-                class={radioStyle + " mr-1"}
+                class={"mr-1"}
                 checked={sankeyColor() === "cand"}
                 onChange={() => onSankeyColorChange("cand")}
               />
@@ -279,7 +278,7 @@ export function LaterChoices(props: LaterChoicesProps) {
               <input
                 type="radio"
                 name="sankey-colors"
-                class={radioStyle + " mr-1"}
+                class={"mr-1"}
                 checked={sankeyColor() === "rank"}
                 onChange={() => onSankeyColorChange("rank")}
               />
