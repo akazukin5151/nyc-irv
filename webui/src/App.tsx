@@ -43,6 +43,29 @@ function App() {
         for some text commentary.
       </p>
 
+      <div class="ml-4 flex flex-col items-center pt-2 pb-4">
+        <h2>Caveats</h2>
+        <ul class="ml-6 w-lg list-disc dark:text-white">
+          <li>
+            Some voters ranked the same candidate multiple times{" "}
+            <span class="whitespace-nowrap">
+              (e.g., A &gt; A &gt; A &gt; C)
+            </span>
+            . We ignore the duplicated ranks, so the example would turn into{" "}
+            <span class="whitespace-nowrap">A &gt; C</span>.
+          </li>
+          <li>
+            We pretend write-ins don't exist and skip to the next named
+            candidate (they won't affect the result anyway).
+          </li>
+          <li>We ignore overvotes and undervotes.</li>
+          <li>
+            No ties happened in this election, so the code did not check for
+            ties.
+          </li>
+        </ul>
+      </div>
+
       <PairwiseWins />
 
       <div style={{ height: "8%" }}></div>
