@@ -1,14 +1,8 @@
+**Interactive site: https://akazukin5151.github.io/nyc-irv/**
+
 # 2025 New York City Democratic mayoral primary analysis
 
 Condorcet analysis of the 2025 New York City Democratic mayoral primary. It was done under IRV (RCV), which does not always elect the Condorcet winner.
-
-## Caveats
-
-* The data have ballots where a voter ranked the same candidate multiple times (e.g., A > A > A > C). It ignores the duplicated ranks, so the example would turn into A > C.
-* It ignores write-ins and skips to the next named candidate (won't affect the result anyway, but it's good to write accurate code)
-* It doesn't handle ties (no ties happened anyway, but it's good to write accurate code)
-* It ignores overvotes. Don't know what to do with them, or what the regulations are. Undervotes are also ignored.
-* You should probably use https://github.com/voting-tools/pref_voting. I'm reinventing the wheel here because it's fun and I like Rust, but that doesn't mean you should use this code.
 
 ## Run
 
@@ -229,8 +223,4 @@ Selma K. Bartholomew | 20586 | 42196 | 39792 | 41491 | 45194 | 53501 | 58270 | 5
 The rows are sorted with the first preferences vote on top.
 
 Looking at the first row with Zohran Kwame Mamdani, for every other candidate, more voters preferred him over the other. Therefore he is the Condorcet winner.
-
-### Interactive charts
-
-See https://akazukin5151.github.io/nyc-irv/
 
