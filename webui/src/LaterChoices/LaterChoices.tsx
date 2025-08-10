@@ -249,7 +249,7 @@ export function LaterChoices(props: LaterChoicesProps) {
         <div style={{ "max-height": "calc(100vh - 40px)" }}>
           <h2 class="mb-1 ml-4">Sankey</h2>
 
-          <div class="mx-4 dark:text-white">
+          <div class="mx-4 mb-2 dark:text-white">
             <p class="mb-1">
               This is similar to the Icicle chart in the beginning, but only
               shows the preferences for voters that ranked{" "}
@@ -264,7 +264,7 @@ export function LaterChoices(props: LaterChoicesProps) {
               first.
             </p>
 
-            <label class="mr-4">
+            <label class="mr-5 rounded-md bg-neutral-100 px-3 pt-2 pb-1 has-checked:bg-sky-100">
               <input
                 type="radio"
                 name="sankey-colors"
@@ -274,7 +274,7 @@ export function LaterChoices(props: LaterChoicesProps) {
               />
               Color by candidate
             </label>
-            <label>
+            <label class="rounded-md bg-neutral-100 px-3 pt-2 pb-1">
               <input
                 type="radio"
                 name="sankey-colors"
