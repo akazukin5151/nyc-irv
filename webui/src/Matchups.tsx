@@ -55,8 +55,9 @@ export function Matchups(props: MatchupsProps) {
                 ? "white"
                 : "black";
 
-              const next = props.matchups[idx() + 1];
-              const is_section_end = next != null && next[0] !== cand1;
+              const next = () => props.matchups[idx() + 1];
+              const is_section_end = () =>
+                next() != null && next()[0] !== cand1;
 
               const tooltip1 = `${cand1}: ${v1_f} (${perc1_f})`;
               const tooltip2 = `${cand2}: ${v2_f} (${perc2_f})`;
@@ -66,7 +67,7 @@ export function Matchups(props: MatchupsProps) {
               const number_cutoff = 14;
 
               return (
-                <div class={is_section_end ? "mb-4" : ""}>
+                <div class={is_section_end() ? "mb-4" : ""}>
                   <svg
                     height="30"
                     width={400 + bar_width}
