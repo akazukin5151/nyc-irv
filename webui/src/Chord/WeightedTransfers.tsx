@@ -1,10 +1,10 @@
 import { Fragment, useEffect, useState } from "react";
 import { Chord } from "./Chord";
-import { ExternalLink } from "./ExternalLink";
-import { Explainer } from "./Explainer";
-import { CANDIDATE_COLORS, radioStyle } from "./core";
-import { Frac } from "./math/Frac";
-import { Pow } from "./math/Pow";
+import { ExternalLink } from "../ExternalLink";
+import { Explainer } from "../Explainer";
+import { CANDIDATE_COLORS, radioStyle } from "../core";
+import { Frac } from "../math/Frac";
+import { Pow } from "../math/Pow";
 
 const metrics = [
   {

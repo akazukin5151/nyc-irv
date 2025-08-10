@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { LaterChoices } from "./LaterChoices";
 import { RankDistributions } from "./RankDistributions";
-import { WeightedTransfers } from "./WeightedTransfers";
+import { WeightedTransfers } from "./Chord/WeightedTransfers";
 import { ExternalLink } from "./ExternalLink";
 import { Icicle } from "./Icicle/Icicle";
 import { PairwiseWins } from "./PairwiseWins";
