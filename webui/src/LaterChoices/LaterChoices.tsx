@@ -22,9 +22,9 @@ import {
   SEQUENTIAL_COLORS_SOLID,
   SEQUENTIAL_COLORS_TRANS,
   type Setter,
-} from "./core";
+} from "../core";
 import { Sticky } from "./Sticky";
-import { axisLabelColor, useTheme } from "./themeColors";
+import { axisLabelColor, useTheme } from "../themeColors";
 
 ChartJS.register(
   Tooltip,

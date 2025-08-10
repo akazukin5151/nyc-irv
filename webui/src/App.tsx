@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LaterChoices } from "./LaterChoices";
+import { LaterChoices } from "./LaterChoices/LaterChoices";
 import { RankDistributions } from "./RankDistributions";
 import { WeightedTransfers } from "./Chord/WeightedTransfers";
 import { ExternalLink } from "./ExternalLink";
