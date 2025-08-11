@@ -166,7 +166,7 @@ export function LaterChoices(props: LaterChoicesProps) {
   };
 
   return (
-    <section class="h-[calc(100vh*2.1)] rounded-md bg-white shadow-md dark:bg-neutral-800">
+    <section class="rounded-md bg-white shadow-md dark:bg-neutral-800">
       <h2 class="ml-4 pt-2">Later choices</h2>
       <Sticky class_={`mb-2 inline-flex w-full flex-wrap justify-center`}>
         <p>
@@ -246,7 +246,7 @@ export function LaterChoices(props: LaterChoicesProps) {
       </div>
 
       <Show when={sankeyChartData().datasets[0].data.length > 0}>
-        <div style={{ "max-height": "calc(100vh - 40px)" }}>
+        <div>
           <h2 class="mb-1 ml-4">Sankey</h2>
 
           <div class="mx-4 mb-2 dark:text-white">
@@ -286,25 +286,27 @@ export function LaterChoices(props: LaterChoicesProps) {
             </label>
           </div>
 
-          <Bar
-            type="sankey"
-            data={sankeyChartData()}
-            options={{
-              animation: false,
-              responsive: true,
-              maintainAspectRatio: false,
-              indexAxis: "y",
-              scales: {
-                x: {
-                  stacked: true,
+          <div class="relative">
+            <Bar
+              type="sankey"
+              data={sankeyChartData()}
+              options={{
+                animation: false,
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: "y",
+                scales: {
+                  x: {
+                    stacked: true,
+                  },
+                  y: {
+                    stacked: true,
+                  },
                 },
-                y: {
-                  stacked: true,
-                },
-              },
-              color: isDark() ? "white" : "black",
-            }}
-          />
+                color: isDark() ? "white" : "black",
+              }}
+            />
+          </div>
         </div>
       </Show>
     </section>
