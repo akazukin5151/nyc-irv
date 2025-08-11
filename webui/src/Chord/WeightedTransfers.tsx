@@ -216,7 +216,7 @@ export function WeightedTransfers(props: WeightedTransfersProps) {
             </Switch>
           </div>
 
-          <p class="relative right-0 bottom-0 my-2 pr-3 text-right">
+          <p class="relative right-0 bottom-0 my-2 px-3 text-right">
             <Explainer>
               Each ribbon shows both the incoming and outgoing flow. The width
               of start arc is the outgoing flow.

@@ -126,7 +126,7 @@ export function Chord(props: ChordProps) {
       );
     });
 
-  const offset = 70;
+  const offset = 40;
   const zoomedWidth = width - offset;
   const zoomedHeight = height - offset;
   const offsetX = -zoomedWidth / 2;
@@ -134,10 +134,16 @@ export function Chord(props: ChordProps) {
   const viewBox = `${offsetX},${offsetY},${zoomedWidth},${zoomedHeight}`;
 
   return (
-    <>
+    <div
+      style={{
+        width: `min(80vw, ${width}px)`,
+        height: `min(80vh, ${height}px)`,
+      }}
+      class="max-w-full resize overflow-auto"
+    >
       <svg
-        width={width}
-        height={height}
+        width="100%"
+        height="100%"
         viewBox={viewBox}
         class="dark:[&_text]:fill-white"
       >
@@ -226,7 +232,7 @@ export function Chord(props: ChordProps) {
 
         <g>{candidateLabels()}</g>
       </svg>
-    </>
+    </div>
   );
 }
 
