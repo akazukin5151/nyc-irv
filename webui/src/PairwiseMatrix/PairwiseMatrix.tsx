@@ -37,7 +37,7 @@ export function PairwiseMatrix(props: PairwiseMatrixProps) {
 
       <PairwiseMatrixHoverInfo hoverInfo={hoverInfo()} />
 
-      <div class="relative flex max-w-screen justify-center overflow-auto">
+      <div class="relative flex max-h-[calc(100vh-134px)] max-w-screen justify-center overflow-auto">
         <table
           class="mt-3 ml-4 rounded-xl bg-white pb-3 shadow-md dark:bg-neutral-800 [&_td]:px-3 [&_td]:py-1 [&_td]:text-right [&_td]:first:sticky [&_td]:first:left-0 [&_td]:first:z-2 [&_td]:first:bg-white [&_td]:first:text-left [&_td]:first:shadow-md [&_th]:px-3 [&_th]:py-1"
           onMouseMove={(evt) => {
@@ -62,7 +62,7 @@ export function PairwiseMatrix(props: PairwiseMatrixProps) {
             setHoverInfo(null);
           }}
         >
-          <thead class="border-b-2 border-slate-200/50 [&_th]:font-normal">
+          <thead class="sticky top-0 z-3 border-b-2 border-slate-200/50 bg-white shadow-md [&_th]:font-normal">
             <tr>
               <th class="border-r-2 border-slate-200/50" />
               <Show when={cands().length > 0}>
