@@ -1,15 +1,6 @@
 import { CANDIDATE_COLORS } from "./core";
 
 export function PairwiseWins() {
-  const Mamdani = (
-    <span
-      class="underline decoration-3"
-      style={{ "text-decoration-color": CANDIDATE_COLORS.Mamdani }}
-    >
-      Mamdani
-    </span>
-  );
-
   return (
     <>
       <section>
@@ -116,19 +107,30 @@ export function PairwiseWins() {
             <li>There were 11 candidates for Mayor.</li>
             <li>Each candidate can have 10 other 1 v 1 matchups.</li>
             <li>
-              {Mamdani} won all 10 of his matchups, so he is the{" "}
+              <Mamdani /> won all 10 of his matchups, so he is the{" "}
               <span class="underline decoration-green-600 decoration-3">
                 Condorcet winner
               </span>
               .
             </li>
             <li>
-              {Mamdani} was also the winner of this IRV (RCV) election, so in
+              <Mamdani /> was also the winner of this IRV (RCV) election, so in
               this case, IRV successfully elected the Condorcet winner.
             </li>
           </ul>
         </div>
       </section>
     </>
+  );
+}
+
+function Mamdani() {
+  return (
+    <span
+      class="underline decoration-3"
+      style={{ "text-decoration-color": CANDIDATE_COLORS.Mamdani }}
+    >
+      Mamdani
+    </span>
   );
 }
